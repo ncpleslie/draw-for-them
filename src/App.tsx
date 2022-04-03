@@ -1,3 +1,4 @@
+import ButtonBar from "./components/ButtonBar/ButtonBar";
 import SketchArea from "./components/SketchArea/SketchArea";
 
 function App() {

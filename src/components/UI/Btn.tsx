@@ -4,11 +4,12 @@ interface BtnProps {
   onClicked: () => void;
   active?: boolean;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 const Btn: React.FC<PropsWithChildren<BtnProps>> = ({
-  active,
   children,
+  style,
   className,
   onClicked,
 }) => {
@@ -18,7 +19,8 @@ const Btn: React.FC<PropsWithChildren<BtnProps>> = ({
 
   return (
     <button
-      className={`${className} bg-blue-500 hover:bg-blue-700 transition duration-300 ease-in-out hover:translate-y-1 active:scale-105 text-white text-2xl py-2 px-4 rounded`}
+      style={style}
+      className={`bg-blue-500 hover:bg-blue-700 transition ease-in-out hover:scale-110 active:scale-105 text-white text-2xl py-2 px-4 rounded ${className}`}
       onClick={onClick}
     >
       {children}
