@@ -1,0 +1,70 @@
+import { useState } from "react";
+import { HexColorPicker } from "react-colorful";
+import ButtonBarBtn from "../../models/button-bar-btn";
+import ButtonBar from "../UI/ButtonBar";
+import Icon from "../UI/Icon";
+
+interface SketchControlProps {
+  isDrawMode: boolean;
+  selectedColor: string;
+  onPenClicked: () => void;
+  onCircleClicked: () => void;
+  onSquareClicked: () => void;
+  onUndoClicked: () => void;
+  onTrashClicked: () => void;
+  onSaveClicked: () => void;
+  onColorPicked: (color: string) => void;
+  className?: string;
+}
+
+const SketchControl: React.FC<SketchControlProps> = (props) => {
+  const [color, setColor] = useState(props.selectedColor);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+
+  const handleOnColorPicked = (color: string) => {
+    setColor(color);
+    props.onColorPicked(color);
+  };
+
+  const handleOnColorClicked = () => {
+    setShowColorPicker((prev) => !prev);
+  };
+
+  const btnBar: ButtonBarBtn[] = [
+    new ButtonBarBtn(
+      <Icon.Pen />,
+      props.onPenClicked,
+      `${props.isDrawMode && "!bg-blue-700"}`
+    ),
+
+    new ButtonBarBtn(<Icon.Color />, handleOnColorClicked, undefined, {
+      backgroundColor: color,
+    }),
+
+    new ButtonBarBtn(<Icon.Shapes />, () => {}, undefined, undefined, [
+      new ButtonBarBtn(<Icon.Circle />, props.onCircleClicked),
+      new ButtonBarBtn(<Icon.Square />, props.onSquareClicked),
+    ]),
+
+    new ButtonBarBtn(<Icon.Undo />, props.onUndoClicked),
+    new ButtonBarBtn(<Icon.Trash />, props.onTrashClicked, "!bg-red-700"),
+    new ButtonBarBtn(<Icon.Save />, props.onSaveClicked),
+  ];
+
+  return (
+    <>
+      <ButtonBar buttons={btnBar} className={props.className} />
+      <div className="absolute top-20">
+        {showColorPicker && (
+          <HexColorPicker
+            className="z-20"
+            color={color}
+            onChange={handleOnColorPicked}
+          />
+        )}
+      </div>
+    </>
+  );
+};
+
+export default SketchControl;
