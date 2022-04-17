@@ -9,6 +9,7 @@ interface SketchAreaProps {
   isDrawMode: boolean;
   selectedColor: string;
   className?: string;
+  onSave: (imageData: string) => void;
 }
 
 interface ShapeProps {
@@ -60,15 +61,17 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
       return;
     }
 
-    console.log(
-      editor?.canvas.toDataURL({
+    const canvasImageData = editor?.canvas
+      .toDataURL("image/jpeg", {
         width: editor?.canvas.width,
         height: editor?.canvas.height,
         left: 0,
         top: 0,
-        format: "png",
+        format: "jpeg",
       })
-    );
+      .replace("png", "jpeg");
+
+    props.onSave(canvasImageData);
   }, [props.save]);
 
   useEffect(() => {

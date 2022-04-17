@@ -1,3 +1,4 @@
+import axios from "axios";
 import { useState } from "react";
 import SketchArea from "./components/SketchArea/SketchArea";
 import SketchControl from "./components/SketchControl/SketchControl";
@@ -32,6 +33,17 @@ function App() {
 
   const handleOnSaveClicked = () => setSave((prev) => !prev);
 
+  const handleOnSave = async (imageData: string): Promise<void> => {
+    try {
+      await axios.post(
+        "https://us-central1-draw-for-them.cloudfunctions.net/upload_image",
+        { imageData }
+      );
+    } catch (e) {
+      console.error("Failed to upload image", e);
+    }
+  };
+
   const sketchControlProps = {
     isDrawMode,
     selectedColor,
@@ -51,12 +63,13 @@ function App() {
     shape,
     trash,
     save,
+    onSave: handleOnSave,
   };
 
   return (
     <div className="flex flex-col justify-center items-center">
       <SketchControl {...sketchControlProps} className="my-4 absolute top-0" />
-      <SketchArea {...sketchAreaProps} className="h-[90vh] w-[90vw] mt-20" />
+      <SketchArea {...sketchAreaProps} className="h-[160px] w-[240px] mt-20" />
     </div>
   );
 }
