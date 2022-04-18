@@ -61,15 +61,13 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
       return;
     }
 
-    const canvasImageData = editor?.canvas
-      .toDataURL("image/jpeg", {
-        width: editor?.canvas.width,
-        height: editor?.canvas.height,
-        left: 0,
-        top: 0,
-        format: "jpeg",
-      })
-      .replace("png", "jpeg");
+    const canvasImageData = editor?.canvas.toDataURL("image/png", {
+      width: editor?.canvas.width,
+      height: editor?.canvas.height,
+      left: 0,
+      top: 0,
+      format: "png",
+    });
 
     props.onSave(canvasImageData);
   }, [props.save]);
