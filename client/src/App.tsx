@@ -1,5 +1,3 @@
-import Draw from "./routes/Draw";
-
 function App() {
   return (
     <div className="flex flex-col justify-center items-center">Welcome</div>

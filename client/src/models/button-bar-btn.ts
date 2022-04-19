@@ -1,7 +1,4 @@
 export default class ButtonBarBtn {
-  /**
-   *
-   */
   constructor(
     icon: JSX.Element,
     onClick: () => void,

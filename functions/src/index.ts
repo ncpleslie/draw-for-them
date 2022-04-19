@@ -7,6 +7,7 @@ import { uploadImageAsync } from "./service/upload-image";
 import MethodNotAllowedDto from "./models/response/method-not-allowed-dto.model";
 import SuccessDto from "./models/response/success-dto.model";
 import BadRequestDto from "./models/response/bad-request-dto.model";
+import AppConstant from "./constants/app.constant";
 
 const corsHandler = cors({ origin: true });
 
@@ -38,19 +39,23 @@ export const download_image = functions.https.onRequest(
       return;
     }
 
-    if (!request.query?.imageName) {
-      response.status(400).send(new BadRequestDto("imageName"));
-    }
+    corsHandler(request, response, async () => {
+      if (!request.query?.imageName) {
+        response.status(400).send(new BadRequestDto("imageName"));
+      }
 
-    try {
-      const imageBuffer = await getImageByNameAsync(
-        "ad369a4f-7159-4105-bbc3-3940d53ff231.jpeg"
-      );
-      response.status(200).header({ "Content-Type": "image/jpeg" });
-      response.write(imageBuffer.toString("binary"), "binary");
-      response.end();
-    } catch (e) {
-      response.status(500).send(new InternalServerErrorDto(e));
-    }
+      try {
+        const imageBuffer = await getImageByNameAsync(
+          request.query?.imageName as string
+        );
+        response.status(200).header({
+          "Content-Type": `image/${AppConstant.defaultImageFormat}`,
+        });
+        response.write(imageBuffer.toString("binary"), "binary");
+        response.end();
+      } catch (e) {
+        response.status(500).send(new InternalServerErrorDto(e));
+      }
+    });
   }
 );
