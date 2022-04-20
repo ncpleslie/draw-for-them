@@ -1,6 +1,22 @@
+import DashboardBtn from "./components/UI/DashboardBtn";
+import Icon from "./components/UI/Icon";
+
 function App() {
   return (
-    <div className="flex flex-col justify-center items-center">Welcome</div>
+    <div className="flex flex-row justify-center items-center">
+      <DashboardBtn className="h-[90vh] w-[50%] m-4" link="/draw">
+        <>
+          <Icon.Pen />
+          Draw
+        </>
+      </DashboardBtn>
+      <DashboardBtn className="h-[90vh] w-[50%] m-4" link="/view">
+        <>
+          <Icon.Image />
+          View
+        </>
+      </DashboardBtn>
+    </div>
   );
 }
 
