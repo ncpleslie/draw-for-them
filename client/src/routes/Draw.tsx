@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState } from "react";
+import Header from "../components/Header/Header";
 import SketchArea from "../components/SketchArea/SketchArea";
 import SketchControl from "../components/SketchControl/SketchControl";
 
@@ -67,9 +68,16 @@ export default function Draw() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <SketchControl {...sketchControlProps} className="my-4 absolute top-0" />
-      <SketchArea {...sketchAreaProps} className="h-[90vh] w-[90vw] mt-20" />
+    <div className="h-[100vh] app-container overflow-hidden">
+      <Header />
+
+      <div className="flex flex-col justify-center items-center p-4">
+        <SketchControl
+          {...sketchControlProps}
+          className="my-4 absolute top-0"
+        />
+        <SketchArea {...sketchAreaProps} className="h-[90vh] w-[90vw]" />
+      </div>
     </div>
   );
 }

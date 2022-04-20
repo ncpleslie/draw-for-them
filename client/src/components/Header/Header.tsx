@@ -8,7 +8,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="flex flex-row justify-between mx-4">
+    <div className="app-container flex flex-row justify-between px-4">
       {pathname !== "/" ? (
         <>
           <div className="mt-4">

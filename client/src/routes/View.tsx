@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSnapshot } from "valtio";
 import { store } from "../store/store";
 import Api from "../api/api";
+import Header from "../components/Header/Header";
 
 export default function View() {
   const { drawEvents } = useSnapshot(store);
@@ -34,8 +35,14 @@ export default function View() {
   }
 
   return (
-    <>
-      <img src={image} />
-    </>
+    <div className="h-[100vh] app-container">
+      <Header />
+      <div className="flex flex-col justify-center items-center">
+        <img
+          className="neu-container rounded-xl h-[90vh] w-[90vw]"
+          src={image}
+        />
+      </div>
+    </div>
   );
 }

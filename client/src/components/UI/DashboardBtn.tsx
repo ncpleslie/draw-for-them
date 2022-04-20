@@ -12,7 +12,7 @@ const DashboardBtn: React.FC<PropsWithChildren<DashboardBtnProps>> = (
   return (
     <Link
       className={`${props.className} 
-      flex flex-col justify-center items-center neu-btn rounded-3xl`}
+      flex flex-col justify-center items-center neu-btn text-white transition-all rounded-3xl text-9xl`}
       to={props.link}
     >
       {props.children}

@@ -34,11 +34,11 @@ const SketchControl: React.FC<SketchControlProps> = (props) => {
     new ButtonBarBtn(
       <Icon.Pen />,
       props.onPenClicked,
-      `${props.isDrawMode && "!bg-blue-700"}`
+      `${props.isDrawMode && "!text-[#15e38a]"}`
     ),
 
     new ButtonBarBtn(<Icon.Color />, handleOnColorClicked, undefined, {
-      backgroundColor: color,
+      color: color,
     }),
 
     new ButtonBarBtn(<Icon.Shapes />, () => {}, undefined, undefined, [
@@ -47,7 +47,7 @@ const SketchControl: React.FC<SketchControlProps> = (props) => {
     ]),
 
     new ButtonBarBtn(<Icon.Undo />, props.onUndoClicked),
-    new ButtonBarBtn(<Icon.Trash />, props.onTrashClicked, "!bg-red-700"),
+    new ButtonBarBtn(<Icon.Trash />, props.onTrashClicked, "!text-red-700"),
     new ButtonBarBtn(<Icon.Save />, props.onSaveClicked),
   ];
 

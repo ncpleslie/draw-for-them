@@ -91,7 +91,10 @@ const SketchArea: React.FC<SketchAreaProps> = (props) => {
   }, [props.shape.square]);
 
   return (
-    <FabricJSCanvas className={`${props.className} border`} onReady={onReady} />
+    <FabricJSCanvas
+      className={`${props.className} neu-container border rounded-xl`}
+      onReady={onReady}
+    />
   );
 };
 
