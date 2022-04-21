@@ -1,8 +1,10 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Api from "../api/api";
 import Header from "../components/Header/Header";
 import SketchArea from "../components/SketchArea/SketchArea";
 import SketchControl from "../components/SketchControl/SketchControl";
+import LoadingIndicator from "../components/UI/LoadingIndicator";
 
 export default function Draw() {
   const [isDrawMode, setIsDrawMode] = useState(false);
@@ -11,6 +13,7 @@ export default function Draw() {
   const [shape, setShape] = useState({ circle: false, square: false });
   const [trash, setTrash] = useState(false);
   const [save, setSave] = useState(false);
+  const [loading, setLoading] = useState<boolean>();
 
   const handleOnUndoClicked = () => setUndo((prev) => !prev);
 
@@ -35,13 +38,13 @@ export default function Draw() {
   const handleOnSaveClicked = () => setSave((prev) => !prev);
 
   const handleOnSave = async (imageData: string): Promise<void> => {
+    setLoading(true);
     try {
-      await axios.post(
-        "https://us-central1-draw-for-them.cloudfunctions.net/upload_image",
-        { imageData }
-      );
+      await Api.postImage(imageData);
     } catch (e) {
       console.error("Failed to upload image", e);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,6 +69,14 @@ export default function Draw() {
     save,
     onSave: handleOnSave,
   };
+
+  if (loading) {
+    return (
+      <div className="h-[100vh] flex justify-center items-center">
+        <LoadingIndicator />
+      </div>
+    );
+  }
 
   return (
     <div className="h-[100vh] app-container overflow-hidden">

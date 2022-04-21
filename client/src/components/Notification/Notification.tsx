@@ -1,14 +1,26 @@
 import { useSnapshot } from "valtio";
 import { store } from "../../store/store";
+import NotificationBtn from "./NotificationBtn";
 
 const Notification = () => {
   const { activeDrawEvents } = useSnapshot(store);
 
+  const handleOnNotificationClicked = () => {
+    console.log("asd");
+  };
+
   if (activeDrawEvents.length > 0) {
-    return <>You have {activeDrawEvents.length} notifications</>;
+    return (
+      <>
+        <NotificationBtn
+          count={activeDrawEvents.length}
+          onClick={handleOnNotificationClicked}
+        />
+      </>
+    );
   }
 
-  return <>No new notifications</>;
+  return <></>;
 };
 
 export default Notification;

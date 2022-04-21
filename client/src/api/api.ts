@@ -15,4 +15,8 @@ export default class Api {
 
     return URL.createObjectURL(response.data);
   }
+
+  public static async postImage(imageData: string): Promise<void> {
+    await axios.post(`${Api.baseApi}upload_image`, { imageData });
+  }
 }

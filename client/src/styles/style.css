@@ -19,7 +19,6 @@
 
 .neu-btn:active:focus {
   box-shadow: -12px -12px 12px 0 rgba(255, 255, 255, 1),
-    12px 12px 12px 0 rgba(0, 0, 0, 0.3),
     inset -12px -12px 12px 0 rgba(255, 255, 255, 1),
     inset 12px 12px 12px 0 rgba(0, 0, 0, 0.3);
   color: #15e38a;
@@ -28,6 +27,27 @@
 .neu-btn:hover {
   box-shadow: -12px -12px 12px 0 rgba(255, 255, 255, 0.8),
     12px 12px 12px 0 rgba(0, 0, 0, 0.25);
+  color: #8c9290;
+}
+
+.neu-btn-disabled {
+  box-shadow: -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset 12px 12px 12px 0 rgba(0, 0, 0, 0.3);
+  color: #8c9290;
+}
+
+.neu-btn-disabled:hover {
+  box-shadow: -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset 12px 12px 12px 0 rgba(0, 0, 0, 0.3);
+  color: #8c9290;
+}
+
+.neu-btn-disabled:active:focus {
+  box-shadow: -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset 12px 12px 12px 0 rgba(0, 0, 0, 0.3);
   color: #8c9290;
 }
 

@@ -10,6 +10,7 @@ import {
   faEyeDropper,
   faChevronLeft,
   faImage,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Pen: React.FC = () => {
@@ -52,6 +53,10 @@ const Image: React.FC = () => {
   return <FontAwesomeIcon icon={faImage} />;
 };
 
+const Bell: React.FC = () => {
+  return <FontAwesomeIcon icon={faBell} />;
+};
+
 export default {
   Pen,
   Circle,
@@ -63,4 +68,5 @@ export default {
   Color,
   Back,
   Image,
+  Bell,
 };

@@ -11,12 +11,14 @@ const Header = () => {
     <div className="app-container flex flex-row justify-between px-4">
       {pathname !== "/" ? (
         <>
-          <div className="mt-4">
+          <div className="mt-2">
             <Btn onClicked={() => navigate(-1)}>
               <Icon.Back />
             </Btn>
           </div>
-          <Notification />
+          <div className="mt-2">
+            <Notification />
+          </div>
         </>
       ) : (
         <></>
