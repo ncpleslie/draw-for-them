@@ -34,7 +34,7 @@ export default function View() {
   };
 
   return (
-    <div className="h-[100vh] app-container">
+    <div className="h-[100vh] app-container overflow-hidden">
       <Header />
       <div className="flex flex-col justify-center items-center">
         {loading && (
