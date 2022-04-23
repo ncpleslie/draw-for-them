@@ -11,12 +11,10 @@ const Notification = () => {
   const navigate = useNavigate();
 
   const handleOnNotificationItemClicked = (event: DrawEvent): void => {
-    console.log(event);
-
     navigate({
       pathname: "/view",
       search: createSearchParams({
-        image: event.imageId,
+        imageId: event.imageId,
       }).toString(),
     });
   };
@@ -37,7 +35,7 @@ const Notification = () => {
           >
             <Popover.Panel className="absolute w-[25rem] z-10 px-4 mt-3 transform -translate-x-[23rem] left-1/2">
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-                <div className="relative flex justify-center bg-white px-5 py-9">
+                <div className="relative flex flex-col gap-4 justify-center bg-white px-5 py-9">
                   {activeDrawEvents.map((event) => (
                     <div
                       key={event.imageId}
@@ -47,7 +45,7 @@ const Notification = () => {
                       <button
                         onClick={() => handleOnNotificationItemClicked(event)}
                       >
-                        You have a new drawing from name
+                        You have a new drawing from {event.createdBy}
                       </button>
                     </div>
                   ))}

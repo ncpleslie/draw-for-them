@@ -1,24 +1,26 @@
 import { useEffect, useState } from "react";
-import { useSnapshot } from "valtio";
-import { store } from "../store/store";
 import Api from "../api/api";
 import Header from "../components/Header/Header";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 export default function View() {
-  const { activeDrawEvents } = useSnapshot(store);
   const [loading, setLoading] = useState<boolean>();
   const [image, setImage] = useState<string>();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if (!(activeDrawEvents.length > 0)) {
-      setLoading(true);
+    const imageId = searchParams.get("imageId");
 
-      return;
+    if (!imageId) {
+      navigate({ pathname: "/" });
     }
 
-    handleOnLoad(activeDrawEvents[0].imageId);
-  }, [activeDrawEvents]);
+    if (imageId) {
+      handleOnLoad(imageId);
+    }
+  }, []);
 
   const handleOnLoad = async (imageName: string): Promise<void> => {
     setLoading(true);

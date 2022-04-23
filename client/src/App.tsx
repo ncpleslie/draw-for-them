@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+import { createSearchParams } from "react-router-dom";
 import { useSnapshot } from "valtio";
 import DashboardBtn from "./components/UI/DashboardBtn";
 import Icon from "./components/UI/Icon";
@@ -5,6 +7,19 @@ import { store } from "./store/store";
 
 function App() {
   const { activeDrawEvents } = useSnapshot(store);
+  const [viewLink, setViewLink] = useState<string>();
+
+  useEffect(() => {
+    if (!activeDrawEvents) {
+      return;
+    }
+
+    const searchParams = createSearchParams({
+      imageId: activeDrawEvents[0]?.imageId,
+    }).toString();
+
+    setViewLink(`/view?${searchParams}`);
+  }, [activeDrawEvents]);
 
   return (
     <div className="app-container h-[100vh] w-[100vw] flex flex-row justify-center items-center">
@@ -16,8 +31,8 @@ function App() {
       </DashboardBtn>
       <DashboardBtn
         className="relative h-[90vh] w-[50%] m-4"
-        disabled={activeDrawEvents.length === 0}
-        link="/view"
+        disabled={!viewLink}
+        link={viewLink ? viewLink : ""}
       >
         <div className="relative flex flex-col">
           {activeDrawEvents.length > 0 ? (

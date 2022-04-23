@@ -12,7 +12,7 @@ const Header = () => {
       {pathname !== "/" ? (
         <>
           <div className="mt-2">
-            <Btn onClicked={() => navigate(-1)}>
+            <Btn onClicked={() => navigate("/")}>
               <Icon.Back />
             </Btn>
           </div>
