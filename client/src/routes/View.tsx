@@ -11,11 +11,6 @@ export default function View() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // On page load
-  // useEffect(() => {
-  //   handleOnLoad();
-  // }, []);
-
   // Listen to changes to the url
   useEffect(() => {
     handleOnLoad();

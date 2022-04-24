@@ -70,14 +70,6 @@ export default function Draw() {
     onSave: handleOnSave,
   };
 
-  if (loading) {
-    return (
-      <div className="h-[100vh] flex justify-center items-center">
-        <LoadingIndicator />
-      </div>
-    );
-  }
-
   return (
     <div className="h-[100vh] app-container overflow-hidden">
       <Header />
@@ -87,6 +79,11 @@ export default function Draw() {
           {...sketchControlProps}
           className="my-4 absolute top-0"
         />
+        {loading && (
+          <div className="absolute">
+            <LoadingIndicator />
+          </div>
+        )}
         <SketchArea {...sketchAreaProps} className="h-[90vh] w-[90vw]" />
       </div>
     </div>
