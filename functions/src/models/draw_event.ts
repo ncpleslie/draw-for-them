@@ -1,19 +1,19 @@
 export default class DrawEvent {
-  constructor(active: boolean, createdBy: string, imageId: string) {
+  constructor(active: boolean, imageId: string, sentBy: string) {
     this.active = active;
-    this.createdBy = createdBy;
     this.imageId = imageId;
+    this.sentBy = sentBy;
   }
 
   public active: boolean;
-  public createdBy: string;
   public imageId: string;
+  public sentBy: string;
 
   public toJSON() {
     return {
       active: this.active,
-      created_by: this.createdBy,
-      image_id: this.imageId,
+      imageId: this.imageId,
+      sentBy: this.sentBy,
     };
   }
 }

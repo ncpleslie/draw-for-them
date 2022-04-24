@@ -12,7 +12,8 @@ export const addDrawEventAsync = async (
   const imageAsBase64 = imageData.replace(/^data:image\/\w+;base64,/, "");
   const imageBuffer = Buffer.from(imageAsBase64, "base64");
   const imageByteArray = new Uint8Array(imageBuffer);
-  const filename = uuid();
+  const imageId = uuid();
+  const filename = `${receiverId}/${imageId}`;
   await storage.uploadImageAsync(imageByteArray, filename);
-  await database.createDrawEventAsync(receiverId, filename);
+  await database.createDrawEventAsync(receiverId, imageId);
 };

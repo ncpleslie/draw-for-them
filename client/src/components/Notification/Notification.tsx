@@ -7,7 +7,7 @@ import DrawEvent from "../../models/responses/draw_event.model";
 import { createSearchParams, useNavigate } from "react-router-dom";
 
 const Notification = () => {
-  const { activeDrawEvents } = useSnapshot(store);
+  const { drawEvents } = useSnapshot(store);
   const navigate = useNavigate();
 
   const handleOnNotificationItemClicked = (event: DrawEvent): void => {
@@ -19,11 +19,11 @@ const Notification = () => {
     });
   };
 
-  if (activeDrawEvents.length > 0) {
+  if (drawEvents.length > 0) {
     return (
       <>
         <Popover className="relative">
-          <NotificationBtn count={activeDrawEvents.length} />
+          <NotificationBtn count={drawEvents.length} />
 
           <Transition
             enter="transition duration-100 ease-out"
@@ -36,7 +36,7 @@ const Notification = () => {
             <Popover.Panel className="absolute w-[25rem] z-10 px-4 mt-3 transform -translate-x-[23rem] left-1/2">
               <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                 <div className="relative flex flex-col gap-4 justify-center bg-white px-5 py-9">
-                  {activeDrawEvents.map((event) => (
+                  {drawEvents.map((event) => (
                     <div
                       key={event.imageId}
                       className="flex flex-row items-center gap-2 text-lg"
@@ -45,7 +45,7 @@ const Notification = () => {
                       <button
                         onClick={() => handleOnNotificationItemClicked(event)}
                       >
-                        You have a new drawing from {event.createdBy}
+                        You have a new drawing from {event.sentBy}
                       </button>
                     </div>
                   ))}

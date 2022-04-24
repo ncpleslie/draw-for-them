@@ -1,53 +1,31 @@
-import { getFirestore, doc, onSnapshot } from "firebase/firestore";
+import {
+  getFirestore,
+  onSnapshot,
+  collection,
+  query,
+  where,
+} from "firebase/firestore";
 import { app } from "../api/firebase.config";
 import AppConstant from "../constants/app.constant";
-import User from "../models/responses/user.model";
-import UserEvent from "../models/responses/user_event.model";
+import DrawEvent from "../models/responses/draw_event.model";
 import { store } from "../store/store";
 
 export default class UserEventService {
   private static firestore = getFirestore(app);
 
-  public static start(): void {
-    onSnapshot(
-      doc(
+  public static async start(): Promise<void> {
+    const drawEventDocData = query(
+      collection(
         UserEventService.firestore,
         AppConstant.eventsCollectionName,
-        "user_1"
+        "user_1",
+        "draw_events"
       ),
-      (snapshot) => {
-        const docData = snapshot.data();
-        if (!docData) {
-          return;
-        }
-
-        const userEvent = new UserEvent(docData);
-
-        // set createdBy to a readable username
-        userEvent.drawEvents.forEach(async (drawEvent) => {
-          onSnapshot(
-            doc(
-              UserEventService.firestore,
-              AppConstant.usersCollectionName,
-              drawEvent.createdBy
-            ),
-            (snapshot) => {
-              const docData = snapshot.data();
-              if (!docData) {
-                return;
-              }
-              const user = new User(docData);
-              drawEvent.createdBy = user.name;
-
-              store.drawEvents.push(drawEvent);
-
-              if (drawEvent.active) {
-                store.activeDrawEvents.push(drawEvent);
-              }
-            }
-          );
-        });
-      }
+      where("active", "==", true)
     );
+
+    onSnapshot(drawEventDocData, async (querySnapshot) => {
+      store.drawEvents = querySnapshot.docs.map((d) => new DrawEvent(d.data()));
+    });
   }
 }

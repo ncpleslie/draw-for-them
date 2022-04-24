@@ -1,4 +1,9 @@
-import { FieldValue, Firestore, getFirestore } from "firebase-admin/firestore";
+import {
+  Firestore,
+  getFirestore,
+  QueryDocumentSnapshot,
+  DocumentData,
+} from "firebase-admin/firestore";
 import DrawEvent from "../models/draw_event";
 
 export default class Database {
@@ -11,48 +16,56 @@ export default class Database {
     receiverId: string,
     filename: string
   ): Promise<void> {
-    const eventRef = this.db.collection("events").doc(receiverId);
-    await eventRef.update({
-      draw_events: FieldValue.arrayUnion(
-        new DrawEvent(true, "user_2", filename).toJSON()
-      ),
-    });
+    this.db
+      .collection("events")
+      .doc(receiverId)
+      .collection("draw_events")
+      .add(new DrawEvent(true, filename, "user_2").toJSON());
   }
 
-  public async updateDrawEventByIdAsync(
+  public async updateDrawEventAsync(
     userId: string,
     drawEvent: DrawEvent
   ): Promise<void> {
-    const eventRef = this.db.collection("events").doc(userId);
-    const userEventDoc = await eventRef.get();
+    const drawEventSnapshot = await this.getQuerySnapshotOfDrawEventById(
+      userId,
+      drawEvent.imageId
+    );
 
-    if (!userEventDoc.exists) {
-      throw new Error(`User events for user with id ${userId} were not found.`);
-    }
-
-    const userEvent = userEventDoc.data();
+    await drawEventSnapshot.ref.update(drawEvent.toJSON());
   }
 
   public async getDrawEventAsync(
     userId: string,
-    eventId: string
+    imageId: string
   ): Promise<DrawEvent> {
-    const eventRef = this.db.collection("events").doc(userId);
-    const userEventDoc = await eventRef.get();
+    const drawEventSnapshot = await this.getQuerySnapshotOfDrawEventById(
+      userId,
+      imageId
+    );
+    const drawEvent = drawEventSnapshot.data() as DrawEvent;
 
-    if (!userEventDoc.exists) {
-      throw new Error(`User events for user with id ${userId} were not found.`);
+    return new DrawEvent(drawEvent.active, drawEvent.imageId, drawEvent.sentBy);
+  }
+
+  private async getQuerySnapshotOfDrawEventById(
+    userId: string,
+    imageId: string
+  ): Promise<QueryDocumentSnapshot<DocumentData>> {
+    const eventRef = this.db
+      .collection("events")
+      .doc(userId)
+      .collection("draw_events")
+      .where("imageId", "==", imageId)
+      .limit(1);
+    const eventDoc = await eventRef.get();
+
+    if (eventDoc.empty) {
+      throw new Error(
+        `Draw event ${imageId} for user with id ${userId} was not found.`
+      );
     }
 
-    const userEvent = userEventDoc.data();
-    const drawEvent = (userEvent?.draw_events as any).where(
-      (drawEvent: any) => drawEvent.image_id
-    );
-
-    return new DrawEvent(
-      drawEvent.active,
-      drawEvent.created_by,
-      drawEvent.image_id
-    );
+    return eventDoc.docs[0];
   }
 }

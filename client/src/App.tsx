@@ -6,20 +6,20 @@ import Icon from "./components/UI/Icon";
 import { store } from "./store/store";
 
 function App() {
-  const { activeDrawEvents } = useSnapshot(store);
+  const { drawEvents } = useSnapshot(store);
   const [viewLink, setViewLink] = useState<string>();
 
   useEffect(() => {
-    if (!activeDrawEvents) {
+    if (!drawEvents) {
       return;
     }
 
     const searchParams = createSearchParams({
-      imageId: activeDrawEvents[0]?.imageId,
+      imageId: drawEvents[0]?.imageId,
     }).toString();
 
     setViewLink(`/view?${searchParams}`);
-  }, [activeDrawEvents]);
+  }, [drawEvents]);
 
   return (
     <div className="app-container h-[100vh] w-[100vw] flex flex-row justify-center items-center">
@@ -35,11 +35,11 @@ function App() {
         link={viewLink ? viewLink : ""}
       >
         <div className="relative flex flex-col">
-          {activeDrawEvents.length > 0 ? (
+          {drawEvents.length > 0 ? (
             <div className="absolute right-10 -top-10 text-5xl text-icon-active">
               <Icon.Bell />
               <div className="absolute right-[0.85rem] top-[0.3rem] text-white text-3xl">
-                {activeDrawEvents.length}
+                {drawEvents.length}
               </div>
             </div>
           ) : (
