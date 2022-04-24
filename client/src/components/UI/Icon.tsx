@@ -8,6 +8,10 @@ import {
   faCloudArrowUp,
   faShapes,
   faEyeDropper,
+  faChevronLeft,
+  faImage,
+  faBell,
+  faGift,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Pen: React.FC = () => {
@@ -42,4 +46,33 @@ const Color: React.FC = () => {
   return <FontAwesomeIcon icon={faEyeDropper} />;
 };
 
-export default { Pen, Circle, Square, Undo, Trash, Save, Shapes, Color };
+const Back: React.FC = () => {
+  return <FontAwesomeIcon icon={faChevronLeft} />;
+};
+
+const Image: React.FC = () => {
+  return <FontAwesomeIcon icon={faImage} />;
+};
+
+const Bell: React.FC = () => {
+  return <FontAwesomeIcon icon={faBell} />;
+};
+
+const Gift: React.FC = () => {
+  return <FontAwesomeIcon icon={faGift} />;
+};
+
+export default {
+  Pen,
+  Circle,
+  Square,
+  Undo,
+  Trash,
+  Save,
+  Shapes,
+  Color,
+  Back,
+  Image,
+  Bell,
+  Gift,
+};

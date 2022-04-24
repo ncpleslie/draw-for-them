@@ -1,75 +1,54 @@
-import axios from "axios";
-import { useState } from "react";
-import SketchArea from "./components/SketchArea/SketchArea";
-import SketchControl from "./components/SketchControl/SketchControl";
+import { useEffect, useState } from "react";
+import { createSearchParams } from "react-router-dom";
+import { useSnapshot } from "valtio";
+import DashboardBtn from "./components/UI/DashboardBtn";
+import Icon from "./components/UI/Icon";
+import { store } from "./store/store";
 
 function App() {
-  const [isDrawMode, setIsDrawMode] = useState(false);
-  const [selectedColor, setSelectedColor] = useState("#000000");
-  const [undo, setUndo] = useState(false);
-  const [shape, setShape] = useState({ circle: false, square: false });
-  const [trash, setTrash] = useState(false);
-  const [save, setSave] = useState(false);
+  const { drawEvents } = useSnapshot(store);
+  const [viewLink, setViewLink] = useState<string>();
 
-  const handleOnUndoClicked = () => setUndo((prev) => !prev);
-
-  const handleOnCircleClicked = () =>
-    setShape((prev) => ({
-      circle: !prev.circle,
-      square: prev.square,
-    }));
-
-  const handleOnSquareClicked = () =>
-    setShape((prev) => ({
-      circle: prev.circle,
-      square: !prev.square,
-    }));
-
-  const handleOnColorPicked = (color: string) => setSelectedColor(color);
-
-  const handleOnPenClicked = () => setIsDrawMode((prev) => !prev);
-
-  const handleOnTrashClicked = () => setTrash((prev) => !prev);
-
-  const handleOnSaveClicked = () => setSave((prev) => !prev);
-
-  const handleOnSave = async (imageData: string): Promise<void> => {
-    try {
-      await axios.post(
-        "https://us-central1-draw-for-them.cloudfunctions.net/upload_image",
-        { imageData }
-      );
-    } catch (e) {
-      console.error("Failed to upload image", e);
+  useEffect(() => {
+    if (!drawEvents) {
+      return;
     }
-  };
 
-  const sketchControlProps = {
-    isDrawMode,
-    selectedColor,
-    onPenClicked: handleOnPenClicked,
-    onCircleClicked: handleOnCircleClicked,
-    onSquareClicked: handleOnSquareClicked,
-    onUndoClicked: handleOnUndoClicked,
-    onTrashClicked: handleOnTrashClicked,
-    onSaveClicked: handleOnSaveClicked,
-    onColorPicked: handleOnColorPicked,
-  };
+    const searchParams = createSearchParams({
+      imageId: drawEvents[0]?.imageId,
+    }).toString();
 
-  const sketchAreaProps = {
-    isDrawMode,
-    selectedColor,
-    undo,
-    shape,
-    trash,
-    save,
-    onSave: handleOnSave,
-  };
+    setViewLink(`/view?${searchParams}`);
+  }, [drawEvents]);
 
   return (
-    <div className="flex flex-col justify-center items-center">
-      <SketchControl {...sketchControlProps} className="my-4 absolute top-0" />
-      <SketchArea {...sketchAreaProps} className="h-[160px] w-[240px] mt-20" />
+    <div className="app-container h-[100vh] w-[100vw] flex flex-row justify-center items-center">
+      <DashboardBtn className="h-[90vh] w-[50%] m-4" link="/draw">
+        <>
+          <Icon.Pen />
+          Draw
+        </>
+      </DashboardBtn>
+      <DashboardBtn
+        className="relative h-[90vh] w-[50%] m-4"
+        disabled={!viewLink}
+        link={viewLink ? viewLink : ""}
+      >
+        <div className="relative flex flex-col">
+          {drawEvents.length > 0 ? (
+            <div className="absolute right-10 -top-10 text-5xl text-icon-active">
+              <Icon.Bell />
+              <div className="absolute right-[0.85rem] top-[0.3rem] text-white text-3xl">
+                {drawEvents.length}
+              </div>
+            </div>
+          ) : (
+            <></>
+          )}
+          <Icon.Image />
+          View
+        </div>
+      </DashboardBtn>
     </div>
   );
 }
