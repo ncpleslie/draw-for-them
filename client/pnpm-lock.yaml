@@ -1,32 +1,30 @@
 lockfileVersion: 5.3
 
 specifiers:
-  '@fortawesome/fontawesome-svg-core': ^6.1.1
-  '@fortawesome/free-solid-svg-icons': ^6.1.1
-  '@fortawesome/react-fontawesome': ^0.1.18
-  '@headlessui/react': ^1.5.0
-  '@popperjs/core': ^2.11.5
+  '@fortawesome/fontawesome-svg-core': 6.1.1
+  '@fortawesome/free-solid-svg-icons': 6.1.1
+  '@fortawesome/react-fontawesome': 0.1.18
+  '@headlessui/react': 1.5.0
   '@types/react': 17.0.43
   '@types/react-dom': 17.0.14
-  '@typescript-eslint/eslint-plugin': ^5.17.0
-  '@typescript-eslint/parser': ^5.17.0
+  '@typescript-eslint/eslint-plugin': 5.17.0
+  '@typescript-eslint/parser': 5.17.0
   '@vitejs/plugin-react': 1.3.0
-  axios: ^0.26.1
-  classnames: ^2.3.1
-  eslint: ^8.12.0
-  eslint-plugin-react: ^7.29.4
-  fabric: ^5.2.1
-  fabricjs-react: ^1.0.8
-  firebase: ^9.6.11
+  axios: 0.26.1
+  classnames: 2.3.1
+  eslint: 8.12.0
+  eslint-plugin-react: 7.29.4
+  fabric: 5.2.1
+  fabricjs-react: 1.0.8
+  firebase: 9.6.11
   prettier: 2.6.1
   prettier-plugin-tailwindcss: 0.1.8
   react: 18.0.0
-  react-colorful: ^5.5.1
+  react-colorful: 5.5.1
   react-dom: 18.0.0
-  react-popper: ^2.2.5
-  react-router-dom: '6'
+  react-router-dom: 6.3.0
   typescript: 4.6.3
-  valtio: ^1.5.2
+  valtio: 1.5.2
   vitawind: 2.2.4
   vite: 2.9.1
 
@@ -35,7 +33,6 @@ dependencies:
   '@fortawesome/free-solid-svg-icons': 6.1.1
   '@fortawesome/react-fontawesome': 0.1.18_02c9bb727bd1fb5f0c396f6c2f700a1d
   '@headlessui/react': 1.5.0_react-dom@18.0.0+react@18.0.0
-  '@popperjs/core': 2.11.5
   axios: 0.26.1
   classnames: 2.3.1
   fabric: 5.2.1
@@ -44,7 +41,6 @@ dependencies:
   react: 18.0.0
   react-colorful: 5.5.1_react-dom@18.0.0+react@18.0.0
   react-dom: 18.0.0_react@18.0.0
-  react-popper: 2.2.5_ddeceac54e80ad082dd3259289d97632
   react-router-dom: 6.3.0_react-dom@18.0.0+react@18.0.0
   valtio: 1.5.2_react@18.0.0+vite@2.9.1
 
@@ -941,10 +937,6 @@ packages:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.13.0
     dev: true
-
-  /@popperjs/core/2.11.5:
-    resolution: {integrity: sha512-9X2obfABZuDVLCgPK9aX0a/x4jaOEweTTWE2+9sr0Qqqevj2Uv5XorvusThmc9XGYpS9yI+fhh8RTafBtGposw==}
-    dev: false
 
   /@protobufjs/aspromise/1.1.2:
     resolution: {integrity: sha1-m4sMxmPWaafY9vXQiToU00jzD78=}
@@ -3239,24 +3231,8 @@ packages:
       scheduler: 0.21.0
     dev: false
 
-  /react-fast-compare/3.2.0:
-    resolution: {integrity: sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==}
-    dev: false
-
   /react-is/16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
-
-  /react-popper/2.2.5_ddeceac54e80ad082dd3259289d97632:
-    resolution: {integrity: sha512-kxGkS80eQGtLl18+uig1UIf9MKixFSyPxglsgLBxlYnyDf65BiY9B3nZSc6C9XUNDgStROB0fMQlTEz1KxGddw==}
-    peerDependencies:
-      '@popperjs/core': ^2.0.0
-      react: ^16.8.0 || ^17
-    dependencies:
-      '@popperjs/core': 2.11.5
-      react: 18.0.0
-      react-fast-compare: 3.2.0
-      warning: 4.0.3
-    dev: false
 
   /react-refresh/0.11.0:
     resolution: {integrity: sha512-F27qZr8uUqwhWZboondsPx8tnC3Ct3SxZA3V5WyEvujRyyNv0VYPhoBg1gZ8/MV5tubQp76Trw8lTv9hzRBa+A==}
@@ -3856,12 +3832,6 @@ packages:
       xml-name-validator: 4.0.0
     dev: false
     optional: true
-
-  /warning/4.0.3:
-    resolution: {integrity: sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==}
-    dependencies:
-      loose-envify: 1.4.0
-    dev: false
 
   /webidl-conversions/3.0.1:
     resolution: {integrity: sha1-JFNCdeKnvGvnvIZhHMFq4KVlSHE=}

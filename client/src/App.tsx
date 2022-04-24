@@ -7,10 +7,12 @@ import { store } from "./store/store";
 
 function App() {
   const { drawEvents } = useSnapshot(store);
-  const [viewLink, setViewLink] = useState<string>();
+  const [viewLink, setViewLink] = useState<string | null>();
 
   useEffect(() => {
-    if (!drawEvents) {
+    if (!drawEvents || drawEvents.length === 0) {
+      setViewLink(null);
+
       return;
     }
 
