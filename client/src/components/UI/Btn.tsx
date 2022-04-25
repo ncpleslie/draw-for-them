@@ -16,7 +16,7 @@ const Btn: React.FC<PropsWithChildren<BtnProps>> = ({
   return (
     <button
       style={style}
-      className={`neu-btn-small transition-all text-white text-2xl py-2 px-4 rounded ${className}`}
+      className={`neu-btn-small transition-all text-white text-2xl py-2 px-4 rounded-full ${className}`}
       onClick={onClicked}
     >
       {children}

@@ -12,6 +12,7 @@ import {
   faImage,
   faBell,
   faGift,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Pen: React.FC = () => {
@@ -62,6 +63,10 @@ const Gift: React.FC = () => {
   return <FontAwesomeIcon icon={faGift} />;
 };
 
+const Close: React.FC = () => {
+  return <FontAwesomeIcon icon={faXmark} />;
+};
+
 export default {
   Pen,
   Circle,
@@ -75,4 +80,5 @@ export default {
   Image,
   Bell,
   Gift,
+  Close,
 };

@@ -7,7 +7,9 @@ import {
 } from "firebase/firestore";
 import { app } from "../api/firebase.config";
 import AppConstant from "../constants/app.constant";
+import ErrorNotification from "../models/error-notification.model";
 import DrawEvent from "../models/responses/draw_event.model";
+import SuccessNotification from "../models/success-notification.model";
 import { store } from "../store/store";
 
 export default class UserEventService {
@@ -26,6 +28,8 @@ export default class UserEventService {
 
     onSnapshot(drawEventDocData, async (querySnapshot) => {
       store.drawEvents = querySnapshot.docs.map((d) => new DrawEvent(d.data()));
+      store.notifications.push(new SuccessNotification("New drawing"));
+      store.notifications.push(new ErrorNotification("Error"));
     });
   }
 }

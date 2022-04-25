@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Notification from "../Notification/Notification";
 import Btn from "../UI/Btn";
 import Icon from "../UI/Icon";
