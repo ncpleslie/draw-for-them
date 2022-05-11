@@ -5,6 +5,9 @@ import Header from "../components/Header/Header";
 import SketchArea from "../components/SketchArea/SketchArea";
 import SketchControl from "../components/SketchControl/SketchControl";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
+import ErrorNotification from "../models/error-notification.model";
+import SuccessNotification from "../models/success-notification.model";
+import { store } from "../store/store";
 
 export default function Draw() {
   const [isDrawMode, setIsDrawMode] = useState(false);
@@ -41,10 +44,17 @@ export default function Draw() {
     setLoading(true);
     try {
       await Api.postImage(imageData);
-    } catch (e) {
-      console.error("Failed to upload image", e);
-    } finally {
+      store.notifications.push(
+        new SuccessNotification("That masterpiece was sent!")
+      );
+      handleOnTrashClicked();
       setLoading(false);
+    } catch (e) {
+      store.notifications.push(
+        new ErrorNotification(
+          "Oops! Something went wrong. Please try send that masterpiece again."
+        )
+      );
     }
   };
 

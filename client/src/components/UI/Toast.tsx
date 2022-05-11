@@ -70,9 +70,10 @@ const Toast = () => {
               } ${toastType === NotificationType.Error && "bg-red-100"}`}
             >
               <div className="flex flex-row justify-between items-center">
+                <div></div>
                 <Dialog.Title
                   as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
+                  className="text-lg font-medium leading-6 text-gray-900 text-center"
                 >
                   {toastMessage}
                 </Dialog.Title>

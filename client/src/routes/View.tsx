@@ -3,6 +3,8 @@ import Api from "../api/api";
 import Header from "../components/Header/Header";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
+import ErrorNotification from "../models/error-notification.model";
+import { store } from "../store/store";
 
 export default function View() {
   const [loading, setLoading] = useState<boolean>();
@@ -31,7 +33,11 @@ export default function View() {
       const response = await Api.getImageById(imageId);
       setImage(response);
     } catch (e) {
-      console.error("Failed to download image", e);
+      store.notifications.push(
+        new ErrorNotification(
+          "Oops! Something went wrong while trying to view that masterpiece"
+        )
+      );
       navigate({ pathname: "/" });
     } finally {
       setLoading(false);

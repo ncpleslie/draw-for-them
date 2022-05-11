@@ -16,20 +16,47 @@ export default class UserEventService {
   private static firestore = getFirestore(app);
 
   public static async start(): Promise<void> {
-    const drawEventDocData = query(
-      collection(
-        UserEventService.firestore,
-        AppConstant.eventsCollectionName,
-        "user_1",
-        "draw_events"
-      ),
-      where("active", "==", true)
-    );
+    try {
+      const drawEventDocData = query(
+        collection(
+          UserEventService.firestore,
+          AppConstant.eventsCollectionName,
+          "user_1",
+          "draw_events"
+        ),
+        where("active", "==", true)
+      );
 
-    onSnapshot(drawEventDocData, async (querySnapshot) => {
-      store.drawEvents = querySnapshot.docs.map((d) => new DrawEvent(d.data()));
-      store.notifications.push(new SuccessNotification("New drawing"));
-      store.notifications.push(new ErrorNotification("Error"));
-    });
+      onSnapshot(drawEventDocData, async (querySnapshot) => {
+        const newEvents = querySnapshot.docs.map(
+          (d) => new DrawEvent(d.data())
+        );
+        if (newEvents.length === 0) {
+          store.drawEvents = [];
+
+          return;
+        }
+
+        // Determine how many events are new, different events.
+        const diffEvents = newEvents.filter(
+          (newEvent) =>
+            !store.drawEvents.some(
+              (currEvent) => currEvent.imageId === newEvent.imageId
+            )
+        );
+
+        if (diffEvents.length > 0) {
+          store.notifications.push(
+            new SuccessNotification("You have a new drawing")
+          );
+        }
+
+        store.drawEvents = newEvents;
+      });
+    } catch {
+      store.notifications.push(
+        new ErrorNotification("Oops! Something went wrong")
+      );
+    }
   }
 }
