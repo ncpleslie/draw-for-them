@@ -17,7 +17,7 @@ specifiers:
   fabric: 5.2.1
   fabricjs-react: 1.0.8
   firebase: 9.6.11
-  firebaseui: ^0.600.0
+  firebaseui: 0.600.0
   prettier: 2.6.1
   prettier-plugin-tailwindcss: 0.1.8
   react: 18.0.0
