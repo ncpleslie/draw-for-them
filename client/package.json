@@ -16,7 +16,7 @@
     "fabric": "5.2.1",
     "fabricjs-react": "1.0.8",
     "firebase": "9.6.11",
-    "firebaseui": "^0.600.0",
+    "firebaseui": "0.600.0",
     "react": "18.0.0",
     "react-colorful": "5.5.1",
     "react-dom": "18.0.0",

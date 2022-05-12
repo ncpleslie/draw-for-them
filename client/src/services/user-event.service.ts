@@ -7,10 +7,9 @@ import {
 } from "firebase/firestore";
 import { app } from "../api/firebase.config";
 import AppConstant from "../constants/app.constant";
-import ErrorNotification from "../models/error-notification.model";
 import DrawEvent from "../models/responses/draw_event.model";
-import SuccessNotification from "../models/success-notification.model";
 import { store } from "../store/store";
+import ToastService from "./toast.service";
 
 export default class UserEventService {
   private static firestore = getFirestore(app);
@@ -46,17 +45,13 @@ export default class UserEventService {
         );
 
         if (diffEvents.length > 0) {
-          store.notifications.push(
-            new SuccessNotification("You have a new drawing")
-          );
+          ToastService.showSuccessToast("You have a new drawing");
         }
 
         store.drawEvents = newEvents;
       });
     } catch {
-      store.notifications.push(
-        new ErrorNotification("Oops! Something went wrong")
-      );
+      ToastService.showErrorToast("Oops! Something went wrong");
     }
   }
 }

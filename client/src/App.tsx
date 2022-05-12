@@ -1,58 +1,71 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Draw from "./routes/Draw";
+import Login from "./routes/Login";
+import View from "./routes/View";
+import UserEventService from "./services/user-event.service";
+import Toast from "./components/UI/Toast";
+import UserService from "./services/user.service";
+import RequireAuth from "./components/Auth/RequireAuth";
 import { useEffect, useState } from "react";
-import { createSearchParams } from "react-router-dom";
-import { useSnapshot } from "valtio";
-import DashboardBtn from "./components/UI/DashboardBtn";
-import Icon from "./components/UI/Icon";
-import { store } from "./store/store";
+import Root from "./routes/Root";
+import LoadingIndicator from "./components/UI/LoadingIndicator";
 
-function App() {
-  const { drawEvents } = useSnapshot(store);
-  const [viewLink, setViewLink] = useState<string | null>();
+export default function App() {
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!drawEvents || drawEvents.length === 0) {
-      setViewLink(null);
+    (async () => {
+      setLoading(true);
+      try {
+        await UserService.getAndPersistCurrentUser();
+        UserService.listenToAuthChange();
+        UserEventService.start();
+      } catch (e) {
+        setLoading(false);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
-      return;
-    }
-
-    const searchParams = createSearchParams({
-      imageId: drawEvents[0]?.imageId,
-    }).toString();
-
-    setViewLink(`/view?${searchParams}`);
-  }, [drawEvents]);
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-[100vh]">
+        <LoadingIndicator />
+      </div>
+    );
+  }
 
   return (
-    <div className="app-container h-[100vh] w-[100vw] flex flex-row justify-center items-center">
-      <DashboardBtn className="h-[90vh] w-[50%] m-4" link="/draw">
-        <>
-          <Icon.Pen />
-          Draw
-        </>
-      </DashboardBtn>
-      <DashboardBtn
-        className="relative h-[90vh] w-[50%] m-4"
-        disabled={!viewLink}
-        link={viewLink ? viewLink : ""}
-      >
-        <div className="relative flex flex-col">
-          {drawEvents.length > 0 ? (
-            <div className="absolute right-10 -top-10 text-5xl text-icon-active">
-              <Icon.Bell />
-              <div className="absolute right-[0.85rem] top-[0.3rem] text-white text-3xl">
-                {drawEvents.length}
-              </div>
-            </div>
-          ) : (
-            <></>
-          )}
-          <Icon.Image />
-          View
-        </div>
-      </DashboardBtn>
-    </div>
+    <BrowserRouter>
+      <Toast />
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route
+          path="/"
+          element={
+            <RequireAuth>
+              <Root />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/draw"
+          element={
+            <RequireAuth>
+              <Draw />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/view"
+          element={
+            <RequireAuth>
+              <View />
+            </RequireAuth>
+          }
+        />
+      </Routes>
+    </BrowserRouter>
   );
 }
-
-export default App;
