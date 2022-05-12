@@ -14,8 +14,8 @@ specifiers:
   classnames: 2.3.1
   eslint: 8.12.0
   eslint-plugin-react: 7.29.4
-  fabric: 5.2.1
-  fabricjs-react: 1.0.8
+  fabric: github:ncpleslie/fabric.js
+  fabricjs-react: github:ncpleslie/fabricjs-react
   firebase: 9.6.11
   firebaseui: 0.600.0
   prettier: 2.6.1
@@ -36,8 +36,8 @@ dependencies:
   '@headlessui/react': 1.5.0_react-dom@18.0.0+react@18.0.0
   axios: 0.26.1
   classnames: 2.3.1
-  fabric: 5.2.1
-  fabricjs-react: 1.0.8_966ed171c7856540e8f96e825bf2e709
+  fabric: github.com/ncpleslie/fabric.js/fd83c71c427fa965a4d45d6a277dac32533c6479
+  fabricjs-react: github.com/ncpleslie/fabricjs-react/cecd31b288f54031967b4c9ad870e90bcc9f4eb1_3c9f48aa8ce4447d8bec696feec93b25
   firebase: 9.6.11
   firebaseui: 0.600.0_firebase@9.6.11
   react: 18.0.0
@@ -2123,32 +2123,6 @@ packages:
     resolution: {integrity: sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==}
     engines: {node: '>=0.10.0'}
 
-  /fabric/5.2.1:
-    resolution: {integrity: sha512-Irltx4i+aLccWgdQj2Uvrwh/XulDAqqYMZ1bI13fAtmlxl4ggobo0t7VVYy3Ob4YEB0sCeJZKE8ExZgGo/amkw==}
-    engines: {node: '>=14.0.0'}
-    optionalDependencies:
-      canvas: 2.9.1
-      jsdom: 19.0.0_canvas@2.9.1
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - supports-color
-      - utf-8-validate
-    dev: false
-
-  /fabricjs-react/1.0.8_966ed171c7856540e8f96e825bf2e709:
-    resolution: {integrity: sha512-IHsxpEAAxXAUToSsQQw6OMjJNkHYwURqdf+RPjeSilPn1iVpDfBpSyYBX+hqCTg3x7b7WplYZOi/bhmrxMVvYQ==}
-    engines: {node: '>=10'}
-    peerDependencies:
-      fabric: ^4.3.1
-      react: ^17.0.1
-      react-dom: ^17.0.1
-    dependencies:
-      fabric: 5.2.1
-      react: 18.0.0
-      react-dom: 18.0.0_react@18.0.0
-    dev: false
-
   /fast-deep-equal/3.1.3:
     resolution: {integrity: sha512-f3qQ9oQy9j2AhBe/H9VC91wLmKBCCU/gDOnKNAYG5hswO7BLKj09Hc5HYNz9cGI++xlpDCIgDaitVs03ATR84Q==}
     dev: true
@@ -4011,4 +3985,37 @@ packages:
       string-width: 4.2.3
       y18n: 5.0.8
       yargs-parser: 20.2.9
+    dev: false
+
+  github.com/ncpleslie/fabric.js/fd83c71c427fa965a4d45d6a277dac32533c6479:
+    resolution: {tarball: https://codeload.github.com/ncpleslie/fabric.js/tar.gz/fd83c71c427fa965a4d45d6a277dac32533c6479}
+    name: fabric
+    version: 5.1.0
+    engines: {node: '>=14.0.0'}
+    optionalDependencies:
+      canvas: 2.9.1
+      jsdom: 19.0.0_canvas@2.9.1
+    transitivePeerDependencies:
+      - bufferutil
+      - encoding
+      - supports-color
+      - utf-8-validate
+    dev: false
+
+  github.com/ncpleslie/fabricjs-react/cecd31b288f54031967b4c9ad870e90bcc9f4eb1_3c9f48aa8ce4447d8bec696feec93b25:
+    resolution: {tarball: https://codeload.github.com/ncpleslie/fabricjs-react/tar.gz/cecd31b288f54031967b4c9ad870e90bcc9f4eb1}
+    id: github.com/ncpleslie/fabricjs-react/cecd31b288f54031967b4c9ad870e90bcc9f4eb1
+    name: fabricjs-react
+    version: 1.0.8
+    engines: {node: '>=10'}
+    prepare: true
+    requiresBuild: true
+    peerDependencies:
+      fabric: github:ncpleslie/fabric.js
+      react: ^17.0.1
+      react-dom: ^17.0.1
+    dependencies:
+      fabric: github.com/ncpleslie/fabric.js/fd83c71c427fa965a4d45d6a277dac32533c6479
+      react: 18.0.0
+      react-dom: 18.0.0_react@18.0.0
     dev: false
