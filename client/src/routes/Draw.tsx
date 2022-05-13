@@ -1,10 +1,10 @@
 import { useState } from "react";
-import Api from "../api/api";
 import Header from "../components/Header/Header";
 import SketchArea from "../components/SketchArea/SketchArea";
 import SketchControl from "../components/SketchControl/SketchControl";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import ToastService from "../services/toast.service";
+import UserEventService from "../services/user-event.service";
 
 export default function Draw() {
   const [isDrawMode, setIsDrawMode] = useState(false);
@@ -40,7 +40,7 @@ export default function Draw() {
   const handleOnSave = async (imageData: string): Promise<void> => {
     setLoading(true);
     try {
-      await Api.postImage(imageData);
+      await UserEventService.sendDrawEvent(imageData);
       ToastService.showSuccessToast("That masterpiece was sent!");
       handleOnTrashClicked();
       setLoading(false);

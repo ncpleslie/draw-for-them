@@ -5,6 +5,7 @@ import LoadingIndicator from "../components/UI/LoadingIndicator";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import ErrorNotification from "../models/error-notification.model";
 import { store } from "../store/store";
+import UserEventService from "../services/user-event.service";
 
 export default function View() {
   const [loading, setLoading] = useState<boolean>();
@@ -30,7 +31,7 @@ export default function View() {
     }
 
     try {
-      const response = await Api.getImageById(imageId);
+      const response = await UserEventService.getDrawEvent(imageId);
       setImage(response);
     } catch (e) {
       store.notifications.push(

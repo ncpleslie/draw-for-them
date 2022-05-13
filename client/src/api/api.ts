@@ -1,5 +1,6 @@
 import axios from "axios";
 import AppConstant from "../constants/app.constant";
+import UserDetail from "../models/user-detail.model";
 
 export default class Api {
   public static async getImageById(imageId: string): Promise<string> {
@@ -14,11 +15,49 @@ export default class Api {
     return URL.createObjectURL(response.data);
   }
 
-  public static async postImage(imageData: string): Promise<void> {
-    const receiverId = "user_1";
+  public static async postImage(
+    userId: string,
+    imageData: string
+  ): Promise<void> {
     await axios.post(`${AppConstant.baseUrl}add_draw_event`, {
       imageData,
-      receiverId,
+      receiverId: userId,
     });
+  }
+
+  public static async getUserById(userId: string): Promise<UserDetail> {
+    const params = new URLSearchParams();
+    params.append("userId", userId);
+
+    const response = await axios.get(`${AppConstant.baseUrl}get_user`, {
+      params,
+    });
+
+    const responseData = response.data as UserDetail;
+
+    return new UserDetail(
+      responseData.displayName,
+      responseData.email,
+      responseData.friendIds,
+      responseData.uid
+    );
+  }
+
+  public static async searchUser(displayName: string): Promise<UserDetail> {
+    const params = new URLSearchParams();
+    params.append("displayName", displayName);
+
+    const response = await axios.get(`${AppConstant.baseUrl}search_user`, {
+      params,
+    });
+
+    const responseData = response.data as UserDetail;
+
+    return new UserDetail(
+      responseData.displayName,
+      responseData.email,
+      responseData.friendIds,
+      responseData.uid
+    );
   }
 }

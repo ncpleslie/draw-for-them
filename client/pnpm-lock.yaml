@@ -18,6 +18,7 @@ specifiers:
   fabricjs-react: github:ncpleslie/fabricjs-react
   firebase: 9.6.11
   firebaseui: 0.600.0
+  history: ^5.3.0
   npm-run-all: ^4.1.5
   prettier: 2.6.1
   prettier-plugin-tailwindcss: 0.1.8
@@ -41,6 +42,7 @@ dependencies:
   fabricjs-react: github.com/ncpleslie/fabricjs-react/168f97331779600a18df8974ac01ad866e05efbf_3c9f48aa8ce4447d8bec696feec93b25
   firebase: 9.6.11
   firebaseui: 0.600.0_firebase@9.6.11
+  history: 5.3.0
   react: 18.0.0
   react-colorful: 5.5.1_react-dom@18.0.0+react@18.0.0
   react-dom: 18.0.0_react@18.0.0

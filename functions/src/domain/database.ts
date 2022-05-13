@@ -19,9 +19,48 @@ export default class Database {
     this.db
       .collection(CollectionKey.Users)
       .doc(user.uid)
-      .set(new User(user.displayName, user.email, user.uid).toJSON());
+      .set(new User(user.displayName, user.email, [], user.uid).toJSON());
 
     return user;
+  }
+
+  public async getUserAsync(user: UserRecord): Promise<User> {
+    const userRef = this.db.collection(CollectionKey.Users).doc(user.uid);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      throw new Error(`User ${user.uid} was not found.`);
+    }
+
+    const userData = userDoc.data() as User;
+
+    return new User(
+      userData.displayName,
+      userData.email,
+      userData.friendIds,
+      userData.uid
+    );
+  }
+
+  public async getUserByDisplayNameAsync(displayName: string): Promise<User> {
+    const userRef = this.db
+      .collection(CollectionKey.Users)
+      .where("displayName", "==", displayName)
+      .limit(1);
+    const userDoc = await userRef.get();
+
+    if (userDoc.empty) {
+      throw new Error(`User ${displayName} was not found.`);
+    }
+
+    const userData = userDoc.docs[0].data() as User;
+
+    return new User(
+      userData.displayName,
+      userData.email,
+      userData.friendIds,
+      userData.uid
+    );
   }
 
   public async createDrawEventAsync(

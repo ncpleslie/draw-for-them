@@ -1,13 +1,10 @@
-import BaseDbEntity from "./base-db-entity";
-
-export default class User extends BaseDbEntity {
+export default class UserDetail {
   constructor(
     displayName: string | undefined,
     email: string | undefined,
     friendIds: string[],
     uid: string
   ) {
-    super();
     this.displayName = displayName || "Unknown User";
     this.email = email || "unknown email";
     this.friendIds = friendIds || [];
@@ -18,13 +15,4 @@ export default class User extends BaseDbEntity {
   public email: string;
   public friendIds: string[];
   public uid: string;
-
-  public toJSON() {
-    return {
-      displayName: this.displayName,
-      email: this.email,
-      friendIds: this.friendIds,
-      uid: this.uid,
-    };
-  }
 }

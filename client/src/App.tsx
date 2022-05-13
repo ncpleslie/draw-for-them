@@ -9,6 +9,9 @@ import RequireAuth from "./components/Auth/RequireAuth";
 import { useEffect, useState } from "react";
 import Root from "./routes/Root";
 import LoadingIndicator from "./components/UI/LoadingIndicator";
+import AddFriends from "./routes/AddFriends";
+import { CustomRouter } from "./components/CustomRouter/CustomerRouter";
+import customHistory from "./components/CustomRouter/history";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -37,7 +40,7 @@ export default function App() {
   }
 
   return (
-    <BrowserRouter>
+    <CustomRouter history={customHistory}>
       <Toast />
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -65,7 +68,15 @@ export default function App() {
             </RequireAuth>
           }
         />
+        <Route
+          path="/add_friends"
+          element={
+            <RequireAuth>
+              <AddFriends />
+            </RequireAuth>
+          }
+        />
       </Routes>
-    </BrowserRouter>
+    </CustomRouter>
   );
 }

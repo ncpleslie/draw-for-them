@@ -5,6 +5,7 @@ import {
   query,
   where,
 } from "firebase/firestore";
+import Api from "../api/api";
 import { app } from "../api/firebase.config";
 import AppConstant from "../constants/app.constant";
 import DrawEvent from "../models/responses/draw_event.model";
@@ -15,12 +16,18 @@ export default class UserEventService {
   private static firestore = getFirestore(app);
 
   public static async start(): Promise<void> {
+    if (!store.user) {
+      return;
+    }
+
+    const userId = store.user.uid;
+
     try {
       const drawEventDocData = query(
         collection(
           UserEventService.firestore,
           AppConstant.eventsCollectionName,
-          "user_1",
+          userId,
           "draw_events"
         ),
         where("active", "==", true)
@@ -45,7 +52,7 @@ export default class UserEventService {
         );
 
         if (diffEvents.length > 0) {
-          ToastService.showSuccessToast("You have a new drawing");
+          ToastService.showSuccessToast("You have a new drawing!");
         }
 
         store.drawEvents = newEvents;
@@ -53,5 +60,14 @@ export default class UserEventService {
     } catch {
       ToastService.showErrorToast("Oops! Something went wrong");
     }
+  }
+
+  public static async sendDrawEvent(imageData: string): Promise<void> {
+    // TODO: Trigger user selection dialog here
+    await Api.postImage(store.user?.uid!, imageData);
+  }
+
+  public static async getDrawEvent(imageId: string): Promise<string> {
+    return await Api.getImageById(imageId);
   }
 }
