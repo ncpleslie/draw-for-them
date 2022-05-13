@@ -38,7 +38,12 @@ export default function Login() {
       },
       signInFlow: "popup",
       signInSuccessUrl: "/",
-      signInOptions: [firebase.auth.EmailAuthProvider.PROVIDER_ID],
+      signInOptions: [
+        {
+          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+          requireDisplayName: true,
+        },
+      ],
     };
 
     ui.start("#firebaseui-auth-container", uiConfig);

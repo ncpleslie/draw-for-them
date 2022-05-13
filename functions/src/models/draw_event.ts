@@ -1,5 +1,8 @@
-export default class DrawEvent {
+import BaseDbEntity from "./base-db-entity";
+
+export default class DrawEvent extends BaseDbEntity {
   constructor(active: boolean, imageId: string, sentBy: string) {
+    super();
     this.active = active;
     this.imageId = imageId;
     this.sentBy = sentBy;

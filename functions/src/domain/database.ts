@@ -4,7 +4,10 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
 } from "firebase-admin/firestore";
+import { UserRecord } from "firebase-functions/v1/auth";
+import { CollectionKey } from "../enums/collection-key.enum";
 import DrawEvent from "../models/draw_event";
+import User from "../models/user";
 
 export default class Database {
   private db: Firestore;
@@ -12,14 +15,23 @@ export default class Database {
     this.db = getFirestore();
   }
 
+  public async createUserAsync(user: UserRecord): Promise<UserRecord> {
+    this.db
+      .collection(CollectionKey.Users)
+      .doc(user.uid)
+      .set(new User(user.displayName, user.email, user.uid).toJSON());
+
+    return user;
+  }
+
   public async createDrawEventAsync(
     receiverId: string,
     filename: string
   ): Promise<void> {
     this.db
-      .collection("events")
+      .collection(CollectionKey.Events)
       .doc(receiverId)
-      .collection("draw_events")
+      .collection(CollectionKey.DrawEvents)
       .add(new DrawEvent(true, filename, "user_2").toJSON());
   }
 
@@ -53,9 +65,9 @@ export default class Database {
     imageId: string
   ): Promise<QueryDocumentSnapshot<DocumentData>> {
     const eventRef = this.db
-      .collection("events")
+      .collection(CollectionKey.Events)
       .doc(userId)
-      .collection("draw_events")
+      .collection(CollectionKey.DrawEvents)
       .where("imageId", "==", imageId)
       .limit(1);
     const eventDoc = await eventRef.get();
