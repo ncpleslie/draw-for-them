@@ -49,11 +49,10 @@ export default function AddFriends() {
     try {
       setAddingFriend(true);
       await UserService.addAFriend(foundUser.uid);
+      setAddingFriend(false);
       setFriendAdded(true);
       await redirectIfHasFriends();
     } catch (e) {
-      setAddingFriend(false);
-    } finally {
       setAddingFriend(false);
     }
   };

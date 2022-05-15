@@ -76,9 +76,11 @@ export default class UserEventService {
     }
   }
 
-  public static async sendDrawEvent(imageData: string): Promise<void> {
-    // TODO: Trigger user selection dialog here
-    await Api.postImage(store.user?.uid!, imageData);
+  public static async sendDrawEvent(
+    receiverId: string,
+    imageData: string
+  ): Promise<void> {
+    await Api.postImage(receiverId, imageData);
   }
 
   public static async getDrawEvent(imageId: string): Promise<string> {

@@ -5,6 +5,7 @@ import SketchControl from "../components/SketchControl/SketchControl";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import ToastService from "../services/toast.service";
 import UserEventService from "../services/user-event.service";
+import UserService from "../services/user.service";
 
 export default function Draw() {
   const [isDrawMode, setIsDrawMode] = useState(false);
@@ -40,7 +41,15 @@ export default function Draw() {
   const handleOnSave = async (imageData: string): Promise<void> => {
     setLoading(true);
     try {
-      await UserEventService.sendDrawEvent(imageData);
+      const userDetail = await UserService.getCurrentUserDetail();
+
+      if (userDetail.friendIds.length === 1) {
+        await UserEventService.sendDrawEvent(
+          userDetail.friendIds[0],
+          imageData
+        );
+      }
+
       ToastService.showSuccessToast("That masterpiece was sent!");
       handleOnTrashClicked();
       setLoading(false);
