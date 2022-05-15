@@ -51,11 +51,25 @@ export default class UserEventService {
             )
         );
 
-        if (diffEvents.length > 0) {
-          ToastService.showSuccessToast("You have a new drawing!");
-        }
+        (async () => {
+          for await (const newEvent of newEvents) {
+            if (newEvent.sentBy) {
+              continue;
+            }
 
-        store.drawEvents = newEvents;
+            try {
+              const foundUser = await Api.getUserById(newEvent.sentById);
+              newEvent.sentBy = foundUser.displayName;
+            } catch (e) {
+              // silently ignore these
+            }
+          }
+          store.drawEvents = newEvents;
+
+          if (diffEvents.length > 0) {
+            ToastService.showSuccessToast("You have a new drawing!");
+          }
+        })();
       });
     } catch {
       ToastService.showErrorToast("Oops! Something went wrong");

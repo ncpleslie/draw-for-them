@@ -21,3 +21,13 @@ export const getUserByDisplayNameAsync = async (
 ): Promise<User> => {
   return await database.getUserByDisplayNameAsync(displayName);
 };
+
+export const addFriendByIdAsync = async (
+  userToken: string,
+  userToAddId: string
+): Promise<void> => {
+  const decodedToken = await auth().verifyIdToken(userToken);
+  const currentUser = await auth().getUser(decodedToken.uid);
+  const userToAdd = await auth().getUser(userToAddId);
+  await database.addFriendAsync(currentUser, userToAdd);
+};

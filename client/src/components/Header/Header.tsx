@@ -8,10 +8,6 @@ const Header = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
 
-  const logout = () => {
-    UserService.signOut();
-  };
-
   return (
     <div className="app-container flex flex-row justify-between px-4">
       {pathname !== "/" ? (
@@ -21,7 +17,6 @@ const Header = () => {
               <Icon.Back />
             </Btn>
           </div>
-          <button onClick={logout}>Logout</button>
           <div className="mt-2">
             <Notification />
           </div>

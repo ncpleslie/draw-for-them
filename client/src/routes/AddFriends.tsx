@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Btn from "../components/UI/Btn";
 import Icon from "../components/UI/Icon";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
@@ -10,6 +11,12 @@ export default function AddFriends() {
   const [error, setError] = useState(false);
   const [foundUser, setFoundUser] = useState<UserDetail>();
   const [addingFriend, setAddingFriend] = useState(false);
+  const [friendAdded, setFriendAdded] = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => await redirectIfHasFriends())();
+  }, []);
 
   const handleFriendSearch = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -18,7 +25,6 @@ export default function AddFriends() {
       friend: { value: string };
     };
 
-    console.log(target.friend.value);
     try {
       setFoundUser(undefined);
       setLoading(true);
@@ -36,17 +42,27 @@ export default function AddFriends() {
   };
 
   const handleAddAFriend = async () => {
-    if (!foundUser) {
+    if (!foundUser || friendAdded) {
       return;
     }
 
     try {
       setAddingFriend(true);
       await UserService.addAFriend(foundUser.uid);
+      setFriendAdded(true);
+      await redirectIfHasFriends();
     } catch (e) {
       setAddingFriend(false);
     } finally {
       setAddingFriend(false);
+    }
+  };
+
+  const redirectIfHasFriends = async (): Promise<void> => {
+    const userDetail = await UserService.getCurrentUserDetail();
+
+    if (userDetail.friendIds.length > 0) {
+      navigate({ pathname: "/" });
     }
   };
 
@@ -108,13 +124,17 @@ export default function AddFriends() {
               active={!addingFriend}
               className="h-[48px] w-[62px]"
             >
-              {addingFriend ? (
+              {addingFriend && (
                 <div className="animate-spin duration-1000 flex justify-center items-center">
                   <Icon.Spinner />
                 </div>
-              ) : (
-                <Icon.AddUser />
               )}
+              {friendAdded && (
+                <div className="flex justify-center items-center text-icon-active">
+                  <Icon.UserAdded />
+                </div>
+              )}
+              {!addingFriend && !friendAdded && <Icon.AddUser />}
             </Btn>
           </div>
         </div>

@@ -22,7 +22,8 @@ const NotificationItem: React.FC<NotificationItemProps> = ({ event }) => {
     <div className="flex flex-row items-center gap-2 text-lg">
       <Icon.Gift />
       <button onClick={() => handleOnNotificationItemClicked(event)}>
-        You have a new drawing from {event.sentBy}
+        {event.sentBy && `You have a new drawing from ${event.sentBy}`}
+        {!event.sentBy && "You have a new drawing"}
       </button>
     </div>
   );

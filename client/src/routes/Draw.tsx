@@ -45,6 +45,7 @@ export default function Draw() {
       handleOnTrashClicked();
       setLoading(false);
     } catch (e) {
+      setLoading(false);
       ToastService.showErrorToast(
         "Oops! Something went wrong. Please try send that masterpiece again."
       );
@@ -83,7 +84,7 @@ export default function Draw() {
           className="my-4 absolute top-0"
         />
         {loading && (
-          <div className="absolute">
+          <div className="absolute z-10">
             <LoadingIndicator />
           </div>
         )}

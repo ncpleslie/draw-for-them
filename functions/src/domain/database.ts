@@ -3,6 +3,7 @@ import {
   getFirestore,
   QueryDocumentSnapshot,
   DocumentData,
+  FieldValue,
 } from "firebase-admin/firestore";
 import { UserRecord } from "firebase-functions/v1/auth";
 import { CollectionKey } from "../enums/collection-key.enum";
@@ -15,13 +16,21 @@ export default class Database {
     this.db = getFirestore();
   }
 
-  public async createUserAsync(user: UserRecord): Promise<UserRecord> {
-    this.db
+  public async addFriendAsync(
+    currentUser: UserRecord,
+    userToAdd: UserRecord
+  ): Promise<void> {
+    await this.db
       .collection(CollectionKey.Users)
-      .doc(user.uid)
-      .set(new User(user.displayName, user.email, [], user.uid).toJSON());
+      .doc(currentUser.uid)
+      .update({ friendIds: FieldValue.arrayUnion(userToAdd.uid) });
+  }
 
-    return user;
+  public async createUserAsync(user: UserRecord): Promise<User> {
+    const newUser = new User(user.displayName, user.email, [], user.uid);
+    this.db.collection(CollectionKey.Users).doc(user.uid).set(newUser.toJSON());
+
+    return newUser;
   }
 
   public async getUserAsync(user: UserRecord): Promise<User> {
@@ -65,13 +74,14 @@ export default class Database {
 
   public async createDrawEventAsync(
     receiverId: string,
-    filename: string
+    filename: string,
+    sentFromUserId: string
   ): Promise<void> {
     this.db
       .collection(CollectionKey.Events)
       .doc(receiverId)
       .collection(CollectionKey.DrawEvents)
-      .add(new DrawEvent(true, filename, "user_2").toJSON());
+      .add(new DrawEvent(true, filename, sentFromUserId).toJSON());
   }
 
   public async updateDrawEventAsync(
@@ -96,7 +106,11 @@ export default class Database {
     );
     const drawEvent = drawEventSnapshot.data() as DrawEvent;
 
-    return new DrawEvent(drawEvent.active, drawEvent.imageId, drawEvent.sentBy);
+    return new DrawEvent(
+      drawEvent.active,
+      drawEvent.imageId,
+      drawEvent.sentById
+    );
   }
 
   private async getQuerySnapshotOfDrawEventById(

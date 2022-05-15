@@ -29,6 +29,15 @@ export default class UserService {
     }
   }
 
+  public static async getCurrentUserDetail(): Promise<UserDetail> {
+    const user = store.user;
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    return await Api.getUserById(user.uid);
+  }
+
   public static listenToAuthChange(): void {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {

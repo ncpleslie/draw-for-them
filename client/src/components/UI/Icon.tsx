@@ -18,6 +18,7 @@ import {
   faUserPlus,
   faSpinner,
   faUser,
+  faUserCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Pen: React.FC = () => {
@@ -92,6 +93,10 @@ const User: React.FC = () => {
   return <FontAwesomeIcon icon={faUser} />;
 };
 
+const UserAdded: React.FC = () => {
+  return <FontAwesomeIcon icon={faUserCheck} />;
+};
+
 export default {
   Pen,
   Circle,
@@ -111,4 +116,5 @@ export default {
   AddUser,
   Spinner,
   User,
+  UserAdded,
 };

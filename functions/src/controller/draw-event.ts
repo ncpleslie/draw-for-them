@@ -11,13 +11,17 @@ import SuccessDto from "../models/response/success-dto.model";
 import BadRequestDto from "../models/response/bad-request-dto.model";
 import AppConstant from "../constants/app.constant";
 
-const corsHandler = cors({ origin: true });
+const corsHandler = cors({ credentials: true, origin: true });
 
 export const addDrawEvent = async (
   request: functions.Request,
   response: functions.Response
 ) => {
   corsHandler(request, response, async () => {
+    if (!request.headers?.authorization) {
+      response.status(403).send(new BadRequestDto("authorization"));
+    }
+
     if (!request.body?.imageData) {
       response.status(400).send(new BadRequestDto("imageData"));
 
@@ -31,7 +35,12 @@ export const addDrawEvent = async (
     }
 
     try {
-      await addDrawEventAsync(request.body.receiverId, request.body.imageData);
+      const token = request.headers.authorization?.split(" ")[1];
+      await addDrawEventAsync(
+        token as string,
+        request.body.receiverId,
+        request.body.imageData
+      );
       response.status(200).send(new SuccessDto());
     } catch (e) {
       functions.logger.error("Unable to upload image", e);
@@ -46,19 +55,25 @@ export const getDrawEvent = async (
   request: functions.Request,
   response: functions.Response
 ) => {
-  if (request.method !== HTTPMethod.GET) {
-    response.status(405).send(new MethodNotAllowedDto(request.method));
-
-    return;
-  }
-
   corsHandler(request, response, async () => {
+    if (request.method !== HTTPMethod.GET) {
+      response.status(405).send(new MethodNotAllowedDto(request.method));
+
+      return;
+    }
+
+    if (!request.headers?.authorization) {
+      response.status(403).send(new BadRequestDto("authorization"));
+    }
+
     if (!request.query?.imageId) {
       response.status(400).send(new BadRequestDto("imageId"));
     }
 
     try {
+      const token = request.headers.authorization?.split(" ")[1];
       const imageBuffer = await getImageByIdAsync(
+        token as string,
         request.query?.imageId as string
       );
       response.status(200).header({

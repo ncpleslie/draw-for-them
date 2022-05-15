@@ -6,10 +6,11 @@ export default class DrawEvent {
 
     this.active = data.active;
     this.imageId = data.imageId;
-    this.sentBy = data.sentBy;
+    this.sentById = data.sentById;
   }
 
   public active: boolean;
   public imageId: string;
-  public sentBy: string;
+  public sentById: string;
+  public sentBy: string | undefined;
 }

@@ -1,13 +1,12 @@
-import axios from "axios";
-import AppConstant from "../constants/app.constant";
 import UserDetail from "../models/user-detail.model";
+import BaseApi from "./base-api";
 
-export default class Api {
+export default class Api extends BaseApi {
   public static async getImageById(imageId: string): Promise<string> {
     const params = new URLSearchParams();
     params.append("imageId", imageId);
-
-    const response = await axios.get(`${AppConstant.baseUrl}get_draw_event`, {
+    const http = await this.http();
+    const response = await http.get(`get_draw_event`, {
       params,
       responseType: "blob",
     });
@@ -19,7 +18,8 @@ export default class Api {
     userId: string,
     imageData: string
   ): Promise<void> {
-    await axios.post(`${AppConstant.baseUrl}add_draw_event`, {
+    const http = await this.http();
+    await http.post(`add_draw_event`, {
       imageData,
       receiverId: userId,
     });
@@ -29,7 +29,8 @@ export default class Api {
     const params = new URLSearchParams();
     params.append("userId", userId);
 
-    const response = await axios.get(`${AppConstant.baseUrl}get_user`, {
+    const http = await this.http();
+    const response = await http.get(`get_user`, {
       params,
     });
 
@@ -47,7 +48,8 @@ export default class Api {
     const params = new URLSearchParams();
     params.append("displayName", displayName);
 
-    const response = await axios.get(`${AppConstant.baseUrl}search_user`, {
+    const http = await this.http();
+    const response = await http.get(`search_user`, {
       params,
     });
 
@@ -62,11 +64,7 @@ export default class Api {
   }
 
   public static async addAFriend(userId: string): Promise<void> {
-    const params = new URLSearchParams();
-    params.append("userId", userId);
-
-    await axios.get(`${AppConstant.baseUrl}add_a_friend`, {
-      params,
-    });
+    const http = await this.http();
+    await http.patch(`add_a_friend`, { userId });
   }
 }

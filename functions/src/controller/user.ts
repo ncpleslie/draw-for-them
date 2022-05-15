@@ -9,9 +9,10 @@ import {
   addNewUserAsync,
   getUserByIdAsync,
   getUserByDisplayNameAsync,
+  addFriendByIdAsync,
 } from "../service/user.service";
 
-const corsHandler = cors({ origin: true });
+const corsHandler = cors({ credentials: true, origin: true });
 
 export const addNewUser = async (user: UserRecord) => {
   functions.logger.log("A new user has been created", user);
@@ -23,13 +24,13 @@ export const getUser = async (
   request: functions.Request,
   response: functions.Response
 ) => {
-  if (request.method !== HTTPMethod.GET) {
-    response.status(405).send(new MethodNotAllowedDto(request.method));
-
-    return;
-  }
-
   corsHandler(request, response, async () => {
+    if (request.method !== HTTPMethod.GET) {
+      response.status(405).send(new MethodNotAllowedDto(request.method));
+
+      return;
+    }
+
     if (!request.query?.userId) {
       response.status(400).send(new BadRequestDto("userId"));
     }
@@ -49,23 +50,67 @@ export const searchUser = async (
   request: functions.Request,
   response: functions.Response
 ) => {
-  if (request.method !== HTTPMethod.GET) {
-    response.status(405).send(new MethodNotAllowedDto(request.method));
-
-    return;
-  }
-
   corsHandler(request, response, async () => {
-    if (!request.query?.displayName) {
-      response.status(400).send(new BadRequestDto("displayName"));
+    if (request.method !== HTTPMethod.GET) {
+      response.status(405).send(new MethodNotAllowedDto(request.method));
+
+      return;
     }
 
     try {
-      const users = await getUserByDisplayNameAsync(
-        request.query?.displayName as string
+      if (request.query?.displayName) {
+        const user = await getUserByDisplayNameAsync(
+          request.query?.displayName as string
+        );
+
+        response.status(200).send(user);
+
+        return;
+      }
+
+      if (request.query?.userId) {
+        const user = await getUserByIdAsync(request.query?.userId as string);
+
+        response.status(200).send(user);
+
+        return;
+      }
+
+      response.status(400).send(new BadRequestDto("displayName or userId"));
+    } catch (e) {
+      functions.logger.error(e);
+      response.status(500).send(new InternalServerErrorDto(e as Error));
+    }
+  });
+};
+
+export const addAFriend = async (
+  request: functions.Request,
+  response: functions.Response
+) => {
+  corsHandler(request, response, async () => {
+    if (request.method !== HTTPMethod.PATCH) {
+      response.status(405).send(new MethodNotAllowedDto(request.method));
+
+      return;
+    }
+
+    if (!request.headers?.authorization) {
+      response.status(403).send(new BadRequestDto("authorization"));
+    }
+
+    if (!request.body?.userId) {
+      response.status(400).send(new BadRequestDto("userId"));
+    }
+
+    try {
+      const token = request.headers.authorization?.split(" ")[1];
+      const user = await addFriendByIdAsync(
+        token as string,
+        request.body?.userId as string
       );
 
-      response.status(200).send(users);
+      response.status(200).send(user);
     } catch (e) {
       functions.logger.error(e);
       response.status(500).send(new InternalServerErrorDto(e as Error));
