@@ -13,6 +13,11 @@ import {
   faBell,
   faGift,
   faXmark,
+  faTriangleExclamation,
+  faCircleQuestion,
+  faUserPlus,
+  faSpinner,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Pen: React.FC = () => {
@@ -67,6 +72,26 @@ const Close: React.FC = () => {
   return <FontAwesomeIcon icon={faXmark} />;
 };
 
+const Error: React.FC = () => {
+  return <FontAwesomeIcon icon={faTriangleExclamation} />;
+};
+
+const Question: React.FC = () => {
+  return <FontAwesomeIcon icon={faCircleQuestion} />;
+};
+
+const AddUser: React.FC = () => {
+  return <FontAwesomeIcon icon={faUserPlus} />;
+};
+
+const Spinner: React.FC = () => {
+  return <FontAwesomeIcon icon={faSpinner} />;
+};
+
+const User: React.FC = () => {
+  return <FontAwesomeIcon icon={faUser} />;
+};
+
 export default {
   Pen,
   Circle,
@@ -81,4 +106,9 @@ export default {
   Bell,
   Gift,
   Close,
+  Error,
+  Question,
+  AddUser,
+  Spinner,
+  User,
 };

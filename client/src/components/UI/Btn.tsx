@@ -5,12 +5,14 @@ interface BtnProps {
   active?: boolean;
   className?: string;
   style?: React.CSSProperties;
+  type?: "button" | "submit" | "reset" | undefined;
 }
 
 const Btn: React.FC<PropsWithChildren<BtnProps>> = ({
   children,
   style,
   className,
+  type,
   onClicked,
 }) => {
   return (
@@ -18,6 +20,7 @@ const Btn: React.FC<PropsWithChildren<BtnProps>> = ({
       style={style}
       className={`neu-btn-small transition-all text-white text-2xl py-2 px-4 rounded-full ${className}`}
       onClick={onClicked}
+      type={type || "button"}
     >
       {children}
     </button>

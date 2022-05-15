@@ -60,4 +60,13 @@ export default class Api {
       responseData.uid
     );
   }
+
+  public static async addAFriend(userId: string): Promise<void> {
+    const params = new URLSearchParams();
+    params.append("userId", userId);
+
+    await axios.get(`${AppConstant.baseUrl}add_a_friend`, {
+      params,
+    });
+  }
 }

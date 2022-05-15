@@ -52,4 +52,8 @@ export default class UserService {
 
     return searchedUserDetail;
   }
+
+  public static async addAFriend(userId: string): Promise<void> {
+    await Api.addAFriend(userId);
+  }
 }
