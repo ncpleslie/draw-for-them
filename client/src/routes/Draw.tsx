@@ -97,7 +97,7 @@ export default function Draw() {
             <LoadingIndicator />
           </div>
         )}
-        <SketchArea {...sketchAreaProps} className="h-[90vh] w-[90vw]" />
+        <SketchArea {...sketchAreaProps} className="h-[75vh] w-[90vw]" />
       </div>
     </div>
   );

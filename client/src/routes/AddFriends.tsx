@@ -14,9 +14,9 @@ export default function AddFriends() {
   const [friendAdded, setFriendAdded] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    (async () => await redirectIfHasFriends())();
-  }, []);
+  // useEffect(() => {
+  //   (async () => await redirectIfHasFriends())();
+  // }, []);
 
   const handleFriendSearch = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -66,8 +66,8 @@ export default function AddFriends() {
   };
 
   return (
-    <div className="app-container h-[100vh] w-[100vw] flex flex-col justify-center items-center gap-10">
-      <div className="neu-container-raised rounded-xl h-[30vh] w-[40vw] flex flex-col justify-center items-center gap-6">
+    <div className="app-container h-[100vh] w-[100vw] flex flex-row justify-center items-center gap-10">
+      <div className="neu-container-raised rounded-xl h-72 w-72 flex flex-col justify-center items-center gap-6">
         <div className="">
           <h1 className="text-2xl">You have no friends!</h1>
           <h2 className="text-lg">Why not make some now?</h2>
@@ -91,7 +91,7 @@ export default function AddFriends() {
       )}
 
       {error && (
-        <div className="neu-container-raised rounded-xl h-30 w-[40vw] flex flex-row justify-center items-center gap-4">
+        <div className="neu-container-raised rounded-xl h-30 w-72 flex flex-row justify-center items-center gap-4">
           <div className="text-5xl text-icon-inactive">
             <Icon.Question />
           </div>
@@ -103,10 +103,10 @@ export default function AddFriends() {
       )}
 
       {foundUser && (
-        <div className="neu-container-raised rounded-xl h-30 w-[40vw] flex flex-col justify-center items-center gap-4 py-4">
+        <div className="neu-container-raised rounded-xl h-72 w-72 flex flex-col justify-center items-center gap-4 py-4 ">
           <h3 className="text-2xl">You found a friend!</h3>
           <div
-            className="flex flex-row justify-center items-center gap-4"
+            className="flex flex-col justify-center items-center gap-4"
             onClick={handleAddAFriend}
           >
             <div className="neu-container rounded p-4 text-5xl text-icon-inactive">

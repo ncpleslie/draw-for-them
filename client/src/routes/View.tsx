@@ -55,7 +55,7 @@ export default function View() {
           </div>
         )}
         <img
-          className="neu-container rounded-xl h-[90vh] w-[90vw]"
+          className="neu-container rounded-xl h-[80vh] w-[90vw]"
           src={image}
         />
       </div>

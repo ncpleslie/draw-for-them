@@ -41,10 +41,11 @@ const SketchControl: React.FC<SketchControlProps> = (props) => {
       color: color,
     }),
 
-    new ButtonBarBtn(<Icon.Shapes />, () => {}, undefined, undefined, [
-      new ButtonBarBtn(<Icon.Circle />, props.onCircleClicked),
-      new ButtonBarBtn(<Icon.Square />, props.onSquareClicked),
-    ]),
+    // Removed for now until it is easier to use on smaller screens.
+    // new ButtonBarBtn(<Icon.Shapes />, () => {}, undefined, undefined, [
+    //   new ButtonBarBtn(<Icon.Circle />, props.onCircleClicked),
+    //   new ButtonBarBtn(<Icon.Square />, props.onSquareClicked),
+    // ]),
 
     new ButtonBarBtn(<Icon.Undo />, props.onUndoClicked),
     new ButtonBarBtn(<Icon.Trash />, props.onTrashClicked, "!text-red-700"),

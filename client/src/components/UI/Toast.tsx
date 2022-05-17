@@ -65,7 +65,7 @@ const Toast = () => {
             leaveTo="opacity-0 scale-95"
           >
             <div
-              className={`inline-block w-full h-24 max-w-md p-6 my-8 overflow-hidden transition-all transform shadow-xl rounded-2xl ${
+              className={`inline-block w-full h-24 max-w-md p-6 my-4 overflow-hidden transition-all transform shadow-xl rounded-2xl ${
                 toastType === NotificationType.Success && "bg-green-100"
               } ${toastType === NotificationType.Error && "bg-red-100"}`}
             >
@@ -79,7 +79,7 @@ const Toast = () => {
                 </Dialog.Title>
 
                 <Btn
-                  className="rounded-full h-12 w-12 text-2xl focus:outline-none"
+                  className="rounded-full h-12 w-12 !text-2xl focus:outline-none"
                   onClicked={closeModal}
                 >
                   <Icon.Close />
