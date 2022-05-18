@@ -14,9 +14,9 @@ export default function AddFriends() {
   const [friendAdded, setFriendAdded] = useState(false);
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   (async () => await redirectIfHasFriends())();
-  // }, []);
+  useEffect(() => {
+    (async () => await redirectIfHasFriends())();
+  }, []);
 
   const handleFriendSearch = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -34,6 +34,7 @@ export default function AddFriends() {
       );
       setFoundUser(foundUser);
     } catch (e) {
+      console.error(e);
       setLoading(false);
       setError(true);
     } finally {
@@ -53,6 +54,7 @@ export default function AddFriends() {
       setFriendAdded(true);
       await redirectIfHasFriends();
     } catch (e) {
+      console.error(e);
       setAddingFriend(false);
     }
   };
@@ -66,8 +68,8 @@ export default function AddFriends() {
   };
 
   return (
-    <div className="app-container h-[100vh] w-[100vw] flex flex-row justify-center items-center gap-10">
-      <div className="neu-container-raised rounded-xl h-72 w-72 flex flex-col justify-center items-center gap-6">
+    <div className="app-container flex h-[100vh] w-[100vw] flex-row items-center justify-center gap-10">
+      <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-6 rounded-xl">
         <div className="">
           <h1 className="text-2xl">You have no friends!</h1>
           <h2 className="text-lg">Why not make some now?</h2>
@@ -75,7 +77,7 @@ export default function AddFriends() {
         <form onSubmit={handleFriendSearch} className="flex flex-col gap-4">
           <label htmlFor="friend">Search for a friend... if you have any</label>
           <input
-            className="neu-container rounded-xl px-3 py-2 focus:outline-none focus:border-icon-active text-icon-hover"
+            className="neu-container rounded-xl px-3 py-2 text-icon-hover focus:border-icon-active focus:outline-none"
             id="friend"
             type="search"
           />
@@ -91,7 +93,7 @@ export default function AddFriends() {
       )}
 
       {error && (
-        <div className="neu-container-raised rounded-xl h-30 w-72 flex flex-row justify-center items-center gap-4">
+        <div className="neu-container-raised h-30 flex w-72 flex-row items-center justify-center gap-4 rounded-xl">
           <div className="text-5xl text-icon-inactive">
             <Icon.Question />
           </div>
@@ -103,10 +105,10 @@ export default function AddFriends() {
       )}
 
       {foundUser && (
-        <div className="neu-container-raised rounded-xl h-72 w-72 flex flex-col justify-center items-center gap-4 py-4 ">
+        <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-4 rounded-xl py-4 ">
           <h3 className="text-2xl">You've found a friend!</h3>
           <div
-            className="flex flex-col justify-center items-center gap-4"
+            className="flex flex-col items-center justify-center gap-4"
             onClick={handleAddAFriend}
           >
             <div className="neu-container rounded p-4 text-5xl text-icon-inactive">
@@ -124,12 +126,12 @@ export default function AddFriends() {
               className="h-[48px] w-[62px]"
             >
               {addingFriend && (
-                <div className="animate-spin duration-1000 flex justify-center items-center">
+                <div className="flex animate-spin items-center justify-center duration-1000">
                   <Icon.Spinner />
                 </div>
               )}
               {friendAdded && (
-                <div className="flex justify-center items-center text-icon-active">
+                <div className="flex items-center justify-center text-icon-active">
                   <Icon.UserAdded />
                 </div>
               )}

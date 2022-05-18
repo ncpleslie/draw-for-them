@@ -8,13 +8,22 @@ import { useSnapshot } from "valtio";
 import { store } from "../store/store";
 import { useNavigate } from "react-router-dom";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
+import UserService from "../services/user.service";
 
 export default function Login() {
   const { user } = useSnapshot(store);
   const navigate = useNavigate();
 
-  const redirectIfUser = (): void => {
+  const redirectIfUser = async (): Promise<void> => {
     if (user) {
+      const userDetail = await UserService.getCurrentUserDetail();
+
+      if (userDetail.friendIds.length === 0) {
+        navigate({ pathname: "/add_friends" });
+
+        return;
+      }
+
       navigate({ pathname: "/" });
 
       return;
@@ -22,7 +31,7 @@ export default function Login() {
   };
 
   useEffect(() => {
-    redirectIfUser();
+    (async () => await redirectIfUser())();
   }, [user]);
 
   useEffect(() => {
@@ -52,7 +61,7 @@ export default function Login() {
   return (
     <div>
       <div id="firebaseui-auth-container"></div>
-      <div id="loader" className="flex justify-center items-center h-[100vh]">
+      <div id="loader" className="flex h-[100vh] items-center justify-center">
         <LoadingIndicator />
       </div>
     </div>

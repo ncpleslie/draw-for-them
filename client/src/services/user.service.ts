@@ -2,7 +2,6 @@ import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
 import { store } from "../store/store";
 import { app } from "../api/firebase.config";
 import Api from "../api/api";
-import history from "../components/CustomRouter/history";
 import UserDetail from "../models/user-detail.model";
 
 export default class UserService {
@@ -10,7 +9,7 @@ export default class UserService {
     app;
     const auth = getAuth();
 
-    const user = await new Promise<User>((resolve, reject) =>
+    await new Promise<User>((resolve, reject) =>
       onAuthStateChanged(auth, (user) => {
         if (user) {
           resolve(user);
@@ -21,12 +20,6 @@ export default class UserService {
         }
       })
     );
-
-    const userDetail = await Api.getUserById(user.uid);
-
-    if (userDetail.friendIds.length === 0) {
-      history.replace("/add_friends");
-    }
   }
 
   public static async getCurrentUserDetail(): Promise<UserDetail> {

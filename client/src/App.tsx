@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route, HashRouter } from "react-router-dom";
 import Draw from "./routes/Draw";
 import Login from "./routes/Login";
 import View from "./routes/View";
@@ -10,8 +10,6 @@ import { useEffect, useState } from "react";
 import Root from "./routes/Root";
 import LoadingIndicator from "./components/UI/LoadingIndicator";
 import AddFriends from "./routes/AddFriends";
-import { CustomRouter } from "./components/CustomRouter/CustomerRouter";
-import customHistory from "./components/CustomRouter/history";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -24,6 +22,7 @@ export default function App() {
         UserService.listenToAuthChange();
         UserEventService.start();
       } catch (e) {
+        console.error(e);
         setLoading(false);
       } finally {
         setLoading(false);
@@ -33,14 +32,14 @@ export default function App() {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-[100vh]">
+      <div className="flex h-[100vh] items-center justify-center">
         <LoadingIndicator />
       </div>
     );
   }
 
   return (
-    <CustomRouter history={customHistory}>
+    <HashRouter>
       <Toast />
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -77,6 +76,6 @@ export default function App() {
           }
         />
       </Routes>
-    </CustomRouter>
+    </HashRouter>
   );
 }
