@@ -80,7 +80,7 @@ export default function AddFriends() {
             type="search"
           />
           <Btn type="submit" onClicked={() => {}}>
-            Search for a friend
+            Search
           </Btn>
         </form>
       </div>
@@ -104,7 +104,7 @@ export default function AddFriends() {
 
       {foundUser && (
         <div className="neu-container-raised rounded-xl h-72 w-72 flex flex-col justify-center items-center gap-4 py-4 ">
-          <h3 className="text-2xl">You found a friend!</h3>
+          <h3 className="text-2xl">You've found a friend!</h3>
           <div
             className="flex flex-col justify-center items-center gap-4"
             onClick={handleAddAFriend}

@@ -9,26 +9,26 @@ import { store } from "../store/store";
 
 export default function Root() {
   const { drawEvents } = useSnapshot(store);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [viewLink, setViewLink] = useState<string | null>();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const userDetail = await UserService.getCurrentUserDetail();
-        if (userDetail.friendIds.length === 0) {
-          navigate({ pathname: "/add_friends" });
-        }
-      } catch (e) {
-        setLoading(false);
-        // Ignore
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     try {
+  //       setLoading(true);
+  //       const userDetail = await UserService.getCurrentUserDetail();
+  //       if (userDetail.friendIds.length === 0) {
+  //         navigate({ pathname: "/add_friends" });
+  //       }
+  //     } catch (e) {
+  //       setLoading(false);
+  //       // Ignore
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   })();
+  // }, []);
 
   useEffect(() => {
     if (!drawEvents || drawEvents.length === 0) {
