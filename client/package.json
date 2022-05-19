@@ -34,15 +34,16 @@
       "buildResources": "assets",
       "output": "release/${version}"
     },
-    "win": {
+    "linux": {
       "target": [
         {
-          "target": "portable",
+          "target": "deb",
           "arch": [
-            "x64"
+            "arm64"
           ]
         }
       ],
+      "category": "Network",
       "artifactName": "${productName}_${version}.${ext}"
     }
   },
