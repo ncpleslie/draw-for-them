@@ -8,8 +8,8 @@ export default class User extends BaseDbEntity {
     uid: string
   ) {
     super();
-    this.displayName = displayName || "Unknown User";
-    this.email = email || "unknown email";
+    this.displayName = displayName?.trim().toLowerCase() || "unknown user";
+    this.email = email?.trim().toLowerCase() || "unknown email";
     this.friendIds = friendIds || [];
     this.uid = uid;
   }

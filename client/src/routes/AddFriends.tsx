@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Keyboard from "../components/Keyboard/Keyboard";
 import Btn from "../components/UI/Btn";
 import Icon from "../components/UI/Icon";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
@@ -12,6 +13,9 @@ export default function AddFriends() {
   const [foundUser, setFoundUser] = useState<UserDetail>();
   const [addingFriend, setAddingFriend] = useState(false);
   const [friendAdded, setFriendAdded] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [focused, setFocused] = React.useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,6 +24,7 @@ export default function AddFriends() {
 
   const handleFriendSearch = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+    setFocused(false);
 
     const target = e.target as typeof e.target & {
       friend: { value: string };
@@ -41,6 +46,8 @@ export default function AddFriends() {
       setLoading(false);
     }
   };
+
+  const onFocus = () => setFocused(true);
 
   const handleAddAFriend = async () => {
     if (!foundUser || friendAdded) {
@@ -67,6 +74,18 @@ export default function AddFriends() {
     }
   };
 
+  const handleKeyboardKeyEntered = (key: string) => {
+    if (key === "<") {
+      setSearchInputValue((prev: string) => prev.slice(0, -1));
+
+      return;
+    }
+
+    setSearchInputValue((prev: string) => (prev += key));
+
+    console.log(searchInputValue);
+  };
+
   return (
     <div className="app-container flex h-[100vh] w-[100vw] flex-row items-center justify-center gap-10">
       <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-6 rounded-xl">
@@ -77,23 +96,26 @@ export default function AddFriends() {
         <form onSubmit={handleFriendSearch} className="flex flex-col gap-4">
           <label htmlFor="friend">Search for a friend... if you have any</label>
           <input
+            onFocus={onFocus}
             className="neu-container rounded-xl px-3 py-2 text-icon-hover focus:border-icon-active focus:outline-none"
             id="friend"
             type="search"
+            value={searchInputValue}
           />
           <Btn type="submit" onClicked={() => {}}>
             Search
           </Btn>
         </form>
       </div>
+
       {loading && (
-        <div>
+        <div className="flex w-[400px] items-center justify-center">
           <LoadingIndicator />
         </div>
       )}
 
-      {error && (
-        <div className="neu-container-raised h-30 flex w-72 flex-row items-center justify-center gap-4 rounded-xl">
+      {error && !focused && (
+        <div className="neu-container-raised flex h-40 w-[400px] flex-row items-center justify-center gap-4 rounded-xl">
           <div className="text-5xl text-icon-inactive">
             <Icon.Question />
           </div>
@@ -104,8 +126,14 @@ export default function AddFriends() {
         </div>
       )}
 
+      {focused && !loading && (
+        <div className="neu-container-raised w-[400px] rounded-xl">
+          <Keyboard onKeyEntered={handleKeyboardKeyEntered} />
+        </div>
+      )}
+
       {foundUser && (
-        <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-4 rounded-xl py-4 ">
+        <div className="neu-container-raised flex h-72 w-[400px] flex-col items-center justify-center gap-4 rounded-xl py-4 ">
           <h3 className="text-2xl">You've found a friend!</h3>
           <div
             className="flex flex-col items-center justify-center gap-4"

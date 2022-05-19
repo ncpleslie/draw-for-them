@@ -9,6 +9,7 @@ import { store } from "../store/store";
 import { useNavigate } from "react-router-dom";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
 import UserService from "../services/user.service";
+import Keyboard from "../components/Keyboard/Keyboard";
 
 export default function Login() {
   const { user } = useSnapshot(store);
@@ -58,12 +59,19 @@ export default function Login() {
     ui.start("#firebaseui-auth-container", uiConfig);
   }, []);
 
+  const handleKeyboardKeyEntered = () => {};
+
   return (
-    <div>
-      <div id="firebaseui-auth-container"></div>
+    <>
+      <div className="app-container flex h-[100vh] w-full flex-row items-center justify-center gap-10">
+        <div id="firebaseui-auth-container"></div>
+        <div className="neu-container-raised w-[400px] rounded-xl">
+          <Keyboard onKeyEntered={handleKeyboardKeyEntered} />
+        </div>
+      </div>
       <div id="loader" className="flex h-[100vh] items-center justify-center">
         <LoadingIndicator />
       </div>
-    </div>
+    </>
   );
 }

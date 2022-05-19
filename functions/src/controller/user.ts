@@ -60,7 +60,7 @@ export const searchUser = async (
     try {
       if (request.query?.displayName) {
         const user = await getUserByDisplayNameAsync(
-          request.query?.displayName as string
+          (request.query?.displayName as string).trim().toLowerCase()
         );
 
         response.status(200).send(user);

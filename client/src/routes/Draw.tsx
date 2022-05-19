@@ -24,6 +24,8 @@ export default function Draw() {
         setLoading(true);
         const userDetail = await UserService.getCurrentUserDetail();
 
+        console.log(userDetail);
+
         if (userDetail.friendIds.length === 0) {
           ToastService.showErrorToast(
             "You have no friends. How about making some before you draw something"
