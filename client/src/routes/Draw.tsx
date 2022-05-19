@@ -37,6 +37,7 @@ export default function Draw() {
         setLoading(false);
       } finally {
         setLoading(false);
+        setIsDrawMode(true);
       }
     })();
   }, []);
