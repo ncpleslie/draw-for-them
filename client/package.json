@@ -2,7 +2,16 @@
   "name": "draw-for-them",
   "version": "0.0.1",
   "description": "Send your drawings to your friends",
-  "author": "ncpleslie",
+  "homepage": "https://github.com/ncpleslie/draw-for-them",
+  "bugs": {
+    "email": "draw-for-me-issues@nickleslie.dev",
+    "url": "https://github.com/ncpleslie/draw-for-them/issues"
+  },
+  "author": {
+    "email": "draw-for-me@nickleslie.dev",
+    "name": "ncpleslie",
+    "url": "https://github.com/ncpleslie"
+  },
   "license": "MIT",
   "main": "public/main.js",
   "scripts": {
