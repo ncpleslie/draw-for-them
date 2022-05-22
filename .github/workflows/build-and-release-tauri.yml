@@ -59,4 +59,4 @@ jobs:
         with:
           projectPath: ./client/
           releaseId: ${{ needs.create-release.outputs.RELEASE_UPLOAD_ID }}
-          args: -- --target aarch64-unknown-linux-musl
+          args: -- --target aarch64-unknown-linux-gnu
