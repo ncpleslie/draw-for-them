@@ -37,6 +37,15 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v2
+      - uses: uraimo/run-on-arch-action@v2
+        with:
+          arch: aarch64
+          distro: bullseye
+
+          # Not required, but speeds up builds by storing container images in
+          # a GitHub package registry.
+          githubToken: ${{ github.token }}
+
       - name: setup node
         uses: actions/setup-node@v1
         with:
