@@ -12,6 +12,11 @@
   background: #eeeeee;
 }
 
+.neu-container-depressed {
+  box-shadow: inset -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset 12px 12px 12px 0 rgba(0, 0, 0, 0.3);
+}
+
 .neu-container {
   border: 4px solid #ececec;
   box-shadow: -12px -12px 12px 0 rgba(255, 255, 255, 1),

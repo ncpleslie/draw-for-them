@@ -34,6 +34,7 @@ export default function View() {
       const response = await UserEventService.getDrawEvent(imageId);
       setImage(response);
     } catch (e) {
+      console.error(e);
       store.notifications.push(
         new ErrorNotification(
           "Oops! Something went wrong while trying to view that masterpiece"
@@ -46,16 +47,16 @@ export default function View() {
   };
 
   return (
-    <div className="h-[100vh] app-container overflow-hidden">
+    <div className="app-container h-[100vh] overflow-hidden">
       <Header />
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col items-center justify-center p-4">
         {loading && (
           <div className="absolute">
             <LoadingIndicator />
           </div>
         )}
         <img
-          className="neu-container rounded-xl h-[80vh] w-[90vw]"
+          className="neu-container h-[75vh] w-[90vw] rounded-xl"
           src={image}
         />
       </div>

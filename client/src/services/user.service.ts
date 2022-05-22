@@ -1,8 +1,15 @@
-import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  User,
+} from "firebase/auth";
 import { store } from "../store/store";
 import { app } from "../api/firebase.config";
 import Api from "../api/api";
-import history from "../components/CustomRouter/history";
 import UserDetail from "../models/user-detail.model";
 
 export default class UserService {
@@ -10,7 +17,7 @@ export default class UserService {
     app;
     const auth = getAuth();
 
-    const user = await new Promise<User>((resolve, reject) =>
+    await new Promise<User>((resolve, reject) =>
       onAuthStateChanged(auth, (user) => {
         if (user) {
           resolve(user);
@@ -21,12 +28,6 @@ export default class UserService {
         }
       })
     );
-
-    const userDetail = await Api.getUserById(user.uid);
-
-    if (userDetail.friendIds.length === 0) {
-      history.replace("/add_friends");
-    }
   }
 
   public static async getCurrentUserDetail(): Promise<UserDetail> {
@@ -47,6 +48,21 @@ export default class UserService {
         store.user = null;
       }
     });
+  }
+
+  public static async login(email: string, password: string): Promise<void> {
+    const auth = getAuth();
+    await signInWithEmailAndPassword(auth, email, password);
+  }
+
+  public static async signUp(
+    displayName: string,
+    email: string,
+    password: string
+  ): Promise<void> {
+    const auth = getAuth();
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(result.user, { displayName: displayName });
   }
 
   public static signOut(): void {

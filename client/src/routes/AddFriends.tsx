@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Keyboard from "../components/Keyboard/Keyboard";
 import Btn from "../components/UI/Btn";
 import Icon from "../components/UI/Icon";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
+import { KeyboardSpecialKey } from "../enums/keyboard-special-key.enum";
 import UserDetail from "../models/user-detail.model";
 import UserService from "../services/user.service";
 
@@ -12,14 +14,18 @@ export default function AddFriends() {
   const [foundUser, setFoundUser] = useState<UserDetail>();
   const [addingFriend, setAddingFriend] = useState(false);
   const [friendAdded, setFriendAdded] = useState(false);
+  const [searchInputValue, setSearchInputValue] = useState("");
+  const [focused, setFocused] = useState(false);
+
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   (async () => await redirectIfHasFriends())();
-  // }, []);
+  useEffect(() => {
+    (async () => await redirectIfHasFriends())();
+  }, []);
 
   const handleFriendSearch = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
+    setFocused(false);
 
     const target = e.target as typeof e.target & {
       friend: { value: string };
@@ -34,12 +40,15 @@ export default function AddFriends() {
       );
       setFoundUser(foundUser);
     } catch (e) {
+      console.error(e);
       setLoading(false);
       setError(true);
     } finally {
       setLoading(false);
     }
   };
+
+  const onFocus = () => setFocused(true);
 
   const handleAddAFriend = async () => {
     if (!foundUser || friendAdded) {
@@ -53,6 +62,7 @@ export default function AddFriends() {
       setFriendAdded(true);
       await redirectIfHasFriends();
     } catch (e) {
+      console.error(e);
       setAddingFriend(false);
     }
   };
@@ -65,9 +75,19 @@ export default function AddFriends() {
     }
   };
 
+  const handleKeyboardKeyEntered = (key: string) => {
+    if (key === KeyboardSpecialKey.Delete) {
+      setSearchInputValue((prev: string) => prev.slice(0, -1));
+
+      return;
+    }
+
+    setSearchInputValue((prev: string) => (prev += key));
+  };
+
   return (
-    <div className="app-container h-[100vh] w-[100vw] flex flex-row justify-center items-center gap-10">
-      <div className="neu-container-raised rounded-xl h-72 w-72 flex flex-col justify-center items-center gap-6">
+    <div className="app-container flex h-[100vh] w-[100vw] flex-row items-center justify-center gap-10">
+      <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-6 rounded-xl">
         <div className="">
           <h1 className="text-2xl">You have no friends!</h1>
           <h2 className="text-lg">Why not make some now?</h2>
@@ -75,23 +95,26 @@ export default function AddFriends() {
         <form onSubmit={handleFriendSearch} className="flex flex-col gap-4">
           <label htmlFor="friend">Search for a friend... if you have any</label>
           <input
-            className="neu-container rounded-xl px-3 py-2 focus:outline-none focus:border-icon-active text-icon-hover"
+            onFocus={onFocus}
+            className="neu-container rounded-xl px-3 py-2 text-icon-hover focus:border-icon-active focus:outline-none"
             id="friend"
             type="search"
+            value={searchInputValue}
           />
           <Btn type="submit" onClicked={() => {}}>
             Search
           </Btn>
         </form>
       </div>
+
       {loading && (
-        <div>
+        <div className="flex w-[400px] items-center justify-center">
           <LoadingIndicator />
         </div>
       )}
 
-      {error && (
-        <div className="neu-container-raised rounded-xl h-30 w-72 flex flex-row justify-center items-center gap-4">
+      {error && !focused && (
+        <div className="neu-container-raised flex h-40 w-[400px] flex-row items-center justify-center gap-4 rounded-xl">
           <div className="text-5xl text-icon-inactive">
             <Icon.Question />
           </div>
@@ -102,11 +125,17 @@ export default function AddFriends() {
         </div>
       )}
 
+      {focused && !loading && (
+        <div className="neu-container-raised w-[400px] rounded-xl">
+          <Keyboard onKeyEntered={handleKeyboardKeyEntered} />
+        </div>
+      )}
+
       {foundUser && (
-        <div className="neu-container-raised rounded-xl h-72 w-72 flex flex-col justify-center items-center gap-4 py-4 ">
+        <div className="neu-container-raised flex h-72 w-[400px] flex-col items-center justify-center gap-4 rounded-xl py-4 ">
           <h3 className="text-2xl">You've found a friend!</h3>
           <div
-            className="flex flex-col justify-center items-center gap-4"
+            className="flex flex-col items-center justify-center gap-4"
             onClick={handleAddAFriend}
           >
             <div className="neu-container rounded p-4 text-5xl text-icon-inactive">
@@ -124,12 +153,12 @@ export default function AddFriends() {
               className="h-[48px] w-[62px]"
             >
               {addingFriend && (
-                <div className="animate-spin duration-1000 flex justify-center items-center">
+                <div className="flex animate-spin items-center justify-center duration-1000">
                   <Icon.Spinner />
                 </div>
               )}
               {friendAdded && (
-                <div className="flex justify-center items-center text-icon-active">
+                <div className="flex items-center justify-center text-icon-active">
                   <Icon.UserAdded />
                 </div>
               )}

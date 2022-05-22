@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../components/Header/Header";
 import SketchArea from "../components/SketchArea/SketchArea";
 import SketchControl from "../components/SketchControl/SketchControl";
@@ -15,6 +16,31 @@ export default function Draw() {
   const [trash, setTrash] = useState(false);
   const [save, setSave] = useState(false);
   const [loading, setLoading] = useState<boolean>();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setLoading(true);
+        const userDetail = await UserService.getCurrentUserDetail();
+
+        console.log(userDetail);
+
+        if (userDetail.friendIds.length === 0) {
+          ToastService.showErrorToast(
+            "You have no friends. How about making some before you draw something"
+          );
+          navigate({ pathname: "/add_friends" });
+        }
+      } catch (e) {
+        console.log(e);
+        setLoading(false);
+      } finally {
+        setLoading(false);
+        setIsDrawMode(true);
+      }
+    })();
+  }, []);
 
   const handleOnUndoClicked = () => setUndo((prev) => !prev);
 
@@ -54,6 +80,7 @@ export default function Draw() {
       handleOnTrashClicked();
       setLoading(false);
     } catch (e) {
+      console.error(e);
       setLoading(false);
       ToastService.showErrorToast(
         "Oops! Something went wrong. Please try send that masterpiece again."
@@ -84,13 +111,13 @@ export default function Draw() {
   };
 
   return (
-    <div className="h-[100vh] app-container overflow-hidden">
+    <div className="app-container h-[100vh] overflow-hidden">
       <Header />
 
-      <div className="flex flex-col justify-center items-center p-4">
+      <div className="flex flex-col items-center justify-center p-4">
         <SketchControl
           {...sketchControlProps}
-          className="my-4 absolute top-0"
+          className="absolute top-0 my-4"
         />
         {loading && (
           <div className="absolute z-10">
