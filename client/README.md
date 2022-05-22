@@ -7,7 +7,7 @@ The electron application has been built to run on the `Raspberry Pi Zero 2 W` wi
 
 ## To build for release
 
-This repo makes use of the [GitHub Action](https://github.com/samuelmeuli/action-electron-builder) produced by [Samuel Meuli ](https://github.com/samuelmeuli).
+This repo makes use of the [GitHub Action](https://github.com/samuelmeuli/action-electron-builder) produced by [Samuel Meuli](https://github.com/samuelmeuli).
 
 ### When you want to create a new release, follow these steps
 
