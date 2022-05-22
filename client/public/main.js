@@ -1,7 +1,7 @@
-import { app, BrowserWindow } from "electron";
-import isDev from "electron-is-dev";
-import path from "path";
-import { autoUpdater } from "electron-updater";
+const { app, BrowserWindow } = require("electron");
+const isDev = require("electron-is-dev");
+const path = require("path");
+const { autoUpdater } = require("electron-updater");
 
 const createWindow = () => {
   const window = new BrowserWindow({ width: 800, height: 480 });
