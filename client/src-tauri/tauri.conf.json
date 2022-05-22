@@ -4,7 +4,8 @@
     "beforeBuildCommand": "",
     "beforeDevCommand": "",
     "devPath": "http://localhost:3000",
-    "distDir": "../dist"
+    "distDir": "../dist",
+    "runner": "cross"
   },
   "package": {
     "productName": "draw-for-them",
