@@ -5,7 +5,6 @@ const { autoUpdater } = require("electron-updater");
 
 const createWindow = () => {
   const window = new BrowserWindow({ width: 800, height: 480 });
-  autoUpdater.autoDownload = true;
   autoUpdater.checkForUpdatesAndNotify();
 
   window.loadURL(
@@ -38,11 +37,11 @@ autoUpdater.on('update-available', () => {
 })
 
 autoUpdater.on("update-downloaded", () => {
-  await dialog.showMessageBox({
+  dialog.showMessageBox({
     title: "An update has been downloaded",
     message: "An update was downloaded. The application will be quit and install this update..."
+  }).then(() => {
+    setImmediate(() => autoUpdater.quitAndInstall())
   });
-
-  setImmediate(() => autoUpdater.quitAndInstall())
 });
 
