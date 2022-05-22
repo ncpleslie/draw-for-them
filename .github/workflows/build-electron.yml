@@ -35,4 +35,4 @@ jobs:
           # release the app after building
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
 
-          args: --linux --arm64 -c.extraMetadata.main=dist/main.js
+          args: "--linux --arm64 -c.extraMetadata.main=dist/main.js -p always"
