@@ -4,6 +4,7 @@ import Keyboard from "../components/Keyboard/Keyboard";
 import Btn from "../components/UI/Btn";
 import Icon from "../components/UI/Icon";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
+import { KeyboardSpecialKey } from "../enums/keyboard-special-key.enum";
 import UserDetail from "../models/user-detail.model";
 import UserService from "../services/user.service";
 
@@ -14,7 +15,7 @@ export default function AddFriends() {
   const [addingFriend, setAddingFriend] = useState(false);
   const [friendAdded, setFriendAdded] = useState(false);
   const [searchInputValue, setSearchInputValue] = useState("");
-  const [focused, setFocused] = React.useState(false);
+  const [focused, setFocused] = useState(false);
 
   const navigate = useNavigate();
 
@@ -75,15 +76,13 @@ export default function AddFriends() {
   };
 
   const handleKeyboardKeyEntered = (key: string) => {
-    if (key === "<") {
+    if (key === KeyboardSpecialKey.Delete) {
       setSearchInputValue((prev: string) => prev.slice(0, -1));
 
       return;
     }
 
     setSearchInputValue((prev: string) => (prev += key));
-
-    console.log(searchInputValue);
   };
 
   return (

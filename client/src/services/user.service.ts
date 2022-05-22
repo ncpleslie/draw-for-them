@@ -1,4 +1,12 @@
-import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  User,
+} from "firebase/auth";
 import { store } from "../store/store";
 import { app } from "../api/firebase.config";
 import Api from "../api/api";
@@ -40,6 +48,21 @@ export default class UserService {
         store.user = null;
       }
     });
+  }
+
+  public static async login(email: string, password: string): Promise<void> {
+    const auth = getAuth();
+    await signInWithEmailAndPassword(auth, email, password);
+  }
+
+  public static async signUp(
+    displayName: string,
+    email: string,
+    password: string
+  ): Promise<void> {
+    const auth = getAuth();
+    const result = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(result.user, { displayName: displayName });
   }
 
   public static signOut(): void {

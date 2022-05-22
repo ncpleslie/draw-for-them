@@ -1,4 +1,6 @@
 import { FC, memo } from "react";
+import { KeyboardSpecialKey } from "../../enums/keyboard-special-key.enum";
+import Icon from "./Icon";
 
 interface KeyProps {
   character: string;
@@ -16,7 +18,11 @@ const Key: FC<KeyProps> = memo((props) => {
       onClick={handleOnClick}
     >
       <p className="py-5 px-[10px] text-xs font-bold">
-        {props.character.toUpperCase()}
+        {props.character === KeyboardSpecialKey.Delete && <Icon.Delete />}
+        {props.character === KeyboardSpecialKey.Modifier && <Icon.AngleUp />}
+        {props.character !== KeyboardSpecialKey.Delete &&
+          props.character !== KeyboardSpecialKey.Modifier &&
+          props.character.toUpperCase()}
       </p>
     </button>
   );
