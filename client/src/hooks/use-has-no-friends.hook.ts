@@ -4,15 +4,22 @@ import { useSnapshot } from "valtio";
 import UserService from "../services/user.service";
 import { store } from "../store/store";
 
+let hasChecked = false;
+
 export const useHasNoFriends = () => {
   const [loadingHasNoFriends, setLoadingHasNoFriends] = useState(false);
   const { user } = useSnapshot(store);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (hasChecked) {
+      return;
+    }
+
     (async () => {
       setLoadingHasNoFriends(true);
       await redirectIfUser();
+      hasChecked = true;
       setLoadingHasNoFriends(false);
     })();
   }, [user]);
@@ -33,5 +40,5 @@ export const useHasNoFriends = () => {
     }
   };
 
-  return { loadingHasNoFriends };
+  return { loadingHasNoFriends, redirectIfUser };
 };

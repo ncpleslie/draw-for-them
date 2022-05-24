@@ -4,31 +4,13 @@ import { useSnapshot } from "valtio";
 import DashboardBtn from "../components/UI/DashboardBtn";
 import Icon from "../components/UI/Icon";
 import LoadingIndicator from "../components/UI/LoadingIndicator";
-import UserService from "../services/user.service";
+import { useHasNoFriends } from "../hooks/use-has-no-friends.hook";
 import { store } from "../store/store";
 
 export default function Root() {
   const { drawEvents } = useSnapshot(store);
-  const [loading, setLoading] = useState(false);
   const [viewLink, setViewLink] = useState<string | null>();
-  const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   (async () => {
-  //     try {
-  //       setLoading(true);
-  //       const userDetail = await UserService.getCurrentUserDetail();
-  //       if (userDetail.friendIds.length === 0) {
-  //         navigate({ pathname: "/add_friends" });
-  //       }
-  //     } catch (e) {
-  //       setLoading(false);
-  //       // Ignore
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   })();
-  // }, []);
+  const { loadingHasNoFriends } = useHasNoFriends();
 
   useEffect(() => {
     if (!drawEvents || drawEvents.length === 0) {
@@ -44,24 +26,27 @@ export default function Root() {
     setViewLink(`/view?${searchParams}`);
   }, [drawEvents]);
 
-  if (loading) {
+  if (loadingHasNoFriends) {
     return (
-      <div className="flex justify-center items-center h-[100vh]">
+      <div className="flex h-[100vh] items-center justify-center">
         <LoadingIndicator />
       </div>
     );
   }
 
   return (
-    <div className="app-container h-[100vh] w-[100vw] flex flex-row justify-center items-center">
-      <DashboardBtn className="h-[90vh] w-[50%] m-4" link="/draw">
+    <div className="app-container flex h-[100vh] w-[100vw] flex-row flex-wrap items-center justify-center md:flex-nowrap">
+      <DashboardBtn
+        className="m-4 h-[45vh] w-[90vw] md:w-[50%] xl:h-[90vh]"
+        link="/draw"
+      >
         <>
           <Icon.Pen />
           Draw
         </>
       </DashboardBtn>
       <DashboardBtn
-        className="relative h-[90vh] w-[50%] m-4"
+        className="relative m-4 h-[45vh] w-[90vw] md:w-[50%] xl:h-[90vh]"
         disabled={!viewLink}
         link={viewLink ? viewLink : ""}
       >
@@ -69,7 +54,7 @@ export default function Root() {
           {drawEvents.length > 0 ? (
             <div className="absolute right-10 -top-10 text-5xl text-icon-active">
               <Icon.Bell />
-              <div className="absolute right-[0.85rem] top-[0.3rem] text-white text-3xl">
+              <div className="absolute right-[0.85rem] top-[0.3rem] text-3xl text-white">
                 {drawEvents.length}
               </div>
             </div>

@@ -51,6 +51,8 @@ export default class UserEventService {
             )
         );
 
+        console.log(diffEvents);
+
         (async () => {
           for await (const newEvent of newEvents) {
             if (newEvent.sentBy) {
