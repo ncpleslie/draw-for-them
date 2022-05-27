@@ -1,94 +1,65 @@
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
-import { useSnapshot } from "valtio";
+import { Fragment } from "react";
 import { NotificationType } from "../../enums/notification-type.enum";
-import { store } from "../../store/store";
 import Btn from "./Btn";
 import Icon from "./Icon";
 
-const Toast = () => {
-  const { notifications } = useSnapshot(store);
-  const [isOpen, setIsOpen] = useState(false);
-  const [toastMessage, setToastMessage] = useState<string>();
-  const [toastType, setToastType] = useState<NotificationType>();
+interface ToastProps {
+  isOpen: boolean;
+  type: NotificationType;
+  message: string;
+  order: number;
+  onCloseToast: () => void;
+}
 
-  useEffect(() => {
-    if (notifications.length === 0) {
-      return;
-    }
-
-    const notification = notifications[0];
-    openModal(notification.message, notification.type);
-    const timer = setTimeout(() => {
-      store.notifications.shift();
-      closeModal();
-    }, notification.timeout);
-
-    return () => {
-      closeModal();
-      clearTimeout(timer);
-    };
-  }, [notifications]);
-
-  const closeModal = (): void => {
-    setIsOpen(false);
-  };
-
-  const openModal = async (
-    message: string,
-    type: NotificationType
-  ): Promise<void> => {
-    // Add a small delay before opening, just incase there is a modal still closing.
-    // This will allow the closing animation to still play.
-    const delay = new Promise((resolve) => setTimeout(resolve, 300));
-    await delay;
-    setToastMessage(message);
-    setToastType(type);
-    setIsOpen(true);
-  };
-
+const Toast: React.FC<ToastProps> = ({
+  isOpen,
+  type,
+  message,
+  order,
+  onCloseToast,
+}) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <div className="relative">
-        <Dialog
-          as="div"
-          className="absolute flex justify-center h-40 w-[500px] top-0 left-1/2 -translate-x-1/2 z-10 overflow-hidden"
-          onClose={closeModal}
+      <Dialog
+        as="div"
+        style={{ top: order * 8 + "rem" }}
+        className={`absolute left-1/2 z-10 flex h-40 w-[500px] -translate-x-1/2 overflow-hidden`}
+        onClose={onCloseToast}
+      >
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0 scale-95"
+          enterTo="opacity-100 scale-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100 scale-100"
+          leaveTo="opacity-0 scale-95"
         >
-          <Transition.Child
-            as={Fragment}
-            enter="ease-out duration-300"
-            enterFrom="opacity-0 scale-95"
-            enterTo="opacity-100 scale-100"
-            leave="ease-in duration-200"
-            leaveFrom="opacity-100 scale-100"
-            leaveTo="opacity-0 scale-95"
+          <div
+            className={`my-4 inline-block h-24 w-full max-w-md transform overflow-hidden rounded-2xl p-6 shadow-xl transition-all ${
+              type === NotificationType.Success && "bg-green-100"
+            } ${type === NotificationType.Error && "bg-red-100"}`}
           >
-            <div
-              className={`inline-block w-full h-24 max-w-md p-6 my-4 overflow-hidden transition-all transform shadow-xl rounded-2xl ${
-                toastType === NotificationType.Success && "bg-green-100"
-              } ${toastType === NotificationType.Error && "bg-red-100"}`}
-            >
-              <div className="flex flex-row justify-between items-center">
-                <div></div>
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900 text-center"
-                >
-                  {toastMessage}
-                </Dialog.Title>
+            <div className="flex flex-row items-center justify-between">
+              <div></div>
+              <Dialog.Title
+                as="h3"
+                className="text-center text-lg font-medium leading-6 text-gray-900"
+              >
+                {message}
+              </Dialog.Title>
 
-                <Btn
-                  className="rounded-full h-12 w-12 !text-2xl focus:outline-none"
-                  onClicked={closeModal}
-                >
-                  <Icon.Close />
-                </Btn>
-              </div>
+              <Btn
+                className="h-12 w-12 rounded-full !text-2xl focus:outline-none"
+                onClicked={onCloseToast}
+              >
+                <Icon.Close />
+              </Btn>
             </div>
-          </Transition.Child>
-        </Dialog>
-      </div>
+          </div>
+        </Transition.Child>
+      </Dialog>
     </Transition>
   );
 };

@@ -5,7 +5,10 @@ export default abstract class BaseNotification {
     this.message = message;
     this.type = type;
     this.timeout = timeout;
+    this.id = Math.floor(100 + Math.random() * 900);
   }
+
+  public id: number;
 
   public message: string;
 
