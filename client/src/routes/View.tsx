@@ -55,10 +55,9 @@ export default function View() {
             <LoadingIndicator />
           </div>
         )}
-        <img
-          className="neu-container h-[75vh] w-[90vw] rounded-xl"
-          src={image}
-        />
+        <div className="neu-container h-[80vh] w-[90vw] rounded-xl">
+          <img src={image} />
+        </div>
       </div>
     </div>
   );

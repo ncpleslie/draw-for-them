@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Header from "../components/Header/Header";
 import SketchArea from "../components/SketchArea/SketchArea";
 import SketchControl from "../components/SketchControl/SketchControl";
@@ -16,30 +15,9 @@ export default function Draw() {
   const [trash, setTrash] = useState(false);
   const [save, setSave] = useState(false);
   const [loading, setLoading] = useState<boolean>();
-  const navigate = useNavigate();
 
   useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const userDetail = await UserService.getCurrentUserDetail();
-
-        console.log(userDetail);
-
-        if (userDetail.friendIds.length === 0) {
-          ToastService.showErrorToast(
-            "You have no friends. How about making some before you draw something"
-          );
-          navigate({ pathname: "/add_friends" });
-        }
-      } catch (e) {
-        console.log(e);
-        setLoading(false);
-      } finally {
-        setLoading(false);
-        setIsDrawMode(true);
-      }
-    })();
+    setIsDrawMode(true);
   }, []);
 
   const handleOnUndoClicked = () => setUndo((prev) => !prev);
@@ -115,16 +93,16 @@ export default function Draw() {
       <Header />
 
       <div className="flex flex-col items-center justify-center p-4">
-        <SketchControl
-          {...sketchControlProps}
-          className="absolute top-0 my-4"
-        />
         {loading && (
-          <div className="absolute z-10">
+          <div className="absolute z-10 flex h-[100vh] w-[100vw] items-center justify-center">
             <LoadingIndicator />
           </div>
         )}
-        <SketchArea {...sketchAreaProps} className="h-[75vh] w-[90vw]" />
+        <SketchArea {...sketchAreaProps} className="h-[80vh] w-[90vw]" />
+        <SketchControl
+          {...sketchControlProps}
+          className="absolute bottom-0 my-4"
+        />
       </div>
     </div>
   );
