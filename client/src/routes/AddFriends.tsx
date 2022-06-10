@@ -76,9 +76,9 @@ export default function AddFriends() {
   };
 
   return (
-    <div className="app-container flex w-[100vw] flex-row flex-wrap items-center justify-center gap-10">
-      <div className="neu-container-raised mt-24 flex h-72 w-72 flex-col items-center justify-center gap-6 rounded-xl">
-        <div className="">
+    <div className="app-container flex h-[100vh] w-[100vw] flex-row flex-wrap items-center justify-center gap-10 pb-10">
+      <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-6 rounded-xl">
+        <div>
           <h1 className="text-2xl">You have no friends!</h1>
           <h2 className="text-lg">Why not make some now?</h2>
         </div>
@@ -117,7 +117,7 @@ export default function AddFriends() {
       )}
 
       {foundUser && (
-        <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-4 rounded-xl py-4 ">
+        <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-4 rounded-xl py-4">
           <h3 className="text-2xl">You've found a friend!</h3>
           <div
             className="flex flex-col items-center justify-center gap-4"

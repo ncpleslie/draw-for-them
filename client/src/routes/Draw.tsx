@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import Header from "../components/Header/Header";
 import SketchArea from "../components/SketchArea/SketchArea";
 import SketchControl from "../components/SketchControl/SketchControl";
@@ -88,20 +88,47 @@ export default function Draw() {
     onSave: handleOnSave,
   };
 
+  const containerRef = useRef(null);
+  const [drawAreaHeight, setDrawAreaHeight] = useState(0);
+
+  const observer = useRef(
+    new ResizeObserver((entries) => {
+      const margin = 150;
+      setDrawAreaHeight(entries[0].contentRect.height - margin);
+    })
+  );
+
+  useEffect(() => {
+    if (containerRef.current) {
+      observer.current.observe(containerRef.current);
+    }
+
+    return () => {
+      if (containerRef.current) {
+        observer.current.unobserve(containerRef.current);
+      }
+    };
+  }, [containerRef]);
+
   return (
     <div className="app-container h-[100vh] overflow-hidden">
       <Header />
 
-      <div className="flex flex-col items-center justify-center p-4">
+      <div
+        className="flex h-full flex-col items-center justify-start p-4"
+        ref={containerRef}
+      >
         {loading && (
           <div className="absolute z-10 flex h-[100vh] w-[100vw] items-center justify-center">
             <LoadingIndicator />
           </div>
         )}
-        <SketchArea {...sketchAreaProps} className="h-[80vh] w-[90vw]" />
+        <div style={{ height: `${drawAreaHeight}px` }}>
+          <SketchArea {...sketchAreaProps} className={`h-full w-[90vw]`} />
+        </div>
         <SketchControl
           {...sketchControlProps}
-          className="absolute bottom-0 my-4"
+          className="absolute bottom-0 my-4 h-12"
         />
       </div>
     </div>

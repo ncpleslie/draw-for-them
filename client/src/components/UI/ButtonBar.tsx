@@ -18,7 +18,7 @@ const ButtonBar: React.FC<ButtonBarProps> = ({ className, buttons }) => {
   };
 
   return (
-    <div className={`${className} flex flex-row gap-4 justify-center`}>
+    <div className={`${className} wrap flex flex-row justify-center gap-2`}>
       {buttons.map((btn, i) => {
         return (
           <div key={i} className={"flex flex-col gap-4"}>
@@ -35,7 +35,7 @@ const ButtonBar: React.FC<ButtonBarProps> = ({ className, buttons }) => {
                   onClicked={nestedBtn.onClick}
                   style={nestedBtn.style}
                   className={`${nestedBtn.className}  ${
-                    isClicked ? "opacity-100 z-10" : "opacity-0"
+                    isClicked ? "z-10 opacity-100" : "opacity-0"
                   } duration-${[i * 300]} transition ease-in-out`}
                   key={i}
                 >

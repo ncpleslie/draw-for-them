@@ -1,4 +1,5 @@
 import { FabricJSCanvas, useFabricJSEditor } from "fabricjs-react";
+import React from "react";
 import { useEffect } from "react";
 
 interface SketchAreaProps {
@@ -17,7 +18,7 @@ interface ShapeProps {
   square: boolean;
 }
 
-const SketchArea: React.FC<SketchAreaProps> = (props) => {
+const SketchArea: React.FC<SketchAreaProps> = (props, ref) => {
   const { editor, onReady } = useFabricJSEditor();
   const history = [];
 

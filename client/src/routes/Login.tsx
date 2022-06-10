@@ -10,7 +10,7 @@ import ToastService from "../services/toast.service";
 
 export default function Login() {
   const [loading, setLoading] = useState(false);
-  const { loadingHasNoFriends } = useHasNoFriends();
+  const { loadingHasNoFriends, redirectIfUser } = useHasNoFriends();
 
   const handleSignUp = async (formData: FormSubmitData): Promise<void> => {
     if (!formData.displayName) {
@@ -24,6 +24,7 @@ export default function Login() {
         formData.email,
         formData.password
       );
+      await redirectIfUser();
     } catch (e) {
       setLoading(false);
       ToastService.showErrorToast(
@@ -38,6 +39,7 @@ export default function Login() {
     try {
       setLoading(true);
       await UserService.login(formData.email, formData.password);
+      await redirectIfUser();
     } catch (e) {
       setLoading(false);
       ToastService.showErrorToast(
