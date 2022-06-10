@@ -16,10 +16,6 @@ export default function Draw() {
   const [save, setSave] = useState(false);
   const [loading, setLoading] = useState<boolean>();
 
-  useEffect(() => {
-    setIsDrawMode(true);
-  }, []);
-
   const handleOnUndoClicked = () => setUndo((prev) => !prev);
 
   const handleOnCircleClicked = () =>
@@ -124,7 +120,9 @@ export default function Draw() {
           </div>
         )}
         <div style={{ height: `${drawAreaHeight}px` }}>
-          <SketchArea {...sketchAreaProps} className={`h-full w-[90vw]`} />
+          {drawAreaHeight !== 0 && (
+            <SketchArea {...sketchAreaProps} className={`h-full w-[90vw]`} />
+          )}
         </div>
         <SketchControl
           {...sketchControlProps}
