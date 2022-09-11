@@ -55,9 +55,7 @@ const ToastControl = () => {
           isOpen={true}
           type={notification.type}
           message={notification.message}
-          onCloseToast={function (): void {
-            throw new Error("Function not implemented.");
-          }}
+          onCloseToast={() => closeModal(notification.id)}
         />
       ))}
     </div>

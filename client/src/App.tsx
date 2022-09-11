@@ -10,6 +10,7 @@ import Root from "./routes/Root";
 import LoadingIndicator from "./components/UI/LoadingIndicator";
 import AddFriends from "./routes/AddFriends";
 import ToastControl from "./components/Notification/ToastControl";
+import Logout from "./routes/Logout";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -73,6 +74,14 @@ export default function App() {
             element={
               <RequireAuth>
                 <AddFriends />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/logout"
+            element={
+              <RequireAuth>
+                <Logout />
               </RequireAuth>
             }
           />

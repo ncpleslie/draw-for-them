@@ -42,11 +42,7 @@ export default class UserService {
   public static listenToAuthChange(): void {
     const auth = getAuth();
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        store.user = user;
-      } else {
-        store.user = null;
-      }
+      store.user = user;
     });
   }
 
@@ -65,9 +61,9 @@ export default class UserService {
     await updateProfile(result.user, { displayName: displayName });
   }
 
-  public static signOut(): void {
+  public static async signOut(): Promise<void> {
     const auth = getAuth();
-    signOut(auth);
+    await signOut(auth);
   }
 
   public static async searchUserByDisplayName(

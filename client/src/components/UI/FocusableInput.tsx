@@ -4,14 +4,18 @@ interface FocusableInputProps {
   type: React.HTMLInputTypeAttribute | undefined;
   id: string;
   placeholder: string;
+  required?: boolean;
+  value: string | number;
   onChange: (e: ChangeEvent) => void;
-  onFocus: () => void;
+  onFocus?: () => void;
 }
 
 const FocusableInput: React.FC<PropsWithChildren<FocusableInputProps>> = ({
   type,
   id,
   placeholder,
+  required,
+  value,
   onChange,
   onFocus,
 }) => {
@@ -22,6 +26,7 @@ const FocusableInput: React.FC<PropsWithChildren<FocusableInputProps>> = ({
         type={type}
         id={id}
         placeholder={placeholder}
+        required={required}
         onFocus={onFocus}
         onChange={onChange}
       />

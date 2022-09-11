@@ -1,4 +1,5 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import React, { useState } from "react";
+import { LoginFormId } from "../../enums/login-form-id.enum";
 import FormSubmitData from "../../models/form-submit-data.model";
 import Btn from "../UI/Btn";
 import FocusableInput from "../UI/FocusableInput";
@@ -9,77 +10,30 @@ interface LoginSignUpProps {
 }
 
 const LoginSignUp: React.FC<LoginSignUpProps> = ({ isSignUp, onSubmit }) => {
-  const [emailInputValue, setEmailInputValue] = useState("");
-  const [displayNameInputValue, setDisplayNameInputValue] = useState("");
-  const [passwordInputValue, setPasswordInputValue] = useState("");
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [displayNameFocused, setDisplayNameFocused] = useState(false);
-  const [passwordFocused, setPasswordFocused] = useState(false);
-
-  const onEmailFocus = () => {
-    setEmailFocused(true);
-    setDisplayNameFocused(false);
-    setPasswordFocused(false);
-  };
-  const onDisplayNameFocus = () => {
-    setEmailFocused(false);
-    setDisplayNameFocused(true);
-    setPasswordFocused(false);
-  };
-  const onPasswordFocus = () => {
-    setEmailFocused(false);
-    setDisplayNameFocused(false);
-    setPasswordFocused(true);
-  };
-
-  const handleOnInputChange = (e: ChangeEvent) => {
-    const input = e.nativeEvent as InputEvent;
-    const key = input.data as string;
-
-    if (emailFocused) {
-      updateInputValue(key, setEmailInputValue);
-    }
-
-    if (displayNameFocused) {
-      updateInputValue(key, setDisplayNameInputValue);
-    }
-
-    if (passwordFocused) {
-      updateInputValue(key, setPasswordInputValue);
-    }
-  };
-
-  const updateInputValue = (
-    key: string,
-    inputState: Dispatch<SetStateAction<string>>
-  ): void => {
-    if (!key) {
-      inputState((prev: string) => prev.slice(0, -1));
-
-      return;
-    }
-
-    inputState((prev: string) => (prev += key));
-  };
+  const [form, setForm] = useState({
+    [LoginFormId.Email]: "",
+    [LoginFormId.DisplayName]: "",
+    [LoginFormId.Password]: "",
+  });
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (
-      (!displayNameInputValue && isSignUp) ||
-      !emailInputValue ||
-      !passwordInputValue
-    ) {
-      return;
-    }
-
     onSubmit(
       new FormSubmitData(
-        emailInputValue,
-        passwordInputValue,
-        displayNameInputValue
+        form[LoginFormId.Email],
+        form[LoginFormId.Password],
+        form[LoginFormId.DisplayName]
       )
     );
+  };
+
+  const handleFormUpdate = (id: LoginFormId, e: React.ChangeEvent) => {
+    const value = (e.target as HTMLInputElement).value;
+    setForm((prev) => {
+      prev[id] = value;
+      return prev;
+    });
   };
 
   return (
@@ -89,28 +43,31 @@ const LoginSignUp: React.FC<LoginSignUpProps> = ({ isSignUp, onSubmit }) => {
     >
       <FocusableInput
         type={"email"}
-        id={"email-input"}
+        id={LoginFormId.Email}
         placeholder={"Email"}
-        onChange={handleOnInputChange}
-        onFocus={onEmailFocus}
+        value={form[LoginFormId.Email]}
+        required
+        onChange={(e) => handleFormUpdate(LoginFormId.Email, e)}
       />
 
       {isSignUp && (
         <FocusableInput
           type={"text"}
-          id={"display-name-input"}
+          id={LoginFormId.DisplayName}
           placeholder={"Display Name"}
-          onChange={handleOnInputChange}
-          onFocus={onDisplayNameFocus}
+          value={form[LoginFormId.DisplayName]}
+          required
+          onChange={(e) => handleFormUpdate(LoginFormId.DisplayName, e)}
         />
       )}
 
       <FocusableInput
         type={"password"}
-        id={"password-input"}
+        id={LoginFormId.Password}
         placeholder={"Password"}
-        onChange={handleOnInputChange}
-        onFocus={onPasswordFocus}
+        value={form[LoginFormId.Password]}
+        required
+        onChange={(e) => handleFormUpdate(LoginFormId.Password, e)}
       />
 
       <Btn type="submit" className="pt-0" onClicked={() => {}}>

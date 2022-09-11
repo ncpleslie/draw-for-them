@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSnapshot } from "valtio";
 import UserService from "../services/user.service";
 import { store } from "../store/store";
 
@@ -8,7 +7,6 @@ let hasChecked = false;
 
 export const useHasNoFriends = () => {
   const [loadingHasNoFriends, setLoadingHasNoFriends] = useState(false);
-  const { user } = useSnapshot(store);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,11 +20,12 @@ export const useHasNoFriends = () => {
       hasChecked = true;
       setLoadingHasNoFriends(false);
     })();
-  }, [user]);
+  }, [store.user]);
 
   const redirectIfUser = async (): Promise<void> => {
-    if (user) {
+    if (store.user) {
       const userDetail = await UserService.getCurrentUserDetail();
+      console.log(userDetail);
 
       if (userDetail.friendIds.length === 0) {
         navigate({ pathname: "/add_friends" });
