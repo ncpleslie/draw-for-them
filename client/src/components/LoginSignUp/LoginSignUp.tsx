@@ -39,40 +39,44 @@ const LoginSignUp: React.FC<LoginSignUpProps> = ({ isSignUp, onSubmit }) => {
   return (
     <form
       onSubmit={handleFormSubmit}
-      className="mx-4 mt-4 flex h-[250px] flex-col items-center justify-center gap-4"
+      className="mx-4 mt-4 flex h-[250px] flex-col items-center justify-between gap-4"
     >
-      <FocusableInput
-        type={"email"}
-        id={LoginFormId.Email}
-        placeholder={"Email"}
-        value={form[LoginFormId.Email]}
-        required
-        onChange={(e) => handleFormUpdate(LoginFormId.Email, e)}
-      />
-
-      {isSignUp && (
+      <div className="flex h-full flex-col justify-center gap-4">
         <FocusableInput
-          type={"text"}
-          id={LoginFormId.DisplayName}
-          placeholder={"Display Name"}
-          value={form[LoginFormId.DisplayName]}
+          type={"email"}
+          id={LoginFormId.Email}
+          placeholder={"Email"}
+          value={form[LoginFormId.Email]}
           required
-          onChange={(e) => handleFormUpdate(LoginFormId.DisplayName, e)}
+          onChange={(e) => handleFormUpdate(LoginFormId.Email, e)}
         />
-      )}
 
-      <FocusableInput
-        type={"password"}
-        id={LoginFormId.Password}
-        placeholder={"Password"}
-        value={form[LoginFormId.Password]}
-        required
-        onChange={(e) => handleFormUpdate(LoginFormId.Password, e)}
-      />
+        {isSignUp && (
+          <FocusableInput
+            type={"text"}
+            id={LoginFormId.DisplayName}
+            placeholder={"Display Name"}
+            value={form[LoginFormId.DisplayName]}
+            required
+            onChange={(e) => handleFormUpdate(LoginFormId.DisplayName, e)}
+          />
+        )}
 
-      <Btn type="submit" className="pt-0" onClicked={() => {}}>
-        {isSignUp ? "Sign up" : "Login"}
-      </Btn>
+        <FocusableInput
+          type={"password"}
+          id={LoginFormId.Password}
+          placeholder={"Password"}
+          value={form[LoginFormId.Password]}
+          required
+          onChange={(e) => handleFormUpdate(LoginFormId.Password, e)}
+        />
+      </div>
+
+      <div className="">
+        <Btn type="submit" className="pt-0" onClicked={() => {}}>
+          {isSignUp ? "Sign up" : "Login"}
+        </Btn>
+      </div>
     </form>
   );
 };

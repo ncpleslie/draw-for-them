@@ -25,7 +25,6 @@ export const useHasNoFriends = () => {
   const redirectIfUser = async (): Promise<void> => {
     if (store.user) {
       const userDetail = await UserService.getCurrentUserDetail();
-      console.log(userDetail);
 
       if (userDetail.friendIds.length === 0) {
         navigate({ pathname: "/add_friends" });

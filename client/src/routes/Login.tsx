@@ -11,6 +11,7 @@ import ToastService from "../services/toast.service";
 export default function Login() {
   const [loading, setLoading] = useState(false);
   const { loadingHasNoFriends, redirectIfUser } = useHasNoFriends();
+  const [isSignUp, setIsSignUp] = useState(true);
 
   const handleSignUp = async (formData: FormSubmitData): Promise<void> => {
     if (!formData.displayName) {
@@ -58,23 +59,26 @@ export default function Login() {
     );
   }
 
+  const onBtnClicked = (section: string) => {
+    setIsSignUp(section === "Sign Up");
+  };
+
   return (
     <div className="app-container flex h-[100vh] w-full flex-row items-center justify-center gap-10">
       <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
         <Tab.Group>
           <Tab.List className="neu-container-raised flex w-full space-x-1 rounded-xl p-1">
             {["Sign Up", "Login"].map((section) => (
-              <TabBtn key={section}>{section}</TabBtn>
+              <div
+                className="contents"
+                key={section}
+                onClick={() => onBtnClicked(section)}
+              >
+                <TabBtn>{section}</TabBtn>
+              </div>
             ))}
           </Tab.List>
-          <Tab.Panels>
-            <Tab.Panel>
-              <LoginSignUp isSignUp onSubmit={handleSignUp} />
-            </Tab.Panel>
-            <Tab.Panel>
-              <LoginSignUp onSubmit={handleLogin} />
-            </Tab.Panel>
-          </Tab.Panels>
+          <LoginSignUp isSignUp={isSignUp} onSubmit={handleSignUp} />
         </Tab.Group>
       </div>
     </div>
