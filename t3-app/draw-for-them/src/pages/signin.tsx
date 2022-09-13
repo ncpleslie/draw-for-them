@@ -41,7 +41,7 @@ const SignIn: React.FC<SignInProps> = ({ providers, csrfToken }) => {
     if (session) {
       router.replace("/");
     }
-  }, [session]);
+  }, [session, router]);
 
   const handleEmailSubmit = async (emailFormData: EmailSignUpFormData) => {
     await signIn("email", { email: emailFormData.email });

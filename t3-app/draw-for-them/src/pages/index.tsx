@@ -16,7 +16,7 @@ const Home: NextPage = () => {
     if (!session) {
       router.replace("/signin");
     }
-  }, [session]);
+  }, [session, router]);
 
   if (!session) {
     return (

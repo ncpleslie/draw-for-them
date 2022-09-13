@@ -47,7 +47,7 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
         />
       </div>
 
-      <Btn type="submit" loading={loading} onClicked={() => {}}>
+      <Btn type="submit" loading={loading}>
         <p className="text-xl">Sign Up</p>
       </Btn>
     </form>

@@ -107,7 +107,7 @@ const AngleUp: React.FC = () => {
   return <FontAwesomeIcon icon={faAngleUp} />;
 };
 
-export default {
+const icon = {
   Pen,
   Circle,
   Square,
@@ -130,3 +130,5 @@ export default {
   Delete,
   AngleUp,
 };
+
+export default icon;
