@@ -1,3 +1,4 @@
+import { NextPage } from "next";
 import { CtxOrReq } from "next-auth/client/_utils";
 import { BuiltInProviderType } from "next-auth/providers";
 import {
@@ -33,7 +34,7 @@ interface SignInProps {
   > | null;
 }
 
-const SignIn: React.FC<SignInProps> = ({ providers, csrfToken }) => {
+const SignIn: NextPage<SignInProps> = ({ providers, csrfToken }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
 

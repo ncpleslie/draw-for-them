@@ -1,13 +1,9 @@
+import SketchArea from "./SketchArea";
+import SketchControl from "./SketchControl";
+import LoadingIndicator from "../ui/LoadingIndicator";
 import { useEffect, useRef, useState } from "react";
-import Header from "../components/Header/Header";
-import SketchArea from "../components/SketchArea/SketchArea";
-import SketchControl from "../components/SketchControl/SketchControl";
-import LoadingIndicator from "../components/UI/LoadingIndicator";
-import ToastService from "../services/toast.service";
-import UserEventService from "../services/user-event.service";
-import UserService from "../services/user.service";
 
-export default function Draw() {
+const DrawingArea: React.FC = () => {
   const [isDrawMode, setIsDrawMode] = useState(false);
   const [selectedColor, setSelectedColor] = useState("#000000");
   const [undo, setUndo] = useState(false);
@@ -41,22 +37,22 @@ export default function Draw() {
   const handleOnSave = async (imageData: string): Promise<void> => {
     setLoading(true);
     try {
-      const userDetail = await UserService.getCurrentUserDetail();
+      //   const userDetail = await UserService.getCurrentUserDetail();
 
-      if (userDetail.friendIds.length === 1) {
-        await UserEventService.sendDrawEvent(
-          userDetail.friendIds[0],
-          imageData
-        );
-      }
+      //   if (userDetail.friendIds.length === 1) {
+      //     await UserEventService.sendDrawEvent(
+      //       userDetail.friendIds[0],
+      //       imageData
+      //     );
+      //   }
 
-      ToastService.showSuccessToast("That masterpiece was sent!");
+      alert("That masterpiece was sent!");
       handleOnTrashClicked();
       setLoading(false);
     } catch (e) {
       console.error(e);
       setLoading(false);
-      ToastService.showErrorToast(
+      alert(
         "Oops! Something went wrong. Please try send that masterpiece again."
       );
     }
@@ -89,8 +85,16 @@ export default function Draw() {
 
   const observer = useRef(
     new ResizeObserver((entries) => {
+      if (!entries) {
+        return;
+      }
+
+      if (entries.length === 0) {
+        return;
+      }
+
       const margin = 150;
-      setDrawAreaHeight(entries[0].contentRect.height - margin);
+      setDrawAreaHeight(entries[0]!.contentRect.height - margin);
     })
   );
 
@@ -107,28 +111,26 @@ export default function Draw() {
   }, [containerRef]);
 
   return (
-    <div className="app-container h-[100vh] overflow-hidden">
-      <Header />
-
-      <div
-        className="flex h-full flex-col items-center justify-start p-4"
-        ref={containerRef}
-      >
-        {loading && (
-          <div className="absolute z-10 flex h-[100vh] w-[100vw] items-center justify-center">
-            <LoadingIndicator />
-          </div>
-        )}
-        <div style={{ height: `${drawAreaHeight}px` }}>
-          {drawAreaHeight !== 0 && (
-            <SketchArea {...sketchAreaProps} className={`h-full w-[90vw]`} />
-          )}
+    <div
+      className="flex h-full flex-col items-center justify-start p-4"
+      ref={containerRef}
+    >
+      {loading && (
+        <div className="absolute z-10 flex h-[100vh] w-[100vw] items-center justify-center">
+          <LoadingIndicator />
         </div>
-        <SketchControl
-          {...sketchControlProps}
-          className="absolute bottom-0 my-4 h-12"
-        />
+      )}
+      <div style={{ height: `${drawAreaHeight}px` }}>
+        {drawAreaHeight !== 0 && (
+          <SketchArea {...sketchAreaProps} className={`h-full w-[90vw]`} />
+        )}
       </div>
+      <SketchControl
+        {...sketchControlProps}
+        className="absolute bottom-0 my-4 h-12"
+      />
     </div>
   );
-}
+};
+
+export default DrawingArea;
