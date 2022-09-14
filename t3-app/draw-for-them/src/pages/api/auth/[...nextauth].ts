@@ -32,6 +32,7 @@ export const authOptions: NextAuthOptions = {
   ],
   pages: {
     signIn: "/signin",
+    newUser: "/add_a_friend",
   },
   secret: env.NEXTAUTH_SECRET,
   debug: true,

@@ -1,35 +1,35 @@
 import type { NextPage } from "next";
-import { useSession, signOut } from "next-auth/react";
+import { signOut, getSession, GetSessionParams } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import DashboardBtn from "../components/ui/DashboardBtn";
-import FullScreenCenter from "../components/ui/FullScreenCenter";
 import Icon from "../components/ui/Icon";
-import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { trpc } from "../utils/trpc";
 
+export async function getServerSideProps(
+  context: GetSessionParams | undefined
+) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+}
+
 const Home: NextPage = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
   const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
 
   const [viewLink, setViewLink] = useState<string | null>();
   const [drawEvents] = useState<string[] | undefined>();
-
-  useEffect(() => {
-    if (!session) {
-      router.replace("/signin");
-    }
-  }, [session, router]);
-
-  if (!session) {
-    return (
-      <FullScreenCenter>
-        <LoadingIndicator />
-      </FullScreenCenter>
-    );
-  }
 
   return (
     <>
@@ -41,6 +41,9 @@ const Home: NextPage = () => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+      <button className="absolute" onClick={() => signOut()}>
+        Sign Out
+      </button>
 
       <main className="app-container flex h-[100vh] w-[100vw] flex-row flex-wrap items-center justify-center md:flex-nowrap">
         <DashboardBtn

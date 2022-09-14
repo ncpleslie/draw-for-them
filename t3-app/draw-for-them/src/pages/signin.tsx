@@ -8,6 +8,7 @@ import {
   ClientSafeProvider,
   LiteralUnion,
   getCsrfToken,
+  getSession,
 } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -18,6 +19,17 @@ import LoadingIndicator from "../components/ui/LoadingIndicator";
 import EmailSignUpFormData from "../models/email-signup-form-data.model";
 
 export async function getServerSideProps(context: CtxOrReq | undefined) {
+  const session = await getSession(context);
+
+  if (session) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false,
+      },
+    };
+  }
+
   const providers = await getProviders();
   const csrfToken = await getCsrfToken(context);
 
