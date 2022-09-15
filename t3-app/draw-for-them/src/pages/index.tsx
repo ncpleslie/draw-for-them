@@ -4,7 +4,7 @@ import Head from "next/head";
 import { useState } from "react";
 import DashboardBtn from "../components/ui/DashboardBtn";
 import Icon from "../components/ui/Icon";
-import { trpc } from "../utils/trpc";
+// import { trpc } from "../utils/trpc";
 
 export async function getServerSideProps(
   context: GetSessionParams | undefined
@@ -26,9 +26,9 @@ export async function getServerSideProps(
 }
 
 const Home: NextPage = () => {
-  const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
 
-  const [viewLink, setViewLink] = useState<string | null>();
+  const [viewLink] = useState<string | null>();
   const [drawEvents] = useState<string[] | undefined>();
 
   return (

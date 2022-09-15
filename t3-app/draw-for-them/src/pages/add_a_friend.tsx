@@ -1,76 +1,37 @@
 import { NextPage } from "next";
-import { ChangeEvent, useState } from "react";
+import { useState } from "react";
 import Btn from "../components/ui/Btn";
 import FocusableInput from "../components/ui/FocusableInput";
 import Icon from "../components/ui/Icon";
 import LoadingIndicator from "../components/ui/LoadingIndicator";
-import UserDetail from "../models/user-detail.model";
+import { trpc } from "../utils/trpc";
 
 const AddAFriend: NextPage = () => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [foundUser, setFoundUser] = useState<UserDetail>();
   const [addingFriend, setAddingFriend] = useState(false);
   const [friendAdded, setFriendAdded] = useState(false);
-  const [_, setSearchInputValue] = useState("");
-  const [focused, setFocused] = useState(false);
-  // const { loadingHasNoFriends, redirectIfUser } = useHasNoFriends();
+  const [searchInput, setSearchInput] = useState("");
+  const {
+    data: foundUser,
+    isLoading,
+    isError,
+    refetch,
+  } = trpc.useQuery(["user.getUserByName", { name: searchInput }], {
+    enabled: false,
+  });
+
+  const addUserAsFriend = trpc.useMutation("user.addUserAsFriendById", {});
 
   const handleFriendSearch = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    setFocused(false);
-
-    const target = e.target as typeof e.target & {
-      friend: { value: string };
-    };
-
-    try {
-      setFoundUser(undefined);
-      setLoading(true);
-      setError(false);
-      // const foundUser = await UserService.searchUserByDisplayName(
-      //   target.friend.value
-      // );
-      //   setFoundUser(foundUser);
-    } catch (e) {
-      console.error(e);
-      setLoading(false);
-      setError(true);
-    } finally {
-      setLoading(false);
-    }
+    refetch();
   };
-
-  const onFocus = () => setFocused(true);
 
   const handleAddAFriend = async () => {
     if (!foundUser || friendAdded) {
       return;
     }
 
-    try {
-      setAddingFriend(true);
-      // await UserService.addAFriend(foundUser.uid);
-      setAddingFriend(false);
-      setFriendAdded(true);
-      //   await redirectIfUser();
-    } catch (e) {
-      console.error(e);
-      setAddingFriend(false);
-    }
-  };
-
-  const onChange = (e: ChangeEvent) => {
-    const input = e.nativeEvent as InputEvent;
-    const key = input.data as string;
-
-    if (!key) {
-      setSearchInputValue((prev: string) => prev.slice(0, -1));
-
-      return;
-    }
-
-    setSearchInputValue((prev: string) => (prev += key));
+    addUserAsFriend.mutate({ id: foundUser.id });
   };
 
   return (
@@ -85,24 +46,22 @@ const AddAFriend: NextPage = () => {
           <FocusableInput
             type={"search"}
             id={"friend"}
-            placeholder={""}
-            onChange={onChange}
-            onFocus={onFocus}
+            placeholder={"What's your \"friend's\" name?"}
+            required
+            onChange={(e) =>
+              setSearchInput((e.target as HTMLInputElement).value)
+            }
           />
 
-          <Btn type="submit" className="pt-0" onClicked={() => {}}>
+          <Btn type="submit" className="pt-0">
             Search
           </Btn>
         </form>
       </div>
 
-      {/* {(loading || loadingHasNoFriends) && (
-        <div className="flex w-72 items-center justify-center">
-          <LoadingIndicator />
-        </div>
-      )} */}
+      {isLoading && <LoadingIndicator />}
 
-      {error && !focused && (
+      {isError && (
         <div className="neu-container-raised flex h-40 w-72 flex-row items-center justify-center gap-4 rounded-xl">
           <div className="text-5xl text-icon-inactive">
             <Icon.Question />
@@ -126,7 +85,7 @@ const AddAFriend: NextPage = () => {
             </div>
 
             <div>
-              <p>Name: {foundUser.displayName}</p>
+              {foundUser.name && <p>Name: {foundUser.name}</p>}
               <p>Email: {foundUser.email}</p>
             </div>
 

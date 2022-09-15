@@ -73,9 +73,7 @@ const SignIn: NextPage<SignInProps> = ({ providers, csrfToken }) => {
       <div className="app-container flex flex-col h-[100vh] w-full flex-row items-center justify-center gap-10">
         <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
           {providers?.email && (
-            <>
-              <EmailLogin csrfToken={csrfToken} onSubmit={handleEmailSubmit} />
-            </>
+            <EmailLogin csrfToken={csrfToken} onSubmit={handleEmailSubmit} />
           )}
         </div>
         <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
