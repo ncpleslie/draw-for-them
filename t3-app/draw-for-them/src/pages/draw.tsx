@@ -1,9 +1,11 @@
 import { NextPage } from "next";
+import { getSession, GetSessionParams } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import Header from "../components/header/Header";
 import FullScreenCenter from "../components/ui/FullScreenCenter";
 import LoadingIndicator from "../components/ui/LoadingIndicator";
+
 const DrawingArea = dynamic(() => import("../components/draw/DrawingArea"), {
   ssr: false,
   loading: () => (
@@ -12,6 +14,25 @@ const DrawingArea = dynamic(() => import("../components/draw/DrawingArea"), {
     </FullScreenCenter>
   ),
 });
+
+export async function getServerSideProps(
+  context: GetSessionParams | undefined
+) {
+  const session = await getSession(context);
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  return {
+    props: { session },
+  };
+}
 
 const Draw: NextPage = () => {
   return (

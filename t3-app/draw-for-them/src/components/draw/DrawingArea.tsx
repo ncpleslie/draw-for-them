@@ -2,6 +2,7 @@ import SketchArea from "./SketchArea";
 import SketchControl from "./SketchControl";
 import LoadingIndicator from "../ui/LoadingIndicator";
 import { useEffect, useRef, useState } from "react";
+import { trpc } from "../../utils/trpc";
 
 const DrawingArea: React.FC = () => {
   const [isDrawMode, setIsDrawMode] = useState(false);
@@ -11,6 +12,7 @@ const DrawingArea: React.FC = () => {
   const [trash, setTrash] = useState(false);
   const [save, setSave] = useState(false);
   const [loading, setLoading] = useState<boolean>();
+  const sendImage = trpc.useMutation("user.sendUserImage");
 
   const handleOnUndoClicked = () => setUndo((prev) => !prev);
 
@@ -45,6 +47,8 @@ const DrawingArea: React.FC = () => {
       //       imageData
       //     );
       //   }
+
+      await sendImage.mutateAsync({ imageData });
 
       alert("That masterpiece was sent!");
       handleOnTrashClicked();

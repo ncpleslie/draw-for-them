@@ -40,8 +40,18 @@ CREATE TABLE "User" (
     "email" TEXT,
     "emailVerified" TIMESTAMP(3),
     "image" TEXT,
+    "friendId" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Image" (
+    "id" TEXT NOT NULL,
+    "imageData" TEXT NOT NULL,
+    "receiverId" TEXT NOT NULL,
+
+    CONSTRAINT "Image_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -71,3 +81,6 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Image" ADD CONSTRAINT "Image_receiverId_fkey" FOREIGN KEY ("receiverId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

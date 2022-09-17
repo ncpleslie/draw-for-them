@@ -10,13 +10,13 @@ interface ButtonBarProps {
 const ButtonBar: React.FC<ButtonBarProps> = ({ className, buttons }) => {
   const [isClicked, setIsClicked] = useState(false);
   const handleBtnClicked = (index: number) => {
-    if (!buttons && !buttons[index]) {
+    if (!buttons) {
       return;
     }
 
-    buttons[index]!.onClick();
+    buttons[index]?.onClick();
 
-    if (buttons[index]!.nestedButtons) {
+    if (buttons[index]?.nestedButtons) {
       setIsClicked((prev) => !prev);
     }
   };

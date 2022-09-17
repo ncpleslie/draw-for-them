@@ -7,8 +7,8 @@ import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { trpc } from "../utils/trpc";
 
 const AddAFriend: NextPage = () => {
-  const [addingFriend, setAddingFriend] = useState(false);
-  const [friendAdded, setFriendAdded] = useState(false);
+  const [addingFriend] = useState(false);
+  const [friendAdded] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const {
     data: foundUser,
@@ -75,7 +75,7 @@ const AddAFriend: NextPage = () => {
 
       {foundUser && (
         <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-4 rounded-xl py-4">
-          <h3 className="text-2xl">You've found a friend!</h3>
+          <h3 className="text-2xl">You have found a friend!</h3>
           <div
             className="flex flex-col items-center justify-center gap-4"
             onClick={handleAddAFriend}

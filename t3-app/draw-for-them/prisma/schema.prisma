@@ -54,6 +54,14 @@ model User {
   friendId      String?
   accounts      Account[]
   sessions      Session[]
+  images        Image[]     
+}
+
+model Image {
+  id            String     @id @default(cuid())
+  imageData     String
+  receiverId    String
+  user          User       @relation(fields: [receiverId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {

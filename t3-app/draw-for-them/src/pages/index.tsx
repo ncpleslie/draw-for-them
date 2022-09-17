@@ -1,10 +1,10 @@
 import type { NextPage } from "next";
 import { signOut, getSession, GetSessionParams } from "next-auth/react";
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DashboardBtn from "../components/ui/DashboardBtn";
 import Icon from "../components/ui/Icon";
-// import { trpc } from "../utils/trpc";
+import { trpc } from "../utils/trpc";
 
 export async function getServerSideProps(
   context: GetSessionParams | undefined
@@ -26,10 +26,17 @@ export async function getServerSideProps(
 }
 
 const Home: NextPage = () => {
-  // const hello = trpc.useQuery(["example.hello", { text: "from tRPC" }]);
+  const [viewLink, setViewLink] = useState<string | null>();
+  const { data: drawEvents } = trpc.useQuery(["user.getAllImagesForUser"]);
 
-  const [viewLink] = useState<string | null>();
-  const [drawEvents] = useState<string[] | undefined>();
+  useEffect(() => {
+    if (drawEvents?.length === 0) {
+      setViewLink(null);
+      return;
+    }
+
+    setViewLink(`/view/${drawEvents?.[0]?.id}`);
+  }, [drawEvents]);
 
   return (
     <>
