@@ -14,10 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Example {
-  id String @id @default(cuid())
-}
-
 // Necessary for Next auth
 model Account {
   id                String  @id @default(cuid())
@@ -46,23 +42,29 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  image         String?
-  friendId      String?
-  accounts      Account[]
-  sessions      Session[]
-  images        Image[]     
+  id             String       @id @default(cuid())
+  name           String?
+  email          String?      @unique
+  emailVerified  DateTime?
+  image          String?
+  accounts       Account[]
+  sessions       Session[]
+  receivedImages ImageEvent[] @relation(name: "ReceivedImages")
+  sentImages     ImageEvent[] @relation(name: "SentImages")
+  friends         User[] @relation("friends")
+  friendsRelation User[] @relation("friends")
 }
 
-model Image {
+model ImageEvent {
   id            String     @id @default(cuid())
+  active        Boolean    @default(true)
   imageData     String
+  receiver      User       @relation(name: "ReceivedImages", fields: [receiverId], references: [id], onDelete: Cascade)
   receiverId    String
-  user          User       @relation(fields: [receiverId], references: [id], onDelete: Cascade)
+  sender        User       @relation(name: "SentImages", fields: [senderId], references: [id], onDelete: Cascade)
+  senderId      String
 }
+
 
 model VerificationToken {
   identifier String

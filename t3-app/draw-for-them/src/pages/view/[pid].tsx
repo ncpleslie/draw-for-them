@@ -10,6 +10,7 @@ import { createSSGHelpers } from "@trpc/react/ssg";
 import { appRouter } from "../../server/router";
 import { createContext } from "../../server/router/context";
 import superjson from "superjson";
+import FullScreenCenter from "../../components/ui/FullScreenCenter";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{ pid: string }>
@@ -45,11 +46,12 @@ const View: NextPage<
   return (
     <div className="app-container h-[100vh] overflow-hidden">
       <Header />
-      <div className="flex flex-col items-center justify-center p-4">
+
+      <div className="flex flex-col items-center justify-center">
         {isLoading && (
-          <div className="absolute">
+          <FullScreenCenter>
             <LoadingIndicator />
-          </div>
+          </FullScreenCenter>
         )}
         <div className="neu-container h-[80vh] w-[90vw] rounded-xl">
           <img src={image?.imageData} />

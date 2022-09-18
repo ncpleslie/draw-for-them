@@ -3,6 +3,8 @@ import SketchControl from "./SketchControl";
 import LoadingIndicator from "../ui/LoadingIndicator";
 import { useEffect, useRef, useState } from "react";
 import { trpc } from "../../utils/trpc";
+import { toast } from "react-toastify";
+import FullScreenCenter from "../ui/FullScreenCenter";
 
 const DrawingArea: React.FC = () => {
   const [isDrawMode, setIsDrawMode] = useState(false);
@@ -11,7 +13,7 @@ const DrawingArea: React.FC = () => {
   const [shape, setShape] = useState({ circle: false, square: false });
   const [trash, setTrash] = useState(false);
   const [save, setSave] = useState(false);
-  const [loading, setLoading] = useState<boolean>();
+  const [loading, setLoading] = useState(false);
   const sendImage = trpc.useMutation("user.sendUserImage");
 
   const handleOnUndoClicked = () => setUndo((prev) => !prev);
@@ -39,24 +41,14 @@ const DrawingArea: React.FC = () => {
   const handleOnSave = async (imageData: string): Promise<void> => {
     setLoading(true);
     try {
-      //   const userDetail = await UserService.getCurrentUserDetail();
-
-      //   if (userDetail.friendIds.length === 1) {
-      //     await UserEventService.sendDrawEvent(
-      //       userDetail.friendIds[0],
-      //       imageData
-      //     );
-      //   }
-
       await sendImage.mutateAsync({ imageData });
-
-      alert("That masterpiece was sent!");
+      toast.success("That masterpiece was sent!");
       handleOnTrashClicked();
       setLoading(false);
     } catch (e) {
       console.error(e);
       setLoading(false);
-      alert(
+      toast.error(
         "Oops! Something went wrong. Please try send that masterpiece again."
       );
     }
@@ -120,9 +112,9 @@ const DrawingArea: React.FC = () => {
       ref={containerRef}
     >
       {loading && (
-        <div className="absolute z-10 flex h-[100vh] w-[100vw] items-center justify-center">
+        <FullScreenCenter>
           <LoadingIndicator />
-        </div>
+        </FullScreenCenter>
       )}
       <div style={{ height: `${drawAreaHeight}px` }}>
         {drawAreaHeight !== 0 && (

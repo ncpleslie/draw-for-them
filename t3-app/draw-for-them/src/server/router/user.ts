@@ -25,7 +25,7 @@ export const userRouter = createProtectedRouter()
         const currentUserId = ctx.session.user.id;
         await ctx.prisma.user.update({
           where: { id: currentUserId },
-          data: { friendId: input.id },
+          data: { friends: { connect: [{ id: input.id }] } },
         });
       } catch (error) {
         console.log(error);
@@ -41,15 +41,20 @@ export const userRouter = createProtectedRouter()
         const currentUserId = ctx.session.user.id;
         const currentUser = await ctx.prisma.user.findFirst({
           where: { id: currentUserId },
+          include: { friends: true },
         });
-        if (!currentUser?.friendId) {
+
+        if (currentUser?.friends?.length === 0) {
           throw new Error("User has no friends");
         }
 
+        const firstFriendId = currentUser!.friends[0]!.id;
         await ctx.prisma.user.update({
-          where: { id: currentUser.friendId },
+          where: { id: firstFriendId },
           data: {
-            images: { create: { imageData: input.imageData } },
+            receivedImages: {
+              create: { imageData: input.imageData, senderId: currentUserId },
+            },
           },
         });
       } catch (error) {
@@ -60,9 +65,12 @@ export const userRouter = createProtectedRouter()
   .query("getAllImagesForUser", {
     async resolve({ ctx }) {
       try {
-        return await ctx.prisma.image.findMany({
-          where: { receiverId: ctx.session.user.id },
+        const userWithImageEvents = await ctx.prisma.user.findFirst({
+          where: { id: ctx.session.user.id },
+          include: { receivedImages: true },
         });
+
+        return userWithImageEvents?.receivedImages;
       } catch (error) {
         console.log(error);
       }
@@ -74,13 +82,13 @@ export const userRouter = createProtectedRouter()
     }),
     async resolve({ ctx, input }) {
       try {
-        return await ctx.prisma.image.findFirst({
+        return await ctx.prisma.imageEvent.findFirst({
           where: { id: input.id },
         });
       } catch (error) {
         console.log(error);
       } finally {
-        await ctx.prisma.image.delete({ where: { id: input.id } });
+        await ctx.prisma.imageEvent.delete({ where: { id: input.id } });
       }
     },
   });

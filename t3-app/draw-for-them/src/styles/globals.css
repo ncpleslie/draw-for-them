@@ -83,7 +83,7 @@
     inset -3px -3px 3px 0 rgba(255, 255, 255, 1),
     inset 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
   color: #15e38a;
-  @apply transition ease-in-out hover:-translate-y-1 hover:scale-y-95 duration-300;
+  @apply transition ease-in-out -translate-y-1 scale-y-95 duration-300;
 }
 
 .neu-btn-small:hover {
