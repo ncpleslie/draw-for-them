@@ -67,7 +67,7 @@ export const userRouter = createProtectedRouter()
       try {
         const userWithImageEvents = await ctx.prisma.user.findFirst({
           where: { id: ctx.session.user.id },
-          include: { receivedImages: true },
+          include: { receivedImages: { where: { active: true } } },
         });
 
         return userWithImageEvents?.receivedImages;
@@ -83,12 +83,15 @@ export const userRouter = createProtectedRouter()
     async resolve({ ctx, input }) {
       try {
         return await ctx.prisma.imageEvent.findFirst({
-          where: { id: input.id },
+          where: { id: input.id, active: true },
         });
       } catch (error) {
         console.log(error);
       } finally {
-        await ctx.prisma.imageEvent.delete({ where: { id: input.id } });
+        await ctx.prisma.imageEvent.update({
+          where: { id: input.id },
+          data: { active: false },
+        });
       }
     },
   });

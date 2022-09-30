@@ -1,6 +1,10 @@
 // src/server/db/client.ts
 import { PrismaClient } from "@prisma/client";
-import { env } from "../../env/server.mjs";
+const env = (async () => {
+  const { env } = await import("../../env/server.mjs");
+
+  return env;
+})().catch((err) => console.error(err));
 
 declare global {
   // eslint-disable-next-line no-var
