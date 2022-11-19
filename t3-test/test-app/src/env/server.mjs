@@ -5,15 +5,26 @@
  */
 import { serverSchema } from "./schema.mjs";
 import { env as clientEnv, formatErrors } from "./client.mjs";
+import * as dotenv from 'dotenv'
 
-const _serverEnv = serverSchema.safeParse(process.env);
+let _serverEnv = serverSchema.safeParse(process.env);
 
 if (!_serverEnv.success) {
-  console.error(
-    "❌ Invalid environment variables:\n",
-    ...formatErrors(_serverEnv.error.format()),
-  );
-  throw new Error("Invalid environment variables");
+  console.warn('Failed to load server environment variables. Attempting to load alternatives.')
+  const result = dotenv.config();
+  if (result.error) {
+    throw new Error('Backup environment variables failed');
+  }
+
+  _serverEnv = serverSchema.safeParse(result.parsed);
+
+  if (!_serverEnv.success) {
+    console.error(
+      "❌ Invalid environment variables:\n",
+      ...formatErrors(_serverEnv.error.format()),
+    );
+    throw new Error("Invalid environment variables");
+  }
 }
 
 for (let key of Object.keys(_serverEnv.data)) {

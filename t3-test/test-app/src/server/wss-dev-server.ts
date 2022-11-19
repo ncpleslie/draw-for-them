@@ -12,8 +12,6 @@ const wss = new ws.Server({
   port: 3001,
 });
 
-console.log("CREATING WEBSOCKET SERVER");
-
 const handler = applyWSSHandler({ wss, router: appRouter, createContext });
 
 wss.on("connection", (ws) => {

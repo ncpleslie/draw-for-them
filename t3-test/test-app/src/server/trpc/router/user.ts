@@ -63,13 +63,20 @@ export const userRouter = router({
       ee.emit(EventEmitterEvent.NewImage);
     }),
   getAllImagesForUser: protectedProcedure.subscription(async ({ ctx }) => {
+    console.log("get all images");
     return observable<ImageEvent[] | undefined>((emit) => {
       const onNewImage = async () => {
-        const userWithImageEvents = await ctx.prisma.user.findFirst({
-          where: { id: ctx.session.user.id },
-          include: { receivedImages: { where: { active: true } } },
-        });
-        emit.next(userWithImageEvents?.receivedImages);
+        try {
+          const userWithImageEvents = await ctx.prisma.user.findFirst({
+            where: { id: ctx.session.user.id },
+            include: { receivedImages: { where: { active: true } } },
+          });
+          emit.next(userWithImageEvents?.receivedImages);
+        } catch (error) {
+          console.log("error occurred fetching events", error);
+
+          return error;
+        }
       };
 
       ee.on(EventEmitterEvent.NewImage, onNewImage);
