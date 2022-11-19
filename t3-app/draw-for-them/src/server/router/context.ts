@@ -1,15 +1,10 @@
 // src/server/router/context.ts
-import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
-import { NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/declarations/src/adapters/node-http";
-import { IncomingMessage } from "http";
 import { Session } from "next-auth";
-import { EventEmitter } from "ws";
 import { getServerAuthSession } from "../../server/common/get-server-auth-session";
 import { prisma } from "../db/client";
-import ws from "ws";
-
-const eventEmitter = new EventEmitter();
+import { initTRPC, TRPCError, inferAsyncReturnType } from "@trpc/server";
+import superjson from "superjson";
 
 type CreateContextOptions = {
   session: Session | null;
@@ -23,7 +18,6 @@ export const createContextInner = async (opts: CreateContextOptions) => {
   return {
     session: opts.session,
     prisma,
-    eventEmitter,
   };
 };
 
@@ -32,9 +26,7 @@ export const createContextInner = async (opts: CreateContextOptions) => {
  * @link https://trpc.io/docs/context
  **/
 export const createContext = async (
-  opts:
-    | trpcNext.CreateNextContextOptions
-    | NodeHTTPCreateContextFnOptions<IncomingMessage, ws>
+  opts: trpcNext.CreateNextContextOptions | any
 ) => {
   const { req, res } = opts;
 
@@ -46,24 +38,32 @@ export const createContext = async (
   });
 };
 
-type Context = trpc.inferAsyncReturnType<typeof createContext>;
-
-export const createRouter = () => trpc.router<Context>();
+type Context = inferAsyncReturnType<typeof createContext>;
 
 /**
  * Creates a tRPC router that asserts all queries and mutations are from an authorized user. Will throw an unauthorized error if a user is not signed in.
  **/
-export function createProtectedRouter() {
-  return createRouter().middleware(({ ctx, next }) => {
-    if (!ctx.session || !ctx.session.user) {
-      throw new trpc.TRPCError({ code: "UNAUTHORIZED" });
-    }
-    return next({
-      ctx: {
-        ...ctx,
-        // infers that `session` is non-nullable to downstream resolvers
-        session: { ...ctx.session, user: ctx.session.user },
-      },
-    });
+const t = initTRPC.context<Context>().create({
+  transformer: superjson,
+  errorFormatter({ shape }) {
+    return shape;
+  },
+});
+
+const isAuth = t.middleware(({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
+  return next({
+    ctx: {
+      ...ctx,
+      // infers that `session` is non-nullable to downstream resolvers
+      session: { ...ctx.session, user: ctx.session.user },
+    },
   });
-}
+});
+
+export const router = t.router;
+export const publicProcedure = t.procedure;
+export const protectedProcedure = t.procedure.use(isAuth);

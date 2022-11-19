@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { protectedProcedure, router } from "./context";
+import { protectedProcedure, router } from "../trpc";
 
 export const userRouter = router({
   getUserByName: protectedProcedure
@@ -8,8 +8,8 @@ export const userRouter = router({
         name: z.string().trim(),
       })
     )
-    .query(({ ctx, input }) => {
-      return ctx.prisma.user.findFirst({
+    .query(async ({ ctx, input }) => {
+      return await ctx.prisma.user.findFirst({
         where: { email: input.name },
       });
     }),
@@ -19,9 +19,9 @@ export const userRouter = router({
         id: z.string(),
       })
     )
-    .mutation(({ ctx, input }) => {
+    .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
-      ctx.prisma.user.update({
+      await ctx.prisma.user.update({
         where: { id: currentUserId },
         data: { friends: { connect: [{ id: input.id }] } },
       });
@@ -39,11 +39,12 @@ export const userRouter = router({
         include: { friends: true },
       });
 
-      if (!currentUser || !currentUser.friends) {
+      if (!currentUser || currentUser.friends.length === 0) {
         throw new Error("User has no friends");
       }
 
-      const firstFriendId = currentUser.friends.at(0)?.id;
+      const firstFriendId = currentUser.friends[0]?.id;
+      console.log(currentUser);
       await ctx.prisma.user.update({
         where: { id: firstFriendId },
         data: {
@@ -53,8 +54,8 @@ export const userRouter = router({
         },
       });
     }),
-  getAllImagesForUser: protectedProcedure.query(({ ctx }) => {
-    const userWithImageEvents = ctx.prisma.user.findFirst({
+  getAllImagesForUser: protectedProcedure.query(async ({ ctx }) => {
+    const userWithImageEvents = await ctx.prisma.user.findFirst({
       where: { id: ctx.session.user.id },
       include: { receivedImages: { where: { active: true } } },
     });
@@ -67,9 +68,9 @@ export const userRouter = router({
         id: z.string(),
       })
     )
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       try {
-        return ctx.prisma.imageEvent.findFirst({
+        return await ctx.prisma.imageEvent.findFirst({
           where: { id: input.id, active: true },
         });
       } catch (error) {
