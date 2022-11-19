@@ -3,14 +3,18 @@ import {
   InferGetServerSidePropsType,
   NextPage,
 } from "next";
-import Header from "../../components/header/Header";
-import LoadingIndicator from "../../components/ui/LoadingIndicator";
 import { trpc } from "../../utils/trpc";
 import { createProxySSGHelpers } from "@trpc/react-query/ssg";
 import { appRouter } from "../../server/trpc/router/_app";
 import { createContext } from "../../server/trpc/context";
 import superjson from "superjson";
+
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+
 import FullScreenCenter from "../../components/ui/FullScreenCenter";
+import Header from "../../components/header/Header";
+import LoadingIndicator from "../../components/ui/LoadingIndicator";
 
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{ pid: string }>
@@ -38,9 +42,19 @@ export async function getServerSideProps(
 const View: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  const { data: image, isLoading } = trpc.user.getImageById.useQuery({
-    id: id,
-  });
+  const router = useRouter();
+  const { data: image, isLoading } = trpc.user.getImageById.useQuery(
+    {
+      id: id,
+    },
+    { enabled: false }
+  );
+
+  useEffect(() => {
+    if (!image && !isLoading) {
+      router.push("/");
+    }
+  }, [image, isLoading]);
 
   return (
     <div className="app-container h-[100vh] overflow-hidden">

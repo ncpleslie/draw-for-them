@@ -27,7 +27,8 @@ export async function getServerSideProps(
 
 const Home: NextPage = () => {
   const [viewLink, setViewLink] = useState<string | null>();
-  const { data: drawEvents } = trpc.user.getAllImagesForUser.useQuery();
+  // const { data: drawEvents } = trpc.user.getAllImagesForUser.useQuery();
+  const drawEvents: any[] = [];
 
   useEffect(() => {
     if (drawEvents?.length === 0) {
@@ -69,7 +70,7 @@ const Home: NextPage = () => {
         >
           <div className="relative flex flex-col">
             {drawEvents && drawEvents.length > 0 ? (
-              <div className="text-icon-active absolute right-10 -top-10 text-5xl">
+              <div className="absolute right-10 -top-10 text-5xl text-icon-active">
                 <Icon.Bell />
                 <div className="absolute right-[0.85rem] top-[0.3rem] text-3xl text-white">
                   {drawEvents.length}
