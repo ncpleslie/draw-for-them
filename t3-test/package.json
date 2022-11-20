@@ -3,13 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "next build",
+    "build:1-generate": "prisma generate",
+    "build:2-migrate": "prisma migrate deploy",
+    "build:3-next": "cross-env NODE_ENV=production next build",
+    "build:4-server": "tsc --project tsconfig.server.json",
+    "build": "run-s build:*",
     "dev:wss": "tsx watch src/server/wss-dev-server.ts --tsconfig tsconfig.server.json",
     "dev:next": "wait-port 3001 && next dev",
     "dev": "run-p dev:*",
     "postinstall": "prisma generate",
     "lint": "next lint",
-    "start": "next start"
+    "start": "cross-env-shell NODE_ENV=production node dist/src/server/wss-prod-server.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.2.1",

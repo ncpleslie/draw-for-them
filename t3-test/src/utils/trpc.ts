@@ -10,10 +10,29 @@ import { NextPageContext } from "next";
 import superjson from "superjson";
 import { type AppRouter } from "../server/trpc/router/_app";
 
+const getBaseUrl = () => {
+  if (typeof window !== "undefined") {
+    return ""; // browser should use relative url
+  }
+  if (process.env.APP_URL) {
+    return `https://${process.env.APP_URL}`; // SSR should use vercel url
+  }
+
+  return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
+};
+
+const getBaseWsUrl = () => {
+  if (process.env.WS_URL) {
+    return `ws://${process.env.WS_URL}`;
+  }
+
+  return `ws://localhost:${process.env.WS_PORT ?? 3001}`;
+};
+
 function getEndingLink(ctx: NextPageContext | undefined) {
   if (typeof window === "undefined") {
     return httpBatchLink({
-      url: `http://localhost:3000/api/trpc`,
+      url: `${getBaseUrl()}/api/trpc`,
       headers() {
         if (ctx?.req) {
           // on ssr, forward client's headers to the server
@@ -26,9 +45,11 @@ function getEndingLink(ctx: NextPageContext | undefined) {
       },
     });
   }
+
   const client = createWSClient({
-    url: `ws://localhost:3001`,
+    url: getBaseWsUrl(),
   });
+
   return wsLink<AppRouter>({
     client,
   });

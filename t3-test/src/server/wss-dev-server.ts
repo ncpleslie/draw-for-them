@@ -9,7 +9,7 @@ if (!global.fetch) {
 }
 
 const wss = new ws.Server({
-  port: 3001,
+  port: parseInt(process.env.WS_PORT as string) || 3001,
 });
 
 const handler = applyWSSHandler({ wss, router: appRouter, createContext });
