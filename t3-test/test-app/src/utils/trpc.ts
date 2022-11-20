@@ -10,7 +10,7 @@ import { NextPageContext } from "next";
 import superjson from "superjson";
 import { type AppRouter } from "../server/trpc/router/_app";
 
-const getEndingLink = (ctx: NextPageContext | undefined) => {
+function getEndingLink(ctx: NextPageContext | undefined) {
   if (typeof window === "undefined") {
     return httpBatchLink({
       url: `http://localhost:3000/api/trpc`,
@@ -32,12 +32,13 @@ const getEndingLink = (ctx: NextPageContext | undefined) => {
   return wsLink<AppRouter>({
     client,
   });
-};
+}
 
 export const trpc = createTRPCNext<AppRouter>({
   config({ ctx }) {
     return {
       transformer: superjson,
+      queryClientConfig: { defaultOptions: { queries: { staleTime: 60 } } },
       links: [
         loggerLink({
           enabled: (opts) =>

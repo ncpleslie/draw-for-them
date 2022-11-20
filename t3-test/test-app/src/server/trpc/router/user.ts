@@ -4,6 +4,7 @@ import { protectedProcedure, router } from "../trpc";
 import { EventEmitterEvent } from "../../../enums/event-emitter-event.enum";
 import { observable } from "@trpc/server/observable";
 import { ImageEvent } from ".prisma/client";
+import { Context } from "../context";
 
 // (could be replaced by redis, etc)
 const ee = new EventEmitter();
@@ -62,16 +63,16 @@ export const userRouter = router({
 
       ee.emit(EventEmitterEvent.NewImage);
     }),
-  getAllImagesForUser: protectedProcedure.subscription(async ({ ctx }) => {
-    console.log("get all images");
+  getAllImagesForUser: protectedProcedure.query(async ({ ctx }) => {
+    return await getAllUserImages(ctx);
+  }),
+  subToAllImagesForUser: protectedProcedure.subscription(async ({ ctx }) => {
     return observable<ImageEvent[] | undefined>((emit) => {
       const onNewImage = async () => {
         try {
-          const userWithImageEvents = await ctx.prisma.user.findFirst({
-            where: { id: ctx.session.user.id },
-            include: { receivedImages: { where: { active: true } } },
-          });
-          emit.next(userWithImageEvents?.receivedImages);
+          const receivedImages = await getAllUserImages(ctx);
+
+          emit.next(receivedImages);
         } catch (error) {
           console.log("error occurred fetching events", error);
 
@@ -107,3 +108,14 @@ export const userRouter = router({
       }
     }),
 });
+
+export const getAllUserImages = async (
+  ctx: Context
+): Promise<ImageEvent[] | undefined> => {
+  const userWithImageEvents = await ctx.prisma.user.findFirst({
+    where: { id: ctx.session?.user?.id },
+    include: { receivedImages: { where: { active: true } } },
+  });
+
+  return userWithImageEvents?.receivedImages;
+};

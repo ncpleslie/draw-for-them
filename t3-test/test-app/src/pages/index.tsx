@@ -1,17 +1,20 @@
-import type { NextPage } from "next";
+import { ImageEvent } from "@prisma/client";
+import type { InferGetServerSidePropsType, NextPage } from "next";
 import { signOut, getSession, GetSessionParams } from "next-auth/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import DashboardBtn from "../components/ui/DashboardBtn";
 import Icon from "../components/ui/Icon";
+import { getAllUserImages } from "../server/trpc/router/user";
 import { trpc } from "../utils/trpc";
+import { createContext } from "../server/trpc/context";
+import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 
-export async function getServerSideProps(
-  context: GetSessionParams | undefined
-) {
-  const session = await getSession(context);
+export async function getServerSideProps(context: CreateNextContextOptions) {
+  const ctx = await createContext(context);
+  const allImages = (await getAllUserImages(ctx)) || [];
 
-  if (!session) {
+  if (!ctx.session) {
     return {
       redirect: {
         destination: "/signin",
@@ -21,23 +24,34 @@ export async function getServerSideProps(
   }
 
   return {
-    props: { session },
+    props: { session: ctx.session, allImages },
   };
 }
 
-const Home: NextPage = () => {
+const Home: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ allImages }) => {
   const [viewLink, setViewLink] = useState<string | null>();
-  // const { data: drawEvents } = trpc.user.getAllImagesForUser.useQuery();
-  const drawEvents: any[] = [];
+  const [drawEvents, setDrawEvents] = useState<ImageEvent[]>(allImages);
+  trpc.user.subToAllImagesForUser.useSubscription(undefined, {
+    onData(data) {
+      setDrawEvents(data || []);
+      createViewLink(data || []);
+    },
+  });
 
   useEffect(() => {
-    if (drawEvents?.length === 0) {
+    createViewLink(allImages);
+  }, []);
+
+  const createViewLink = (images: ImageEvent[]) => {
+    if (images?.length === 0) {
       setViewLink(null);
       return;
     }
 
-    setViewLink(`/view/${drawEvents?.[0]?.id}`);
-  }, [drawEvents]);
+    setViewLink(`/view/${images[0]?.id}`);
+  };
 
   return (
     <>

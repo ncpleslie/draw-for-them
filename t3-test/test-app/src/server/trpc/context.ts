@@ -3,9 +3,8 @@ import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/adapters/node-http";
 import { IncomingMessage } from "http";
 import { type Session } from "next-auth";
+import { getSession } from "next-auth/react";
 import ws from "ws";
-
-import { getServerAuthSession } from "../common/get-server-auth-session";
 import { prisma } from "../db/client";
 
 type CreateContextOptions = {
@@ -33,11 +32,7 @@ export const createContext = async (
     | CreateNextContextOptions
     | NodeHTTPCreateContextFnOptions<IncomingMessage, ws>
 ) => {
-  const { req, res } = opts;
-
-  // Get the session from the server using the unstable_getServerSession wrapper function
-  // @ts-ignore
-  const session = await getServerAuthSession({ req, res });
+  const session = await getSession(opts);
 
   return await createContextInner({
     session,

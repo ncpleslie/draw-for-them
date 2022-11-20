@@ -1,18 +1,14 @@
 import { Popover } from "@headlessui/react";
 import { ImageEvent } from "@prisma/client";
-import { useState } from "react";
-import { trpc } from "../../utils/trpc";
+import { FC } from "react";
 import NotificationBtn from "./NotificationBtn";
 import NotificationPanel from "./NotificationPanel";
 
-const Notification = () => {
-  const [drawEvents, setDrawEvents] = useState<ImageEvent[]>();
-  trpc.user.getAllImagesForUser.useSubscription(undefined, {
-    onData(data) {
-      setDrawEvents(data);
-    },
-  });
+interface NotificationProps {
+  drawEvents: ImageEvent[];
+}
 
+const Notification: FC<NotificationProps> = ({ drawEvents }) => {
   if (!drawEvents || drawEvents?.length === 0) {
     return <></>;
   }
