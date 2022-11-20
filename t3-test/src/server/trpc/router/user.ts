@@ -3,7 +3,7 @@ import { EventEmitter } from "events";
 import { protectedProcedure, router } from "../trpc";
 import { EventEmitterEvent } from "../../../enums/event-emitter-event.enum";
 import { observable } from "@trpc/server/observable";
-import { ImageEvent } from ".prisma/client";
+import { ImageEvent } from "@prisma/client";
 import { Context } from "../context";
 
 // (could be replaced by redis, etc)
