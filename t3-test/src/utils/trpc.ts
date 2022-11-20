@@ -28,7 +28,7 @@ const getBaseUrl = () => {
 
 const getBaseWsUrl = () => {
   if (WS_URL) {
-    return `ws://${WS_URL}`;
+    return `wss://${WS_URL}`;
   }
 
   return `ws://localhost:${process.env.WS_PORT ?? 3001}`;
