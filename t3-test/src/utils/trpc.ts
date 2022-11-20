@@ -8,22 +8,27 @@ import { createTRPCNext } from "@trpc/next";
 import { type inferRouterInputs, type inferRouterOutputs } from "@trpc/server";
 import { NextPageContext } from "next";
 import superjson from "superjson";
+import getConfig from "next/config";
 import { type AppRouter } from "../server/trpc/router/_app";
+
+const { publicRuntimeConfig } = getConfig();
+
+const { APP_URL, WS_URL } = publicRuntimeConfig;
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") {
     return ""; // browser should use relative url
   }
-  if (process.env.APP_URL) {
-    return `https://${process.env.APP_URL}`; // SSR should use vercel url
+  if (APP_URL) {
+    return `https://${APP_URL}`; // SSR should use vercel url
   }
 
   return `http://localhost:${process.env.PORT ?? 3000}`; // dev SSR should use localhost
 };
 
 const getBaseWsUrl = () => {
-  if (process.env.WS_URL) {
-    return `ws://${process.env.WS_URL}`;
+  if (WS_URL) {
+    return `ws://${WS_URL}`;
   }
 
   return `ws://localhost:${process.env.WS_PORT ?? 3001}`;
