@@ -16,6 +16,7 @@ import EmailLogin from "../components/signin/EmailLogin";
 import Btn from "../components/ui/Btn";
 import FullScreenCenter from "../components/ui/FullScreenCenter";
 import LoadingIndicator from "../components/ui/LoadingIndicator";
+import { Routes } from "../enums/routes.enum";
 import EmailSignUpFormData from "../models/email-signup-form-data.model";
 
 export async function getServerSideProps(context: CtxOrReq | undefined) {
@@ -24,7 +25,7 @@ export async function getServerSideProps(context: CtxOrReq | undefined) {
   if (session) {
     return {
       redirect: {
-        destination: "/",
+        destination: Routes.Root,
         permanent: false,
       },
     };
@@ -70,7 +71,7 @@ const SignIn: NextPage<SignInProps> = ({ providers, csrfToken }) => {
 
   return (
     <>
-      <div className="app-container flex flex-col h-[100vh] w-full flex-row items-center justify-center gap-10">
+      <div className="app-container flex h-[100vh] w-full flex-row flex-col items-center justify-center gap-10">
         <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
           {providers?.email && (
             <EmailLogin csrfToken={csrfToken} onSubmit={handleEmailSubmit} />

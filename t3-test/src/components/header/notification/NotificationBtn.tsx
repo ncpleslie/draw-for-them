@@ -1,4 +1,4 @@
-import Icon from "../ui/Icon";
+import Icon from "../../ui/Icon";
 import { Popover } from "@headlessui/react";
 
 interface NotificationBtnProps {
@@ -8,12 +8,12 @@ interface NotificationBtnProps {
 const NotificationBtn: React.FC<NotificationBtnProps> = ({ count }) => {
   return (
     <Popover.Button
-      className={`neu-btn-small transition-all flex justify-center items-center rounded-full h-12 w-12 text-2xl ${
+      className={`neu-btn-small flex h-12 w-12 items-center justify-center rounded-full text-2xl transition-all ${
         count === 0 ? "!text-icon-inactive" : "!text-icon-active"
       } `}
     >
       <Icon.Bell />
-      <div className="absolute text-white text-sm">{count}</div>
+      <div className="absolute text-sm text-white">{count}</div>
     </Popover.Button>
   );
 };

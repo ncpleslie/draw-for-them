@@ -1,4 +1,4 @@
-import Icon from "../ui/Icon";
+import Icon from "../../ui/Icon";
 import Link from "next/link";
 import { ImageEvent } from "@prisma/client";
 

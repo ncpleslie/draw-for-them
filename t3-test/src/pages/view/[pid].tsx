@@ -10,7 +10,7 @@ import { createContext } from "../../server/trpc/context";
 import superjson from "superjson";
 
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import FullScreenCenter from "../../components/ui/FullScreenCenter";
 import Header from "../../components/header/Header";
@@ -57,20 +57,20 @@ const View: NextPage<
   }, [image, isLoading]);
 
   return (
-    <div className="app-container h-[100vh] overflow-hidden">
+    <main className="app-container h-[100vh] overflow-hidden">
       <Header />
 
-      <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col items-center justify-center p-4">
         {isLoading && (
           <FullScreenCenter>
             <LoadingIndicator />
           </FullScreenCenter>
         )}
-        <div className="neu-container h-[80vh] w-[90vw] rounded-xl">
+        <div className={`neu-container rounded-xl`}>
           <img src={image?.imageData} />
         </div>
       </div>
-    </div>
+    </main>
   );
 };
 

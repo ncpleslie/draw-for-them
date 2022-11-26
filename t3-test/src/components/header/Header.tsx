@@ -3,10 +3,11 @@ import Btn from "../ui/Btn";
 import Icon from "../ui/Icon";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Notification from "../notification/Notification";
+import Notification from "./notification/Notification";
 import { trpc } from "../../utils/trpc";
 import { useEffect, useState } from "react";
 import { ImageEvent } from "@prisma/client";
+import Menu from "./menu/Menu";
 
 const Header = ({}) => {
   const router = useRouter();
@@ -34,8 +35,9 @@ const Header = ({}) => {
             </Btn>
           </div>
           <ToastContainer />
-          <div className="mt-4">
+          <div className="mt-4 flex gap-4">
             <Notification drawEvents={drawEvents || []} />
+            <Menu />
           </div>
         </>
       ) : (

@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import Header from "../components/header/Header";
 import FullScreenCenter from "../components/ui/FullScreenCenter";
 import LoadingIndicator from "../components/ui/LoadingIndicator";
+import { Routes } from "../enums/routes.enum";
 
 const DrawingArea = dynamic(() => import("../components/draw/DrawingArea"), {
   ssr: false,
@@ -23,7 +24,7 @@ export async function getServerSideProps(
   if (!session) {
     return {
       redirect: {
-        destination: "/signin",
+        destination: Routes.SignIn,
         permanent: false,
       },
     };

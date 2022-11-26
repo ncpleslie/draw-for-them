@@ -1,6 +1,6 @@
 import { ImageEvent } from "@prisma/client";
 import type { InferGetServerSidePropsType, NextPage } from "next";
-import { signOut, getSession, GetSessionParams } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 import DashboardBtn from "../components/ui/DashboardBtn";
@@ -9,6 +9,7 @@ import { getAllUserImages } from "../server/trpc/router/user";
 import { trpc } from "../utils/trpc";
 import { createContext } from "../server/trpc/context";
 import { CreateNextContextOptions } from "@trpc/server/adapters/next";
+import { Routes } from "../enums/routes.enum";
 
 export async function getServerSideProps(context: CreateNextContextOptions) {
   const ctx = await createContext(context);
@@ -17,7 +18,7 @@ export async function getServerSideProps(context: CreateNextContextOptions) {
   if (!ctx.session) {
     return {
       redirect: {
-        destination: "/signin",
+        destination: Routes.SignIn,
         permanent: false,
       },
     };

@@ -10,7 +10,7 @@ const FullScreenCenter: React.FC<PropsWithChildren<FullScreenCenterProps>> = ({
 }) => {
   return (
     <div
-      className={`${className} flex h-[100vh] items-center justify-center absolute top-0`}
+      className={`${className} absolute top-0 flex h-[100vh] w-[100vw] items-center justify-center`}
     >
       {children}
     </div>
