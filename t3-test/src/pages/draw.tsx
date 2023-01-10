@@ -37,7 +37,7 @@ export async function getServerSideProps(
 
 const Draw: NextPage = () => {
   return (
-    <main className="app-container h-[100vh] overflow-hidden">
+    <main className="app-container h-screen overflow-hidden">
       <Header />
       <Suspense>
         <DrawingArea />
