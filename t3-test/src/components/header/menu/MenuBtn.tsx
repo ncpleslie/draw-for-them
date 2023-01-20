@@ -1,11 +1,16 @@
 import Icon from "../../ui/Icon";
 import { Popover } from "@headlessui/react";
+import PopoverBtn from "../../ui/PopoverBtn";
 
-const MenuBtn: React.FC = () => {
+interface MenuBtnProps {
+  menuOpen: boolean;
+}
+
+const MenuBtn: React.FC<MenuBtnProps> = ({ menuOpen }) => {
   return (
-    <Popover.Button className="neu-btn-small flex h-12 w-12 items-center justify-center rounded-full text-2xl text-icon-inactive transition-all">
+    <PopoverBtn menuOpen={menuOpen}>
       <Icon.Bars />
-    </Popover.Button>
+    </PopoverBtn>
   );
 };
 

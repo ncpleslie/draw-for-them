@@ -50,6 +50,10 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
       <Btn type="submit" loading={loading}>
         <p className="text-xl">Sign Up</p>
       </Btn>
+
+      <Btn type="submit" loading={loading}>
+        <p className="text-xl">Sign In</p>
+      </Btn>
     </form>
   );
 };

@@ -15,8 +15,12 @@ const Notification: FC<NotificationProps> = ({ drawEvents }) => {
 
   return (
     <Popover className="relative z-20">
-      <NotificationBtn count={drawEvents.length} />
-      <NotificationPanel events={drawEvents} />
+      {({ open }) => (
+        <>
+          <NotificationBtn count={drawEvents.length} menuOpen={open} />
+          <NotificationPanel events={drawEvents} />
+        </>
+      )}
     </Popover>
   );
 };

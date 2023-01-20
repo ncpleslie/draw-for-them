@@ -114,7 +114,9 @@ export const getAllUserImages = async (
 ): Promise<ImageEvent[] | undefined> => {
   const userWithImageEvents = await ctx.prisma.user.findFirst({
     where: { id: ctx.session?.user?.id },
-    include: { receivedImages: { where: { active: true } } },
+    include: {
+      receivedImages: { include: { sender: true }, where: { active: true } },
+    },
   });
 
   return userWithImageEvents?.receivedImages;

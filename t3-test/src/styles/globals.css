@@ -75,6 +75,7 @@
 .neu-btn-small {
   color: #7a7a7a;
   box-shadow: 7px 7px 13px #bebebe, -7px -7px 13px #ffffff;
+  @apply outline-icon-active ring-icon-active;
 }
 
 .neu-btn-small:active:focus {
@@ -84,6 +85,16 @@
     inset 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
   color: #15e38a;
   @apply -translate-y-1 scale-y-95 transition duration-300 ease-in-out;
+}
+
+.neu-btn-small-active {
+  box-shadow: -3px -3px 3px 0 rgba(255, 255, 255, 1),
+    3px 3px 3px 0 rgba(0, 0, 0, 0.3),
+    inset -3px -3px 3px 0 rgba(255, 255, 255, 1),
+    inset 3px 3px 3px 0 rgba(0, 0, 0, 0.3) !important;
+  color: #15e38a !important;
+  @apply -translate-y-1 scale-y-95 transition duration-300 ease-in-out;
+  @apply outline-icon-active ring-icon-active;
 }
 
 .neu-btn-small:hover {

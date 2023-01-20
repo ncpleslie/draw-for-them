@@ -5,8 +5,12 @@ import MenuPanel from "./MenuPanel";
 const Menu: React.FC = () => {
   return (
     <Popover className="relative z-20">
-      <MenuBtn />
-      <MenuPanel />
+      {({ open }) => (
+        <>
+          <MenuBtn menuOpen={open} />
+          <MenuPanel />
+        </>
+      )}
     </Popover>
   );
 };
