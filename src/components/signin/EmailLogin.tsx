@@ -46,14 +46,15 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
           onChange={(e) => handleFormUpdate(SignUpFormId.Email, e)}
         />
       </div>
+      <div className="flex flex-row">
+        <Btn type="submit" loading={loading}>
+          <p className="text-xl">Sign Up</p>
+        </Btn>
 
-      <Btn type="submit" loading={loading}>
-        <p className="text-xl">Sign Up</p>
-      </Btn>
-
-      <Btn type="submit" loading={loading}>
-        <p className="text-xl">Sign In</p>
-      </Btn>
+        <Btn type="submit" loading={loading}>
+          <p className="text-xl">Sign In</p>
+        </Btn>
+      </div>
     </form>
   );
 };

@@ -11,6 +11,7 @@
     "dev:wss": "tsx watch src/server/wss-dev-server.ts --tsconfig tsconfig.server.json",
     "dev:next": "wait-port 3001 && next dev",
     "dev:db-up": "docker-compose up -d",
+    "dev:db-push": "prisma db push",
     "dev": "run-p dev:*",
     "db-up": "docker-compose up -d",
     "db-seed": "prisma db seed",
