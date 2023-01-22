@@ -1,5 +1,6 @@
 import { NextPage } from "next";
-import { useState } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 import Btn from "../components/ui/Btn";
 import FocusableInput from "../components/ui/FocusableInput";
 import Icon from "../components/ui/Icon";
@@ -7,8 +8,7 @@ import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { trpc } from "../utils/trpc";
 
 const AddAFriend: NextPage = () => {
-  const [addingFriend] = useState(false);
-  const [friendAdded] = useState(false);
+  const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
   const {
     data: foundUser,
@@ -22,7 +22,11 @@ const AddAFriend: NextPage = () => {
     }
   );
 
-  const addUserAsFriend = trpc.user.addUserAsFriendById.useMutation({});
+  const {
+    mutate: mutateAddFriend,
+    isLoading: addFriendLoading,
+    isSuccess: addFriendSuccess,
+  } = trpc.user.addUserAsFriendById.useMutation({});
 
   const handleFriendSearch = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
@@ -30,15 +34,19 @@ const AddAFriend: NextPage = () => {
   };
 
   const handleAddAFriend = async () => {
-    if (!foundUser || friendAdded) {
+    if (!foundUser || addFriendSuccess) {
       return;
     }
 
-    addUserAsFriend.mutate({ id: foundUser.id });
+    mutateAddFriend({ id: foundUser.id });
   };
 
+  useEffect(() => {
+    router.replace("/");
+  }, [addFriendSuccess]);
+
   return (
-    <div className="app-container flex h-[100vh] w-[100vw] flex-row flex-wrap items-center justify-center gap-10 pb-10">
+    <div className="app-container flex max-h-full min-h-screen w-screen flex-row flex-wrap items-center justify-center gap-10 pb-10">
       <div className="neu-container-raised flex h-72 w-72 flex-col items-center justify-center gap-6 rounded-xl">
         <div>
           <h1 className="text-2xl">You have no friends!</h1>
@@ -66,7 +74,7 @@ const AddAFriend: NextPage = () => {
 
       {isError && (
         <div className="neu-container-raised flex h-40 w-72 flex-row items-center justify-center gap-4 rounded-xl">
-          <div className="text-icon-inactive text-5xl">
+          <div className="text-5xl text-icon-inactive">
             <Icon.Question />
           </div>
           <div>
@@ -83,7 +91,7 @@ const AddAFriend: NextPage = () => {
             className="flex flex-col items-center justify-center gap-4"
             onClick={handleAddAFriend}
           >
-            <div className="neu-container text-icon-inactive rounded p-4 text-5xl">
+            <div className="neu-container rounded p-4 text-5xl text-icon-inactive">
               <Icon.User />
             </div>
 
@@ -94,20 +102,16 @@ const AddAFriend: NextPage = () => {
 
             <Btn
               onClicked={handleAddAFriend}
-              active={!addingFriend}
-              className="h-[48px] w-[62px]"
+              active={!addFriendLoading}
+              className="h-12 w-48"
+              loading={addFriendLoading}
             >
-              {addingFriend && (
-                <div className="flex animate-spin items-center justify-center duration-1000">
-                  <Icon.Spinner />
-                </div>
-              )}
-              {friendAdded && (
-                <div className="text-icon-active flex items-center justify-center">
+              {addFriendSuccess && (
+                <div className="flex items-center justify-center text-icon-active">
                   <Icon.UserAdded />
                 </div>
               )}
-              {!addingFriend && !friendAdded && <Icon.AddUser />}
+              {!addFriendLoading && !addFriendSuccess && <Icon.AddUser />}
             </Btn>
           </div>
         </div>

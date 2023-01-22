@@ -46,7 +46,7 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
           onChange={(e) => handleFormUpdate(SignUpFormId.Email, e)}
         />
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-row gap-8">
         <Btn type="submit" loading={loading}>
           <p className="text-xl">Sign Up</p>
         </Btn>

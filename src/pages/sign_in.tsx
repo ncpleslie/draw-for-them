@@ -10,6 +10,7 @@ import {
   getCsrfToken,
   getSession,
 } from "next-auth/react";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import EmailLogin from "../components/signin/EmailLogin";
@@ -71,6 +72,9 @@ const SignIn: NextPage<SignInProps> = ({ providers, csrfToken }) => {
 
   return (
     <>
+      <Head>
+        <title>Draw For Them | Sign In</title>
+      </Head>
       <div className="app-container flex h-[100vh] w-full flex-col items-center justify-center gap-10">
         <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
           {providers?.email && (

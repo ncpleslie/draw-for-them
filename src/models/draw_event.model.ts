@@ -1,16 +1,40 @@
-export default class DrawEvent {
-  constructor(data: any) {
-    if (!data) {
-      throw new Error("DrawEvent contains no data.");
-    }
+import { ImageEvent } from "@prisma/client";
+import { ImageEventWithSender } from "../types/prisma.types";
 
-    this.active = data.active;
-    this.imageId = data.imageId;
-    this.sentById = data.sentById;
+export default class BaseDrawEvent {
+  constructor(data: ImageEvent) {
+    this.id = data.id;
+    this.senderId = data.senderId;
   }
 
-  public active: boolean;
-  public imageId: string;
-  public sentById: string;
-  public sentBy: string | undefined;
+  public id: string;
+  public senderId: string;
+
+  protected toJSON() {
+    return {
+      id: this.id,
+      senderId: this.senderId,
+    };
+  }
+}
+
+export class NotificationDrawEvent extends BaseDrawEvent {
+  constructor(data: any);
+  constructor(data: ImageEventWithSender) {
+    super(data);
+
+    if (data.sender) {
+      this.senderName =
+        data.sender.name || data.sender.email || "an unknown user";
+    } else {
+      this.senderName = data.senderName;
+    }
+  }
+
+  public senderName: string;
+
+  public toJSON() {
+    const dto = super.toJSON();
+    return { ...dto, senderName: this.senderName };
+  }
 }

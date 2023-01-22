@@ -3,8 +3,8 @@ import { EventEmitter } from "events";
 import { protectedProcedure, router } from "../trpc";
 import { EventEmitterEvent } from "../../../enums/event-emitter-event.enum";
 import { observable } from "@trpc/server/observable";
-import { ImageEvent } from "@prisma/client";
 import { Context } from "../context";
+import { NotificationDrawEvent } from "../../../models/draw_event.model";
 
 // (could be replaced by redis, etc)
 const ee = new EventEmitter();
@@ -67,7 +67,7 @@ export const userRouter = router({
     return await getAllUserImages(ctx);
   }),
   subToAllImagesForUser: protectedProcedure.subscription(async ({ ctx }) => {
-    return observable<ImageEvent[] | undefined>((emit) => {
+    return observable<NotificationDrawEvent[] | undefined>((emit) => {
       const onNewImage = async () => {
         try {
           const receivedImages = await getAllUserImages(ctx);
@@ -111,7 +111,7 @@ export const userRouter = router({
 
 export const getAllUserImages = async (
   ctx: Context
-): Promise<ImageEvent[] | undefined> => {
+): Promise<NotificationDrawEvent[] | undefined> => {
   const userWithImageEvents = await ctx.prisma.user.findFirst({
     where: { id: ctx.session?.user?.id },
     include: {
@@ -119,5 +119,7 @@ export const getAllUserImages = async (
     },
   });
 
-  return userWithImageEvents?.receivedImages;
+  return userWithImageEvents?.receivedImages.map(
+    (image) => new NotificationDrawEvent(image)
+  );
 };

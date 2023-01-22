@@ -6,12 +6,12 @@ import "react-toastify/dist/ReactToastify.css";
 import Notification from "./notification/Notification";
 import { trpc } from "../../utils/trpc";
 import { useEffect, useState } from "react";
-import { ImageEvent } from "@prisma/client";
 import Menu from "./menu/Menu";
+import { NotificationDrawEvent } from "../../models/draw_event.model";
 
 const Header = ({}) => {
   const router = useRouter();
-  const [drawEvents, setDrawEvents] = useState<ImageEvent[]>();
+  const [drawEvents, setDrawEvents] = useState<NotificationDrawEvent[]>();
 
   const { data: allImages } = trpc.user.getAllImagesForUser.useQuery();
 
@@ -27,22 +27,22 @@ const Header = ({}) => {
 
   return (
     <div className="app-container flex flex-row justify-between px-4">
-      {router.pathname !== "/" ? (
-        <>
+      <>
+        {router.pathname !== "/" ? (
           <div className="mt-4">
-            <Btn onClicked={() => router.push("/")}>
+            <Btn className="h-12 w-12" onClicked={() => router.push("/")}>
               <Icon.Back />
             </Btn>
           </div>
-          <ToastContainer />
-          <div className="mt-4 flex gap-4">
-            <Notification drawEvents={drawEvents || []} />
-            <Menu />
-          </div>
-        </>
-      ) : (
-        <></>
-      )}
+        ) : (
+          <></>
+        )}
+        <ToastContainer />
+        <div className="mt-4 flex gap-4">
+          <Notification drawEvents={drawEvents || []} />
+          <Menu />
+        </div>
+      </>
     </div>
   );
 };

@@ -1,11 +1,11 @@
 import { Popover } from "@headlessui/react";
-import { ImageEvent } from "@prisma/client";
 import { FC } from "react";
+import { NotificationDrawEvent } from "../../../models/draw_event.model";
 import NotificationBtn from "./NotificationBtn";
 import NotificationPanel from "./NotificationPanel";
 
 interface NotificationProps {
-  drawEvents: ImageEvent[];
+  drawEvents: NotificationDrawEvent[];
 }
 
 const Notification: FC<NotificationProps> = ({ drawEvents }) => {
