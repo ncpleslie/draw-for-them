@@ -17,9 +17,7 @@ export const userRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      return await ctx.prisma.user.findFirst({
-        where: { email: input.name },
-      });
+      return await ctx.userDomain.getUserByNameAsync(input.name);
     }),
   addUserAsFriendById: protectedProcedure
     .input(
@@ -29,10 +27,7 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
-      await ctx.prisma.user.update({
-        where: { id: currentUserId },
-        data: { friends: { connect: [{ id: input.id }] } },
-      });
+      await ctx.userDomain.addUserAsFriendByIdAsync(currentUserId, input.id);
     }),
   sendUserImage: protectedProcedure
     .input(
@@ -42,50 +37,36 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
-      const currentUser = await ctx.prisma.user.findFirst({
-        where: { id: currentUserId },
-        include: { friends: true },
-      });
-
-      if (!currentUser || currentUser.friends.length === 0) {
-        throw new Error("User has no friends");
-      }
-
-      const firstFriendId = currentUser.friends[0]?.id;
-      await ctx.prisma.user.update({
-        where: { id: firstFriendId },
-        data: {
-          receivedImages: {
-            create: { imageData: input.imageData, senderId: currentUserId },
-          },
-        },
-      });
+      await ctx.userDomain.addImageEventToUserByIdAsync(
+        currentUserId,
+        input.imageData
+      );
 
       ee.emit(EventEmitterEvent.NewImage);
     }),
   getAllImagesForUser: protectedProcedure.query(async ({ ctx }) => {
-    return await getAllUserImages(ctx);
+    const currentUserId = ctx.session.user.id;
+    const imageEvents = await ctx.userDomain.getAllImagesForUserAsync(
+      currentUserId
+    );
+
+    return imageEvents?.map((image) => new NotificationDrawEvent(image));
   }),
   subToAllImagesForUser: protectedProcedure.subscription(async ({ ctx }) => {
-    return observable<NotificationDrawEvent[] | undefined>((emit) => {
-      const onNewImage = async () => {
-        try {
-          const receivedImages = await getAllUserImages(ctx);
+    const onNewImage = async () => {
+      console.log("onNewImages");
+      const currentUserId = ctx.session.user.id;
+      const imageEvents = await ctx.userDomain.getAllImagesForUserAsync(
+        currentUserId
+      );
 
-          emit.next(receivedImages);
-        } catch (error) {
-          console.log("error occurred fetching events", error);
+      return imageEvents?.map((image) => new NotificationDrawEvent(image));
+    };
 
-          return error;
-        }
-      };
-
-      ee.on(EventEmitterEvent.NewImage, onNewImage);
-
-      return () => {
-        ee.off(EventEmitterEvent.NewImage, onNewImage);
-      };
-    });
+    return subscribeToEvent<NotificationDrawEvent[] | undefined>(
+      EventEmitterEvent.NewImage,
+      onNewImage
+    );
   }),
   getImageById: protectedProcedure
     .input(
@@ -94,32 +75,29 @@ export const userRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      try {
-        return await ctx.prisma.imageEvent.findFirst({
-          where: { id: input.id, active: true },
-        });
-      } catch (error) {
-        console.log(error);
-      } finally {
-        await ctx.prisma.imageEvent.update({
-          where: { id: input.id },
-          data: { active: false },
-        });
-      }
+      const image = await ctx.imageDomain.getActiveImageByIdAsync(input.id);
+      await ctx.imageDomain.setImageInactiveByIdAsync(input.id);
+
+      ee.emit(EventEmitterEvent.NewImage);
+
+      return image;
     }),
 });
 
-export const getAllUserImages = async (
-  ctx: Context
-): Promise<NotificationDrawEvent[] | undefined> => {
-  const userWithImageEvents = await ctx.prisma.user.findFirst({
-    where: { id: ctx.session?.user?.id },
-    include: {
-      receivedImages: { include: { sender: true }, where: { active: true } },
-    },
-  });
+const subscribeToEvent = <TReturn>(
+  eventName: EventEmitterEvent,
+  event: () => Promise<TReturn>
+) => {
+  return observable<TReturn>((emit) => {
+    const wrappedEvent = async () => {
+      const result = await event();
+      emit.next(result);
+    };
 
-  return userWithImageEvents?.receivedImages.map(
-    (image) => new NotificationDrawEvent(image)
-  );
+    ee.on(eventName, wrappedEvent);
+
+    return () => {
+      ee.off(eventName, wrappedEvent);
+    };
+  });
 };

@@ -2,7 +2,6 @@ import type { InferGetServerSidePropsType, NextPage } from "next";
 import { useEffect, useState } from "react";
 import DashboardBtn from "../components/ui/DashboardBtn";
 import Icon from "../components/ui/Icon";
-import { getAllUserImages } from "../server/trpc/router/user";
 import { trpc } from "../utils/trpc";
 import { createContext } from "../server/trpc/context";
 import { CreateNextContextOptions } from "@trpc/server/adapters/next";
@@ -16,7 +15,23 @@ export async function getServerSideProps(context: CreateNextContextOptions) {
   const allImages = [];
 
   try {
-    const images = (await getAllUserImages(ctx)) || [];
+    const userId = ctx.session?.user?.id;
+    if (!userId) {
+      // Redirect user
+      return {
+        redirect: {
+          destination: Routes.SignIn,
+          permanent: false,
+        },
+      };
+    }
+    const imageEvents =
+      (await ctx.userDomain.getAllImagesForUserAsync(userId)) || [];
+
+    const images = imageEvents?.map(
+      (image) => new NotificationDrawEvent(image)
+    );
+
     allImages.push(...images);
   } catch (err) {
     console.error(err);

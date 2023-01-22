@@ -6,6 +6,11 @@ import { type Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import ws from "ws";
 import { prisma } from "../db/client";
+import ImageDomain from "../domain/image-domain";
+import UserDomain from "../domain/user-domain";
+
+const userDomain = new UserDomain(prisma.user);
+const imageDomain = new ImageDomain(prisma.imageEvent);
 
 type CreateContextOptions = {
   session: Session | null;
@@ -19,7 +24,8 @@ type CreateContextOptions = {
 export const createContextInner = async (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    prisma,
+    userDomain,
+    imageDomain,
   };
 };
 

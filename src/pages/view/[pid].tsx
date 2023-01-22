@@ -4,13 +4,8 @@ import {
   NextPage,
 } from "next";
 import { trpc } from "../../utils/trpc";
-import { createProxySSGHelpers } from "@trpc/react-query/ssg";
-import { appRouter } from "../../server/trpc/router/_app";
-import { createContext } from "../../server/trpc/context";
-import superjson from "superjson";
-
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import FullScreenCenter from "../../components/ui/FullScreenCenter";
 import Header from "../../components/header/Header";
@@ -19,23 +14,8 @@ import LoadingIndicator from "../../components/ui/LoadingIndicator";
 export async function getServerSideProps(
   context: GetServerSidePropsContext<{ pid: string }>
 ) {
-  const ssg = createProxySSGHelpers({
-    router: appRouter,
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    //@ts-ignore
-    ctx: await createContext({ req: context.req, res: context.res }),
-    transformer: superjson,
-  });
-
-  const id = context.params?.pid as string;
-
-  await ssg.user.getImageById.prefetch({ id });
-
   return {
-    props: {
-      trpcState: ssg.dehydrate(),
-      id,
-    },
+    props: { id: context.params?.pid as string },
   };
 }
 
@@ -43,12 +23,9 @@ const View: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
   const router = useRouter();
-  const { data: image, isLoading } = trpc.user.getImageById.useQuery(
-    {
-      id: id,
-    },
-    { enabled: false }
-  );
+  const { data: image, isLoading } = trpc.user.getImageById.useQuery({
+    id: id,
+  });
 
   useEffect(() => {
     if (!image && !isLoading) {

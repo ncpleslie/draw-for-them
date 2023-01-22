@@ -17,6 +17,7 @@ const Header = ({}) => {
 
   trpc.user.subToAllImagesForUser.useSubscription(undefined, {
     onData(data) {
+      console.log("updated events", data);
       setDrawEvents(data || []);
     },
   });
