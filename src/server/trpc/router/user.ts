@@ -37,8 +37,13 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
-      await ctx.userDomain.addImageEventToUserByIdAsync(
+      const receiverId = await ctx.userDomain.getUsersFirstFriendAsync(
+        currentUserId
+      );
+
+      await ctx.imageDomain.addImageByIdAsync(
         currentUserId,
+        receiverId,
         input.imageData
       );
 
@@ -54,7 +59,6 @@ export const userRouter = router({
   }),
   subToAllImagesForUser: protectedProcedure.subscription(async ({ ctx }) => {
     const onNewImage = async () => {
-      console.log("onNewImages");
       const currentUserId = ctx.session.user.id;
       const imageEvents = await ctx.userDomain.getAllImagesForUserAsync(
         currentUserId
@@ -75,6 +79,7 @@ export const userRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
+      console.log("Getting image", input.id);
       const image = await ctx.imageDomain.getActiveImageByIdAsync(input.id);
       await ctx.imageDomain.setImageInactiveByIdAsync(input.id);
 

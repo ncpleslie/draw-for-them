@@ -8,9 +8,12 @@ import ws from "ws";
 import { prisma } from "../db/client";
 import ImageDomain from "../domain/image-domain";
 import UserDomain from "../domain/user-domain";
+import MockStorageClient from "../storage/mock-storage-client";
+
+const storageClient = new MockStorageClient();
 
 const userDomain = new UserDomain(prisma.user);
-const imageDomain = new ImageDomain(prisma.imageEvent);
+const imageDomain = new ImageDomain(prisma.imageEvent, storageClient);
 
 type CreateContextOptions = {
   session: Session | null;

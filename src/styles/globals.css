@@ -3,8 +3,13 @@
 @tailwind utilities;
 
 @layer base {
+  button:focus {
+    outline: 0 !important;
+  }
+
   html {
     -webkit-tap-highlight-color: transparent;
+    outline: none !important;
   }
 }
 

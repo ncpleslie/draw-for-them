@@ -66,7 +66,6 @@ model VerificationToken {
 model ImageEvent {
   id            String     @id @default(cuid())
   active        Boolean    @default(true)
-  imageData     String
   receiver      User       @relation(name: "ReceivedImages", fields: [receiverId], references: [id], onDelete: Cascade)
   receiverId    String
   sender        User       @relation(name: "SentImages", fields: [senderId], references: [id], onDelete: Cascade)

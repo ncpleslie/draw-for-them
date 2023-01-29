@@ -12,8 +12,8 @@ const AddAFriend: NextPage = () => {
   const [searchInput, setSearchInput] = useState("");
   const {
     data: foundUser,
-    isLoading,
     isError,
+    isFetching: searchFriendLoading,
     refetch,
   } = trpc.user.getUserByName.useQuery(
     { name: searchInput },
@@ -42,7 +42,9 @@ const AddAFriend: NextPage = () => {
   };
 
   useEffect(() => {
-    router.replace("/");
+    if (addFriendSuccess) {
+      router.replace("/");
+    }
   }, [addFriendSuccess]);
 
   return (
@@ -70,7 +72,7 @@ const AddAFriend: NextPage = () => {
         </form>
       </div>
 
-      {isLoading && <LoadingIndicator />}
+      {searchFriendLoading && <LoadingIndicator />}
 
       {isError && (
         <div className="neu-container-raised flex h-40 w-72 flex-row items-center justify-center gap-4 rounded-xl">

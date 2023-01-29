@@ -19,28 +19,23 @@ export default class UserDomain {
     });
   }
 
-  public async addImageEventToUserByIdAsync(
-    currentUserId: string,
-    imageString: string
-  ) {
+  public async getUsersFirstFriendAsync(currentUserId: string) {
     const currentUser = await this.db.findFirst({
       where: { id: currentUserId },
       include: { friends: true },
     });
 
-    if (!currentUser || currentUser.friends.length === 0) {
-      throw new Error("User has no friends");
+    if (!currentUser) {
+      throw new Error("User not found");
     }
 
     const firstFriendId = currentUser.friends[0]?.id;
-    await this.db.update({
-      where: { id: firstFriendId },
-      data: {
-        receivedImages: {
-          create: { imageData: imageString, senderId: currentUserId },
-        },
-      },
-    });
+
+    if (!firstFriendId) {
+      throw new Error("User has no friends");
+    }
+
+    return firstFriendId;
   }
 
   public async getAllImagesForUserAsync(userId: string) {

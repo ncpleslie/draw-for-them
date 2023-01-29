@@ -5,7 +5,7 @@ import {
 } from "next";
 import { trpc } from "../../utils/trpc";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import FullScreenCenter from "../../components/ui/FullScreenCenter";
 import Header from "../../components/header/Header";
@@ -24,7 +24,7 @@ const View: NextPage<
 > = ({ id }) => {
   const router = useRouter();
   const { data: image, isLoading } = trpc.user.getImageById.useQuery({
-    id: id,
+    id,
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const View: NextPage<
           </FullScreenCenter>
         )}
         <div className={`neu-container rounded-xl`}>
-          <img src={image?.imageData} />
+          <img src={image} />
         </div>
       </div>
     </main>
