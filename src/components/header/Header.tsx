@@ -15,7 +15,7 @@ const Header = ({}) => {
 
   const { data: allImages } = trpc.user.getAllImagesForUser.useQuery();
 
-  trpc.user.subToAllImagesForUser.useSubscription(undefined, {
+  trpc.user.subscribeToAllImagesForUser.useSubscription(undefined, {
     onData(data) {
       setDrawEvents(data || []);
     },

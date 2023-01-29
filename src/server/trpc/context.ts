@@ -9,15 +9,20 @@ import { prisma } from "../db/client";
 import ImageDomain from "../domain/image-domain";
 import UserDomain from "../domain/user-domain";
 import MockStorageClient from "../storage/mock-storage-client";
-
-const storageClient = new MockStorageClient();
-
-const userDomain = new UserDomain(prisma.user);
-const imageDomain = new ImageDomain(prisma.imageEvent, storageClient);
+import StorageClient from "../storage/storage-client";
 
 type CreateContextOptions = {
   session: Session | null;
 };
+
+// TODO: FIND A PLACE FOR THESE TO BE SINGLETONS!
+const storageClient =
+  process.env.NODE_ENV === "production"
+    ? new StorageClient()
+    : new MockStorageClient();
+
+const userDomain = new UserDomain(prisma.user);
+const imageDomain = new ImageDomain(prisma.imageEvent, storageClient);
 
 /** Use this helper for:
  * - testing, so we dont have to mock Next.js' req/res

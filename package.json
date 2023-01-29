@@ -41,6 +41,7 @@
     "dotenv": "^16.0.3",
     "fabric": "github:ncpleslie/fabric.js",
     "fabricjs-react": "github:ncpleslie/fabricjs-react",
+    "firebase-admin": "^11.5.0",
     "next": "13.0.2",
     "next-auth": "^4.15.1",
     "node-fetch": "^3.3.0",

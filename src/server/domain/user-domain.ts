@@ -1,12 +1,20 @@
 import { UserDomainType } from "../../types/prisma.types";
+import DomainNotFoundError from "./errors/domain-not-found.error";
+import DomainValidationError from "./errors/domain-validation.error";
 
 export default class UserDomain {
   constructor(private db: UserDomainType) {}
 
   public async getUserByNameAsync(name: string) {
-    return await this.db.findFirst({
+    const user = await this.db.findFirst({
       where: { email: name },
     });
+
+    if (!user) {
+      throw new DomainNotFoundError("User not found");
+    }
+
+    return user;
   }
 
   public async addUserAsFriendByIdAsync(
@@ -26,13 +34,13 @@ export default class UserDomain {
     });
 
     if (!currentUser) {
-      throw new Error("User not found");
+      throw new DomainNotFoundError("User not found");
     }
 
     const firstFriendId = currentUser.friends[0]?.id;
 
     if (!firstFriendId) {
-      throw new Error("User has no friends");
+      throw new DomainValidationError("User has no friends");
     }
 
     return firstFriendId;
@@ -45,6 +53,10 @@ export default class UserDomain {
         receivedImages: { include: { sender: true }, where: { active: true } },
       },
     });
+
+    if (!user) {
+      throw new DomainNotFoundError("User not found");
+    }
 
     return user?.receivedImages;
   }

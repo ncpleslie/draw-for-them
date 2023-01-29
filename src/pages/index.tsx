@@ -49,7 +49,7 @@ export async function getServerSideProps(context: CreateNextContextOptions) {
   return {
     props: {
       session: ctx.session,
-      allImages: allImages.map((image) => image.toJSON()),
+      allImages: allImages?.map((image) => image.toJSON()),
     },
   };
 }
@@ -60,7 +60,7 @@ const Home: NextPage<
   const [viewLink, setViewLink] = useState<string | null>();
   const [drawEvents, setDrawEvents] = useState<NotificationDrawEvent[]>();
 
-  trpc.user.subToAllImagesForUser.useSubscription(undefined, {
+  trpc.user.subscribeToAllImagesForUser.useSubscription(undefined, {
     onData(data) {
       setDrawEvents(data || []);
       createViewLink(data || []);

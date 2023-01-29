@@ -5,7 +5,7 @@ import {
 } from "next";
 import { trpc } from "../../utils/trpc";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import FullScreenCenter from "../../components/ui/FullScreenCenter";
 import Header from "../../components/header/Header";
