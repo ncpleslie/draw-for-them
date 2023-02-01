@@ -23,15 +23,13 @@ const View: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
   const router = useRouter();
-  const { data: image, isLoading } = trpc.user.getImageById.useQuery({
+  const {
+    data: image,
+    isLoading,
+    error,
+  } = trpc.user.getImageById.useQuery({
     id,
   });
-
-  useEffect(() => {
-    if (!image && !isLoading) {
-      router.push("/");
-    }
-  }, [image, isLoading]);
 
   return (
     <main className="app-container h-[100vh] overflow-hidden">
@@ -43,9 +41,14 @@ const View: NextPage<
             <LoadingIndicator />
           </FullScreenCenter>
         )}
-        <div className={`neu-container rounded-xl`}>
-          <img src={image} />
-        </div>
+
+        {image && !isLoading && (
+          <div className={`neu-container rounded-xl`}>
+            <img src={image} />
+          </div>
+        )}
+
+        {error && <div>I'm sorry. This image is no longer available</div>}
       </div>
     </main>
   );

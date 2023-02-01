@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import FullScreenCenter from "../ui/FullScreenCenter";
 
 const DrawingArea: React.FC = () => {
-  const [isDrawMode, setIsDrawMode] = useState(false);
+  const [isDrawMode, setIsDrawMode] = useState(true);
   const [selectedColor, setSelectedColor] = useState("#000000");
   const [undo, setUndo] = useState(false);
   const [shape, setShape] = useState({ circle: false, square: false });

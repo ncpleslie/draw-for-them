@@ -1,5 +1,6 @@
 import { IImageEventDomain } from "../domain/db/client";
 import IStorageClient from "../domain/storage/storage-client.interface";
+import DomainNotFoundError from "./errors/domain-not-found.error";
 
 export default class ImageEventService {
   constructor(private db: IImageEventDomain, private storage: IStorageClient) {}
@@ -34,7 +35,7 @@ export default class ImageEventService {
     });
 
     if (!activeImage) {
-      throw new Error("Image event not found.");
+      throw new DomainNotFoundError("Image event not found.");
     }
 
     return await this.storage.getBase64ImageAsync(activeImage.id);

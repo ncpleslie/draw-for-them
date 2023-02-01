@@ -18,7 +18,7 @@ interface ShapeProps {
   square: boolean;
 }
 
-const SketchArea: React.FC<SketchAreaProps> = (props, ref) => {
+const SketchArea: React.FC<SketchAreaProps> = (props) => {
   const { editor, onReady } = useFabricJSEditor();
   const history = [];
 
@@ -30,7 +30,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props, ref) => {
     }
 
     canvas.isDrawingMode = props.isDrawMode;
-  }, [props.isDrawMode]);
+  }, [props.isDrawMode, editor?.canvas]);
 
   useEffect(() => {
     const canvas = editor?.canvas;
@@ -40,7 +40,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props, ref) => {
     }
 
     canvas.freeDrawingBrush.color = props.selectedColor;
-  }, [props.selectedColor]);
+  }, [props.selectedColor, editor?.canvas]);
 
   useEffect(() => {
     const canvas = editor?.canvas;
@@ -53,9 +53,13 @@ const SketchArea: React.FC<SketchAreaProps> = (props, ref) => {
       history.push(editor?.canvas._objects.pop());
       editor?.canvas.renderAll();
     }
-  }, [props.undo]);
+  }, [props.undo, editor?.canvas]);
 
   useEffect(() => {
+    if (!props.save) {
+      return;
+    }
+
     const canvas = editor?.canvas;
 
     if (!canvas) {
@@ -71,7 +75,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props, ref) => {
     });
 
     props.onSave(canvasImageData);
-  }, [props.save]);
+  }, [props.save, editor?.canvas]);
 
   useEffect(() => {
     const canvas = editor?.canvas;
@@ -81,7 +85,7 @@ const SketchArea: React.FC<SketchAreaProps> = (props, ref) => {
     }
 
     editor?.canvas.remove(...editor?.canvas.getObjects());
-  }, [props.trash]);
+  }, [props.trash, editor?.canvas]);
 
   useEffect(() => {
     editor?.addCircle();

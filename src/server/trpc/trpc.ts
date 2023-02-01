@@ -1,12 +1,26 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
+import { ZodError } from "zod";
+import DomainNotFoundError from "../services/errors/domain-not-found.error";
 
 import { type Context } from "./context";
 
 const t = initTRPC.context<Context>().create({
   transformer: superjson,
-  errorFormatter({ shape }) {
-    return shape;
+  errorFormatter({ error, shape }) {
+    // TODO: Tidy this up. Not good.
+    return {
+      ...shape,
+      data: {
+        ...shape.data,
+        code:
+          error.cause instanceof DomainNotFoundError ? "FORBIDDEN" : error.code,
+        zodError:
+          error.code === "BAD_REQUEST" && error.cause instanceof ZodError
+            ? error.cause.flatten()
+            : null,
+      },
+    };
   },
 });
 
