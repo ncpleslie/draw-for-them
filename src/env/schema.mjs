@@ -6,8 +6,12 @@ import { z } from "zod";
  * This way you can ensure the app isn't built with invalid env vars.
  */
 export const serverSchema = z.object({
-  DATABASE_URL: z.string().url(),
+  // System
   NODE_ENV: z.enum(["development", "test", "production"]),
+  WS_PORT: z.coerce.number(),
+  PORT: z.coerce.number(),
+
+  // Authentication
   NEXTAUTH_SECRET:
     process.env.NODE_ENV === "production"
       ? z.string().min(1)
@@ -23,6 +27,22 @@ export const serverSchema = z.object({
   EMAIL_FROM: z.string(),
   GOOGLE_ID: z.string(),
   GOOGLE_SECRET: z.string(),
+
+  // Database
+  DATABASE_URL: z.string().url(),
+
+  // Storage
+  STORAGE_TYPE: z.string(),
+  STORAGE_PROJECT_ID: z.string(),
+  STORAGE_PRIVATE_KEY_ID: z.string(),
+  STORAGE_PRIVATE_KEY: z.string(),
+  STORAGE_CLIENT_EMAIL: z.string(),
+  STORAGE_CLIENT_ID: z.string(),
+  STORAGE_AUTH_URI: z.string(),
+  STORAGE_TOKEN_URI: z.string(),
+  STORAGE_AUTH_PROVIDER_CERT_URL: z.string(),
+  STORAGE_CLIENT_CERT_URL: z.string(),
+  STORAGE_BUCKET: z.string()
 });
 
 /**

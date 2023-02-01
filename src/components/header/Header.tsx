@@ -13,9 +13,9 @@ const Header = ({}) => {
   const router = useRouter();
   const [drawEvents, setDrawEvents] = useState<NotificationDrawEvent[]>();
 
-  const { data: allImages } = trpc.user.getAllImagesForUser.useQuery();
+  const { data: allImages } = trpc.user.getAllImageEventsForUser.useQuery();
 
-  trpc.user.subscribeToAllImagesForUser.useSubscription(undefined, {
+  trpc.user.subscribeToImageEventsForUser.useSubscription(undefined, {
     onData(data) {
       setDrawEvents(data || []);
     },

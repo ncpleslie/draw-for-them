@@ -1,9 +1,9 @@
-import { UserDomainType } from "../../types/prisma.types";
+import { IUserDomain } from "../domain/db/client";
 import DomainNotFoundError from "./errors/domain-not-found.error";
 import DomainValidationError from "./errors/domain-validation.error";
 
-export default class UserDomain {
-  constructor(private db: UserDomainType) {}
+export default class UserService {
+  constructor(private db: IUserDomain) {}
 
   public async getUserByNameAsync(name: string) {
     const user = await this.db.findFirst({
@@ -46,7 +46,7 @@ export default class UserDomain {
     return firstFriendId;
   }
 
-  public async getAllImagesForUserAsync(userId: string) {
+  public async getAllImageEventsForUserAsync(userId: string) {
     const user = await this.db.findFirst({
       where: { id: userId },
       include: {

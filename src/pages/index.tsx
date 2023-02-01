@@ -26,7 +26,7 @@ export async function getServerSideProps(context: CreateNextContextOptions) {
       };
     }
     const imageEvents =
-      (await ctx.userDomain.getAllImagesForUserAsync(userId)) || [];
+      (await ctx.userService.getAllImageEventsForUserAsync(userId)) || [];
 
     const images = imageEvents?.map(
       (image) => new NotificationDrawEvent(image)
@@ -60,7 +60,7 @@ const Home: NextPage<
   const [viewLink, setViewLink] = useState<string | null>();
   const [drawEvents, setDrawEvents] = useState<NotificationDrawEvent[]>();
 
-  trpc.user.subscribeToAllImagesForUser.useSubscription(undefined, {
+  trpc.user.subscribeToImageEventsForUser.useSubscription(undefined, {
     onData(data) {
       setDrawEvents(data || []);
       createViewLink(data || []);

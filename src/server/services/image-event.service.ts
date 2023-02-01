@@ -1,8 +1,8 @@
-import { ImageDomainType } from "../../types/prisma.types";
-import IStorageClient from "../storage/storage-client.interface";
+import { IImageEventDomain } from "../domain/db/client";
+import IStorageClient from "../domain/storage/storage-client.interface";
 
-export default class ImageDomain {
-  constructor(private db: ImageDomainType, private storage: IStorageClient) {}
+export default class ImageEventService {
+  constructor(private db: IImageEventDomain, private storage: IStorageClient) {}
 
   public async addImageByIdAsync(
     senderId: string,

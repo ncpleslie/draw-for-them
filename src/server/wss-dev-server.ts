@@ -3,13 +3,14 @@ import ws from "ws";
 import fetch from "node-fetch";
 import { appRouter } from "./trpc/router/_app";
 import { createContext } from "./trpc/context";
+import { env } from "../env/server.mjs";
 
 if (!global.fetch) {
   (global as any).fetch = fetch;
 }
 
 const wss = new ws.Server({
-  port: parseInt(process.env.WS_PORT as string) || 3001,
+  port: env.WS_PORT,
 });
 
 const handler = applyWSSHandler({ wss, router: appRouter, createContext });

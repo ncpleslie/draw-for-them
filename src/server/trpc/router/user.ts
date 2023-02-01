@@ -5,7 +5,6 @@ import { EventEmitterEvent } from "../../../enums/event-emitter-event.enum";
 import { observable } from "@trpc/server/observable";
 import { NotificationDrawEvent } from "../../../models/draw_event.model";
 
-// (could be replaced by redis, etc)
 const ee = new EventEmitter();
 
 export const userRouter = router({
@@ -17,12 +16,12 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
-      await ctx.userDomain.addUserAsFriendByIdAsync(currentUserId, input.id);
+      await ctx.userService.addUserAsFriendByIdAsync(currentUserId, input.id);
     }),
 
-  getAllImagesForUser: protectedProcedure.query(async ({ ctx }) => {
+  getAllImageEventsForUser: protectedProcedure.query(async ({ ctx }) => {
     const currentUserId = ctx.session.user.id;
-    const imageEvents = await ctx.userDomain.getAllImagesForUserAsync(
+    const imageEvents = await ctx.userService.getAllImageEventsForUserAsync(
       currentUserId
     );
 
@@ -36,8 +35,10 @@ export const userRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const image = await ctx.imageDomain.getActiveImageByIdAsync(input.id);
-      await ctx.imageDomain.setImageInactiveByIdAsync(input.id);
+      const image = await ctx.imageEventService.getActiveImageByIdAsync(
+        input.id
+      );
+      await ctx.imageEventService.setImageInactiveByIdAsync(input.id);
 
       ee.emit(EventEmitterEvent.NewImage);
 
@@ -51,7 +52,7 @@ export const userRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      return await ctx.userDomain.getUserByNameAsync(input.name);
+      return await ctx.userService.getUserByNameAsync(input.name);
     }),
 
   sendUserImage: protectedProcedure
@@ -62,11 +63,11 @@ export const userRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
-      const receiverId = await ctx.userDomain.getUsersFirstFriendAsync(
+      const receiverId = await ctx.userService.getUsersFirstFriendAsync(
         currentUserId
       );
 
-      await ctx.imageDomain.addImageByIdAsync(
+      await ctx.imageEventService.addImageByIdAsync(
         currentUserId,
         receiverId,
         input.imageData
@@ -75,11 +76,11 @@ export const userRouter = router({
       ee.emit(EventEmitterEvent.NewImage);
     }),
 
-  subscribeToAllImagesForUser: protectedProcedure.subscription(
+  subscribeToImageEventsForUser: protectedProcedure.subscription(
     async ({ ctx }) => {
       const onNewImage = async () => {
         const currentUserId = ctx.session.user.id;
-        const imageEvents = await ctx.userDomain.getAllImagesForUserAsync(
+        const imageEvents = await ctx.userService.getAllImageEventsForUserAsync(
           currentUserId
         );
 

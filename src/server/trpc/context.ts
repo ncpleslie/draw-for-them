@@ -5,35 +5,22 @@ import { IncomingMessage } from "http";
 import { type Session } from "next-auth";
 import { getSession } from "next-auth/react";
 import ws from "ws";
-import { prisma } from "../db/client";
-import ImageDomain from "../domain/image-domain";
-import UserDomain from "../domain/user-domain";
-import MockStorageClient from "../storage/mock-storage-client";
-import StorageClient from "../storage/storage-client";
+import { imageEventService, userService } from "../provider/global-provider";
 
 type CreateContextOptions = {
   session: Session | null;
 };
 
-// TODO: FIND A PLACE FOR THESE TO BE SINGLETONS!
-const storageClient =
-  process.env.NODE_ENV === "production"
-    ? new StorageClient()
-    : new MockStorageClient();
-
-const userDomain = new UserDomain(prisma.user);
-const imageDomain = new ImageDomain(prisma.imageEvent, storageClient);
-
 /** Use this helper for:
- * - testing, so we dont have to mock Next.js' req/res
+ * - testing, so we don't have to mock Next.js' req/res
  * - trpc's `createSSGHelpers` where we don't have req/res
  * @see https://create.t3.gg/en/usage/trpc#-servertrpccontextts
  **/
 export const createContextInner = async (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    userDomain,
-    imageDomain,
+    imageEventService: imageEventService,
+    userService: userService,
   };
 };
 

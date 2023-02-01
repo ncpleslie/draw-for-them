@@ -1,34 +1,13 @@
-import {
-  getApps,
-  cert,
-  initializeApp,
-  ServiceAccount,
-} from "firebase-admin/app";
-import { getStorage, Storage } from "firebase-admin/storage";
 import IStorageClient from "./storage-client.interface";
-import config from "../../../firebase-config.json";
-import AppConstants from "../../constants/app.constants";
+import AppConstants from "../../../constants/app.constants";
+import BaseStorageClient from "./base-storage-client";
 
-export default class StorageClient implements IStorageClient {
-  private storage!: Storage;
-
+export default class StorageClient
+  extends BaseStorageClient
+  implements IStorageClient
+{
   constructor() {
-    if (getApps().length) {
-      return;
-    }
-
-    // TODO: Tidy this up
-    // Move config to env
-    const app = initializeApp(
-      {
-        projectId: config.project_id,
-        credential: cert(config as ServiceAccount),
-        storageBucket: "draw-for-them-storage.appspot.com",
-      },
-      "draw-for-them"
-    );
-
-    this.storage = getStorage(app);
+    super();
   }
 
   public async storeBase64ImageAsync(
