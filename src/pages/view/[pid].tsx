@@ -22,7 +22,6 @@ export async function getServerSideProps(
 const View: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ id }) => {
-  const router = useRouter();
   const {
     data: image,
     isLoading,

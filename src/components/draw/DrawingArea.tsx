@@ -2,11 +2,13 @@ import SketchArea from "./SketchArea";
 import SketchControl from "./SketchControl";
 import LoadingIndicator from "../ui/LoadingIndicator";
 import { useEffect, useRef, useState } from "react";
-import { trpc } from "../../utils/trpc";
-import { toast } from "react-toastify";
 import FullScreenCenter from "../ui/FullScreenCenter";
 
-const DrawingArea: React.FC = () => {
+interface DrawingAreaProps {
+  onSave: (image: string) => Promise<void>;
+}
+
+const DrawingArea: React.FC<DrawingAreaProps> = ({ onSave }) => {
   const [isDrawMode, setIsDrawMode] = useState(true);
   const [selectedColor, setSelectedColor] = useState("#000000");
   const [undo, setUndo] = useState(false);
@@ -14,7 +16,6 @@ const DrawingArea: React.FC = () => {
   const [trash, setTrash] = useState(false);
   const [save, setSave] = useState(false);
   const [loading, setLoading] = useState(false);
-  const sendImage = trpc.user.sendUserImage.useMutation();
 
   const handleOnUndoClicked = () => setUndo((prev) => !prev);
 
@@ -36,22 +37,13 @@ const DrawingArea: React.FC = () => {
 
   const handleOnTrashClicked = () => setTrash((prev) => !prev);
 
-  const handleOnSaveClicked = () => setSave((prev) => !prev);
+  const handleOnSaveClicked = () => {
+    return setSave((prev) => !prev);
+  };
 
-  const handleOnSave = async (imageData: string): Promise<void> => {
-    setLoading(true);
-    try {
-      await sendImage.mutateAsync({ imageData });
-      toast.success("That masterpiece was sent!");
-      handleOnTrashClicked();
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
-      setLoading(false);
-      toast.error(
-        "Oops! Something went wrong. Please try send that masterpiece again."
-      );
-    }
+  const handleOnSave = async (imageData: string) => {
+    onSave(imageData);
+    setSave(false);
   };
 
   const sketchControlProps = {
