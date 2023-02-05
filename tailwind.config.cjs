@@ -9,6 +9,9 @@ module.exports = {
           hover: '#8c9290',
           active: '#15e38a',
           'split-active': '#15e38a transparent #15e38a transparent'
+        },
+        neu: {
+          DEFAULT: '#ececec'
         }
       },
       animation: {

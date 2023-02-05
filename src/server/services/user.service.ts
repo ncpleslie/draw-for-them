@@ -5,6 +5,19 @@ import DomainValidationError from "./errors/domain-validation.error";
 export default class UserService {
   constructor(private db: IUserDomain) {}
 
+  public async getCurrentUsersFriendsAsync(currentUserId: string) {
+    const userWithFriends = await this.db.findFirst({
+      where: { id: currentUserId },
+      include: { friends: true },
+    });
+
+    if (!userWithFriends) {
+      throw new DomainNotFoundError("User not found");
+    }
+
+    return userWithFriends.friends;
+  }
+
   public async getUserByNameAsync(name: string) {
     const user = await this.db.findFirst({
       where: { email: name },
@@ -27,23 +40,29 @@ export default class UserService {
     });
   }
 
-  public async getUsersFirstFriendAsync(currentUserId: string) {
+  public async getUsersFriendByIdAsync(userId: string, currentUserId: string) {
     const currentUser = await this.db.findFirst({
       where: { id: currentUserId },
-      include: { friends: true },
+      include: {
+        friends: {
+          where: {
+            id: userId,
+          },
+        },
+      },
     });
 
     if (!currentUser) {
       throw new DomainNotFoundError("User not found");
     }
 
-    const firstFriendId = currentUser.friends[0]?.id;
+    const friendId = currentUser.friends[0]?.id;
 
-    if (!firstFriendId) {
-      throw new DomainValidationError("User has no friends");
+    if (!friendId) {
+      throw new DomainValidationError("User has no friend with that id");
     }
 
-    return firstFriendId;
+    return friendId;
   }
 
   public async getAllImageEventsForUserAsync(userId: string) {

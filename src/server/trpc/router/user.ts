@@ -45,6 +45,12 @@ export const userRouter = router({
       return image;
     }),
 
+  getFriends: protectedProcedure.query(async ({ ctx }) => {
+    const currentUserId = ctx.session.user.id;
+
+    return await ctx.userService.getCurrentUsersFriendsAsync(currentUserId);
+  }),
+
   getUserByName: protectedProcedure
     .input(
       z.object({
@@ -58,12 +64,14 @@ export const userRouter = router({
   sendUserImage: protectedProcedure
     .input(
       z.object({
+        userId: z.string(),
         imageData: z.string(),
       })
     )
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
-      const receiverId = await ctx.userService.getUsersFirstFriendAsync(
+      const receiverId = await ctx.userService.getUsersFriendByIdAsync(
+        input.userId,
         currentUserId
       );
 

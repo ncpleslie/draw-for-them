@@ -108,7 +108,7 @@ const Home: NextPage<
               {drawEvents && drawEvents.length > 0 ? (
                 <div className="absolute right-10 -top-10 text-5xl text-icon-active">
                   <Icon.Bell />
-                  <div className="absolute right-[0.85rem] top-[0.3rem] text-3xl text-white">
+                  <div className="absolute right-[0.4rem] top-[0.3rem] text-3xl text-white">
                     {drawEvents.length}
                   </div>
                 </div>
