@@ -5,4 +5,5 @@ export enum Routes {
   AddAFriend = "/add_a_friend",
   SignIn = "/sign_in",
   SignOut = "/sign_out",
+  Profile = "/profile",
 }

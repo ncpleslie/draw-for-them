@@ -14,7 +14,8 @@ const MenuPanel: React.FC = () => {
     >
       <Popover.Panel className="absolute left-1/2 mt-3 w-[20rem] -translate-x-[17.5rem] transform px-4">
         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
-          <div className="relative flex flex-col justify-center gap-4 bg-white py-2">
+          <div className="relative flex flex-col justify-center gap-4 bg-white">
+            <MenuItem href={Routes.Profile}>Profile</MenuItem>
             <MenuItem href={Routes.SignOut}>Sign Out</MenuItem>
           </div>
         </div>

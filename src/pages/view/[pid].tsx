@@ -1,33 +1,21 @@
-import {
-  GetServerSidePropsContext,
-  InferGetServerSidePropsType,
-  NextPage,
-} from "next";
+import { NextPage } from "next";
 import { trpc } from "../../utils/trpc";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
 
 import FullScreenCenter from "../../components/ui/FullScreenCenter";
 import Header from "../../components/header/Header";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
 
-export async function getServerSideProps(
-  context: GetServerSidePropsContext<{ pid: string }>
-) {
-  return {
-    props: { id: context.params?.pid as string },
-  };
-}
+const View: NextPage = () => {
+  const router = useRouter();
+  const { pid } = router.query;
 
-const View: NextPage<
-  InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ id }) => {
   const {
     data: image,
     isLoading,
     error,
   } = trpc.user.getImageById.useQuery({
-    id,
+    id: pid as string,
   });
 
   return (
