@@ -34,6 +34,7 @@ export const authOptions: NextAuthOptions = {
   pages: {
     signIn: Routes.SignIn,
     newUser: Routes.AddAFriend,
+    signOut: Routes.SignOut,
   },
   secret: env.NEXTAUTH_SECRET,
   debug: true,

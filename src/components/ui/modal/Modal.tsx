@@ -1,4 +1,10 @@
-import { cloneElement, Fragment, PropsWithChildren, useEffect } from "react";
+import {
+  cloneElement,
+  Fragment,
+  PropsWithChildren,
+  useEffect,
+  useState,
+} from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { create } from "zustand";
 import Btn from "../Btn";
@@ -17,6 +23,7 @@ export const useModalStore = create<ModalState>((set) => ({
 
 export interface BaseModalProps {
   close?: (value: any) => void;
+  state?: ModalState;
 }
 
 interface ModalProps extends BaseModalProps {
@@ -29,7 +36,6 @@ const addModal = <TModal,>(
   resolve: (value: TModal) => void
 ) => {
   const div = document.createElement("div");
-  div.setAttribute("id", "modal-root");
   const root = createRoot(div);
 
   const close = (value: TModal) => {
@@ -46,10 +52,19 @@ const addModal = <TModal,>(
   );
 };
 
-export const useModal = async <TModal,>(body: JSX.Element, title: string) => {
-  return new Promise<TModal>((resolve) => {
-    addModal(title, body, resolve);
-  });
+export const useModal = <TModal,>(
+  bodyCallback: (state: ModalState) => JSX.Element,
+  title: string
+) => {
+  const modalState = useModalStore();
+  const body = bodyCallback(modalState);
+
+  return {
+    show: async () =>
+      new Promise<TModal>((resolve) => {
+        addModal(title, body, resolve);
+      }),
+  };
 };
 
 const Modal: React.FC<PropsWithChildren<ModalProps>> = ({

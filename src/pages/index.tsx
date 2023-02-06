@@ -89,9 +89,9 @@ const Home: NextPage<
     <>
       <main className="app-container h-screen">
         <Header />
-        <div className="flex w-screen flex-row flex-wrap items-center justify-center md:flex-nowrap">
+        <div className="flex w-screen flex-row flex-wrap items-center justify-center md:h-[90dvh] md:flex-nowrap">
           <DashboardBtn
-            className="m-4 h-[45vh] w-[90vw] md:w-[50%] xl:h-[85vh]"
+            className="m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
             link="/draw"
           >
             <>
@@ -100,16 +100,18 @@ const Home: NextPage<
             </>
           </DashboardBtn>
           <DashboardBtn
-            className="relative m-4 h-[45vh] w-[90vw] md:w-[50%] xl:h-[85vh]"
+            className="relative m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
             disabled={!viewLink}
             link={viewLink ? viewLink : ""}
           >
             <div className="relative flex flex-col">
               {drawEvents && drawEvents.length > 0 ? (
-                <div className="absolute right-10 -top-10 text-5xl text-icon-active">
-                  <Icon.Bell />
-                  <div className="absolute right-[0.4rem] top-[0.3rem] text-3xl text-white">
+                <div className="absolute right-10 -top-10 grid grid-cols-1 grid-rows-1 place-items-center text-5xl text-icon-active">
+                  <div className="z-20 col-start-1 col-end-1 row-start-1 row-end-1 text-3xl text-white">
                     {drawEvents.length}
+                  </div>
+                  <div className="z-10 col-start-1 col-end-1 row-start-1 row-end-1">
+                    <Icon.Bell />
                   </div>
                 </div>
               ) : (

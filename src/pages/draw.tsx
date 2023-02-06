@@ -52,14 +52,13 @@ interface UserSelectModalBodyProps extends BaseModalProps {
 const UserSelectModalBody: React.FC<UserSelectModalBodyProps> = ({
   isLoading,
   friends,
+  state,
   close,
 }) => {
-  const toggleModal = useModalStore((state) => state.toggleModal);
-
   const onUserSelected = (user: User) => {
     if (close) {
       close(user);
-      toggleModal();
+      state?.toggleModal();
     }
   };
 
@@ -90,14 +89,16 @@ const UserSelectModalBody: React.FC<UserSelectModalBodyProps> = ({
 const Draw: NextPage = () => {
   const sendImage = trpc.user.sendUserImage.useMutation();
   const { isLoading, data } = trpc.user.getFriends.useQuery();
+  const { show } = useModal<User>(
+    (state) => (
+      <UserSelectModalBody isLoading={isLoading} friends={data} state={state} />
+    ),
+    "Send To"
+  );
 
   const onSave = async (image: string) => {
     try {
-      const selectedFriend = await useModal<User>(
-        <UserSelectModalBody isLoading={isLoading} friends={data} />,
-        "Send To"
-      );
-
+      const selectedFriend = await show();
       if (!selectedFriend) {
         return;
       }
