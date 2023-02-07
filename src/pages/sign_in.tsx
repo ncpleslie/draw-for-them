@@ -54,7 +54,7 @@ const SignIn: NextPage<SignInProps> = ({ providers, csrfToken }) => {
 
   useEffect(() => {
     if (session) {
-      router.replace("/");
+      router.replace(Routes.Root);
     }
   }, [session, router]);
 

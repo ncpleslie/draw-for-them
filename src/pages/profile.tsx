@@ -7,9 +7,7 @@ import { createContext } from "../server/trpc/context";
 export async function getServerSideProps(context: CreateNextContextOptions) {
   const ctx = await createContext(context);
 
-  const userId = ctx.session?.user?.id;
-  if (!userId) {
-    // Redirect user
+  if (!ctx.session || !ctx.session.user) {
     return {
       redirect: {
         destination: Routes.SignIn,
@@ -18,33 +16,30 @@ export async function getServerSideProps(context: CreateNextContextOptions) {
     };
   }
 
-  // GET USER DATA HERE
+  const profile = await ctx.userService.getUserProfileAsync(
+    ctx.session.user.id
+  );
 
-  if (!ctx.session) {
-    return {
-      redirect: {
-        destination: Routes.SignIn,
-        permanent: false,
-      },
-    };
-  }
+  console.log(profile);
 
   return {
     props: {
-      user: userId,
+      user: ctx.session.user.id,
+      profile,
     },
   };
 }
 
 const Profile: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ user }) => {
+> = ({ user, profile }) => {
   return (
     <>
       <main className="app-container h-screen">
         <Header />
         <div className="flex w-screen flex-row flex-wrap items-center justify-center md:flex-nowrap">
-          {user}
+          {JSON.stringify(user)}
+          {JSON.stringify(profile)}
         </div>
       </main>
     </>

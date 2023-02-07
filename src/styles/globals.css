@@ -39,6 +39,13 @@
   @apply bg-neu;
 }
 
+.neu-container-raised-error {
+  border: 4px solid #fca5a550;
+  box-shadow: -12px -12px 12px 0 #ffffff,
+    12px 12px 12px 0 rgba(252, 165, 165, 0.3);
+  @apply bg-red-300/50;
+}
+
 .neu-btn {
   color: #7a7a7a;
   border: 1px solid #ececec;

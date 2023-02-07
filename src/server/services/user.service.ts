@@ -5,9 +5,9 @@ import DomainValidationError from "./errors/domain-validation.error";
 export default class UserService {
   constructor(private db: IUserDomain) {}
 
-  public async getCurrentUsersFriendsAsync(currentUserId: string) {
+  public async getUserFriendsAsync(userId: string) {
     const userWithFriends = await this.db.findFirst({
-      where: { id: currentUserId },
+      where: { id: userId },
       include: { friends: true },
     });
 
@@ -18,16 +18,49 @@ export default class UserService {
     return userWithFriends.friends;
   }
 
-  public async getUserByNameAsync(name: string) {
-    const user = await this.db.findFirst({
-      where: { email: name },
+  public async getUsersByNameAsync(name: string) {
+    const users = await this.db.findMany({
+      where: {
+        OR: [
+          {
+            email: {
+              contains: name,
+            },
+          },
+          {
+            name: {
+              contains: name,
+            },
+          },
+        ],
+      },
     });
 
-    if (!user) {
-      throw new DomainNotFoundError("User not found");
+    return users;
+  }
+
+  public async getUserProfileAsync(userId: string) {
+    const userProfile = await this.db.findFirst({
+      where: { id: userId },
+      include: {
+        friends: {
+          select: {
+            id: true,
+            name: true,
+            email: false,
+            emailVerified: false,
+          },
+        },
+        sentImages: true,
+        receivedImages: true,
+      },
+    });
+
+    if (!userProfile) {
+      throw new Error("Unable to find user's profile");
     }
 
-    return user;
+    return this.exclude(userProfile, ["emailVerified"]);
   }
 
   public async addUserAsFriendByIdAsync(
@@ -78,5 +111,32 @@ export default class UserService {
     }
 
     return user?.receivedImages;
+  }
+
+  public async updateProfileAsync(
+    userId: string,
+    profileData: { name?: string }
+  ) {
+    const user = await this.db.update({
+      where: {
+        id: userId,
+      },
+      data: {
+        name: profileData.name,
+      },
+    });
+
+    return user;
+  }
+
+  // TODO: Move to custom modal or base service
+  private exclude<User, Key extends keyof User>(
+    user: User,
+    keys: Key[]
+  ): Omit<User, Key> {
+    for (let key of keys) {
+      delete user[key];
+    }
+    return user;
   }
 }

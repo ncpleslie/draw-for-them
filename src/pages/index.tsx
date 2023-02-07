@@ -82,7 +82,7 @@ const Home: NextPage<
       return;
     }
 
-    setViewLink(`/view/${images[0]?.id}`);
+    setViewLink(`${Routes.View}/${images[0]?.id}`);
   };
 
   return (
@@ -92,7 +92,7 @@ const Home: NextPage<
         <div className="flex w-screen flex-row flex-wrap items-center justify-center md:h-[90dvh] md:flex-nowrap">
           <DashboardBtn
             className="m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
-            link="/draw"
+            link={Routes.Draw}
           >
             <>
               <Icon.Pen />

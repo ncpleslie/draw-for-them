@@ -48,17 +48,21 @@ export const userRouter = router({
   getFriends: protectedProcedure.query(async ({ ctx }) => {
     const currentUserId = ctx.session.user.id;
 
-    return await ctx.userService.getCurrentUsersFriendsAsync(currentUserId);
+    return await ctx.userService.getUserFriendsAsync(currentUserId);
   }),
 
-  getUserByName: protectedProcedure
+  getProfile: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.userService.getUserProfileAsync(ctx.session.user.id);
+  }),
+
+  getUsersByName: protectedProcedure
     .input(
       z.object({
         name: z.string().trim(),
       })
     )
     .query(async ({ ctx, input }) => {
-      return await ctx.userService.getUserByNameAsync(input.name);
+      return await ctx.userService.getUsersByNameAsync(input.name);
     }),
 
   sendUserImage: protectedProcedure
@@ -101,6 +105,29 @@ export const userRouter = router({
       );
     }
   ),
+
+  updateUserProfile: protectedProcedure
+    .input(
+      z
+        .object({
+          name: z.string(),
+        })
+        .partial()
+        .refine(
+          (data: Record<string | number | symbol, unknown>) =>
+            Object.values(data).some((v) => !!v),
+          {
+            message:
+              "At least one value must be provided if you want to update a profile",
+          }
+        )
+    )
+    .mutation(async ({ ctx, input }) => {
+      return await ctx.userService.updateProfileAsync(
+        ctx.session.user.id,
+        input
+      );
+    }),
 });
 
 const subscribeToEvent = <TReturn>(
