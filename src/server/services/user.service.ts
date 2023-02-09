@@ -134,7 +134,7 @@ export default class UserService {
     user: User,
     keys: Key[]
   ): Omit<User, Key> {
-    for (let key of keys) {
+    for (const key of keys) {
       delete user[key];
     }
     return user;

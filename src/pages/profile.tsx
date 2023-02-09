@@ -116,13 +116,13 @@ const Profile: NextPage<
             </div>
             <p>Sent</p>
             {profile.sentImages.map((sent) => (
-              <p>
+              <p key={sent.id}>
                 {sent.receiverId} at {sent.date.toString()}
               </p>
             ))}
             <p>Received</p>
             {profile.receivedImages.map((sent) => (
-              <p>
+              <p key={sent.id}>
                 {sent.senderId} at {sent.date.toString()}
               </p>
             ))}

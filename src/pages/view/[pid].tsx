@@ -35,7 +35,7 @@ const View: NextPage = () => {
           </div>
         )}
 
-        {error && <div>I'm sorry. This image is no longer available</div>}
+        {error && <div>I&apos;m sorry. This image is no longer available</div>}
       </div>
     </main>
   );

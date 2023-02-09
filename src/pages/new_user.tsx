@@ -73,7 +73,7 @@ const NewUser: NextPage<
           onSubmit={handleFriendSearch}
           className="flex w-full flex-col items-center justify-center gap-4 md:w-1/2 "
         >
-          <label htmlFor="friend">First up, what's your name?</label>
+          <label htmlFor="friend">First up, what&apos;s your name?</label>
           <FocusableInput
             type={"text"}
             id={"name"}
@@ -86,7 +86,7 @@ const NewUser: NextPage<
             </div>
           )}
           <Btn type="submit" className="mt-4 pt-0" loading={isLoading}>
-            Let's move on
+            Let&apos;s move on
           </Btn>
         </form>
       </div>

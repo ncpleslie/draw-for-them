@@ -21,7 +21,11 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  const parsedUrl = parse(req.url!, true);
+  if (!req.url) {
+    return;
+  }
+
+  const parsedUrl = parse(req.url, true);
   handle(req, res, parsedUrl);
 });
 

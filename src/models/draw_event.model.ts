@@ -1,5 +1,4 @@
-import { ImageEvent } from "@prisma/client";
-import { ImageEventWithSender } from "../types/prisma.types";
+import { ImageEvent, User } from "@prisma/client";
 
 export default class BaseDrawEvent {
   constructor(data: ImageEvent) {
@@ -18,16 +17,17 @@ export default class BaseDrawEvent {
   }
 }
 
+type ImageEventWithSender = ImageEvent & { sender: User };
+
 export class NotificationDrawEvent extends BaseDrawEvent {
   constructor(data: any);
   constructor(data: ImageEventWithSender) {
     super(data);
 
     if (data.sender) {
-      this.senderName =
-        data.sender.name || data.sender.email || "an unknown user";
+      this.senderName = data.sender.name || data.sender.email;
     } else {
-      this.senderName = data.senderName;
+      this.senderName = "an unknown user";
     }
   }
 
