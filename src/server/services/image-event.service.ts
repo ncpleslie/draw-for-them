@@ -13,6 +13,7 @@ export default class ImageEventService {
     const imageEvent = await this.db.create({
       data: {
         active: true,
+        date: new Date(),
         sender: {
           connect: {
             id: senderId,

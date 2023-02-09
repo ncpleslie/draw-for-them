@@ -4,6 +4,8 @@
  * This is especially useful for Docker builds.
  */
 
+import { withSuperjson } from "next-superjson"
+
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env/server.mjs"));
 
 /** @type {import("next").NextConfig} */
@@ -20,4 +22,4 @@ const config = {
     WS_URL: process.env.WS_URL,
   },
 };
-export default config;
+export default withSuperjson(config);

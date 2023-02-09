@@ -16,6 +16,7 @@ const MenuPanel: React.FC = () => {
         <div className="overflow-hidden rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div className="relative flex flex-col justify-center gap-4 bg-white">
             <MenuItem href={Routes.Profile}>Profile</MenuItem>
+            <MenuItem href={Routes.AddAFriend}>Find More Friends</MenuItem>
             <MenuItem href={Routes.SignOut}>Sign Out</MenuItem>
           </div>
         </div>
