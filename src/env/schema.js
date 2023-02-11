@@ -52,6 +52,8 @@ export const serverSchema = z.object({
  */
 export const clientSchema = z.object({
   // NEXT_PUBLIC_BAR: z.string(),
+  NEXT_PUBLIC_WS_URL: z.string(),
+  NEXT_PUBLIC_APP_URL: z.string()
 });
 
 /**
@@ -62,4 +64,6 @@ export const clientSchema = z.object({
  */
 export const clientEnv = {
   // NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
+  NEXT_PUBLIC_WS_URL: process.env.WS_URL,
+  NEXT_PUBLIC_APP_URL: process.env.APP_URL
 };
