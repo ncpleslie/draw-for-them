@@ -64,6 +64,10 @@ export const useModal = <TModal,>(
       new Promise<TModal>((resolve) => {
         addModal(title, body, resolve);
       }),
+    showWithModal: async (body: JSX.Element) =>
+      new Promise<TModal>((resolve) => {
+        addModal(title, body, resolve);
+      }),
   };
 };
 

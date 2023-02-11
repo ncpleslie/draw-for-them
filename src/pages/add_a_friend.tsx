@@ -92,7 +92,7 @@ const AddAFriend: NextPage<
                     }`
                   : "You have no friends!"}
               </h1>
-              <h2 className="text-lg">Why not make some now?</h2>
+              <h2 className="text-lg">Why not make some more now?</h2>
             </div>
             <form onSubmit={handleFriendSearch} className="flex flex-col gap-4">
               <label htmlFor="friend">

@@ -15,6 +15,7 @@ import {
 } from "../components/ui/modal/Modal";
 import { User } from "@prisma/client";
 import Icon from "../components/ui/Icon";
+import AppShell from "../components/AppShell";
 
 const DrawingArea = dynamic(() => import("../components/draw/DrawingArea"), {
   ssr: false,
@@ -117,12 +118,11 @@ const Draw: NextPage = () => {
   };
 
   return (
-    <main className="app-container h-screen overflow-hidden">
-      <Header />
+    <AppShell>
       <Suspense>
         <DrawingArea onSave={onSave} />
       </Suspense>
-    </main>
+    </AppShell>
   );
 };
 

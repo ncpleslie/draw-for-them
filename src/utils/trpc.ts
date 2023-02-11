@@ -13,13 +13,13 @@ import { type AppRouter } from "../server/trpc/router/_app";
 
 const { publicRuntimeConfig } = getConfig();
 
-const { APP_URL, WS_URL } = publicRuntimeConfig;
+const { APP_URL, WS_URL, NODE_ENV } = publicRuntimeConfig;
 
 const getBaseUrl = () => {
   if (typeof window !== "undefined") {
     return ""; // browser should use relative url
   }
-  if (APP_URL) {
+  if (APP_URL && NODE_ENV === "production") {
     return `https://${APP_URL}`; // SSR should use vercel url
   }
 
@@ -27,7 +27,7 @@ const getBaseUrl = () => {
 };
 
 const getBaseWsUrl = () => {
-  if (WS_URL) {
+  if (WS_URL && NODE_ENV === "production") {
     return `wss://${WS_URL}`;
   }
 

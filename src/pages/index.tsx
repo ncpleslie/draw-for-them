@@ -8,6 +8,7 @@ import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { Routes } from "../enums/routes.enum";
 import Header from "../components/header/Header";
 import { NotificationDrawEvent } from "../models/draw_event.model";
+import AppShell from "../components/AppShell";
 
 export async function getServerSideProps(context: CreateNextContextOptions) {
   const ctx = await createContext(context);
@@ -86,44 +87,41 @@ const Home: NextPage<
   };
 
   return (
-    <>
-      <main className="app-container h-screen">
-        <Header />
-        <div className="flex w-screen flex-row flex-wrap items-center justify-center md:h-[90dvh] md:flex-nowrap">
-          <DashboardBtn
-            className="m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
-            link={Routes.Draw}
-          >
-            <>
-              <Icon.Pen />
-              Draw
-            </>
-          </DashboardBtn>
-          <DashboardBtn
-            className="relative m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
-            disabled={!viewLink}
-            link={viewLink ? viewLink : ""}
-          >
-            <div className="relative flex flex-col">
-              {drawEvents && drawEvents.length > 0 ? (
-                <div className="absolute right-10 -top-10 grid grid-cols-1 grid-rows-1 place-items-center text-5xl text-icon-active">
-                  <div className="z-20 col-start-1 col-end-1 row-start-1 row-end-1 text-3xl text-white">
-                    {drawEvents.length}
-                  </div>
-                  <div className="z-10 col-start-1 col-end-1 row-start-1 row-end-1">
-                    <Icon.Bell />
-                  </div>
+    <AppShell>
+      <div className="flex w-screen flex-row flex-wrap items-center justify-center md:h-[90dvh] md:flex-nowrap">
+        <DashboardBtn
+          className="m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
+          link={Routes.Draw}
+        >
+          <>
+            <Icon.Pen />
+            Draw
+          </>
+        </DashboardBtn>
+        <DashboardBtn
+          className="relative m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
+          disabled={!viewLink}
+          link={viewLink ? viewLink : ""}
+        >
+          <div className="relative flex flex-col">
+            {drawEvents && drawEvents.length > 0 ? (
+              <div className="absolute right-10 -top-10 grid grid-cols-1 grid-rows-1 place-items-center text-5xl text-icon-active">
+                <div className="z-20 col-start-1 col-end-1 row-start-1 row-end-1 text-3xl text-white">
+                  {drawEvents.length}
                 </div>
-              ) : (
-                <></>
-              )}
-              <Icon.Image />
-              View
-            </div>
-          </DashboardBtn>
-        </div>
-      </main>
-    </>
+                <div className="z-10 col-start-1 col-end-1 row-start-1 row-end-1">
+                  <Icon.Bell />
+                </div>
+              </div>
+            ) : (
+              <></>
+            )}
+            <Icon.Image />
+            View
+          </div>
+        </DashboardBtn>
+      </div>
+    </AppShell>
   );
 };
 

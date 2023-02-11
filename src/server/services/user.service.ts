@@ -63,6 +63,38 @@ export default class UserService {
     return this.exclude(userProfile, ["emailVerified"]);
   }
 
+  public async getHistoryByUserIdAsync(
+    currentUserId: string,
+    friendId: string
+  ) {
+    const history = await this.db.findMany({
+      where: { id: currentUserId },
+      include: {
+        friends: {
+          where: {
+            id: friendId,
+          },
+        },
+        sentImages: {
+          where: {
+            senderId: currentUserId,
+          },
+        },
+        receivedImages: {
+          where: {
+            receiverId: currentUserId,
+          },
+        },
+      },
+    });
+
+    if (!history) {
+      throw new Error("Unable to find current user's friend history");
+    }
+
+    return history[0];
+  }
+
   public async addUserAsFriendByIdAsync(
     currentUserId: string,
     userToFriendId: string

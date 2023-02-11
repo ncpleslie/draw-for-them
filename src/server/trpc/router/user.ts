@@ -55,6 +55,21 @@ export const userRouter = router({
     return await ctx.userService.getUserProfileAsync(ctx.session.user.id);
   }),
 
+  getHistoryByUserId: protectedProcedure
+    .input(
+      z.object({
+        friendId: z.string().trim(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const currentUserId = ctx.session.user.id;
+
+      return await ctx.userService.getHistoryByUserIdAsync(
+        currentUserId,
+        input.friendId
+      );
+    }),
+
   getUsersByName: protectedProcedure
     .input(
       z.object({

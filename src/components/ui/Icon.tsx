@@ -22,6 +22,7 @@ import {
   faDeleteLeft,
   faAngleUp,
   faBars,
+  faTimeline,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Pen: React.FC = () => {
@@ -112,6 +113,10 @@ const Bars: React.FC = () => {
   return <FontAwesomeIcon icon={faBars} />;
 };
 
+const History: React.FC = () => {
+  return <FontAwesomeIcon icon={faTimeline} />;
+};
+
 const icon = {
   Pen,
   Circle,
@@ -135,6 +140,7 @@ const icon = {
   Delete,
   AngleUp,
   Bars,
+  History,
 };
 
 export default icon;
