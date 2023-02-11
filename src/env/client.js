@@ -1,7 +1,8 @@
 // @ts-check
 import { clientEnv, clientSchema } from "./schema.js";
+import * as dotenv from 'dotenv'
 
-const _clientEnv = clientSchema.safeParse(clientEnv);
+let _clientEnv = clientSchema.safeParse(clientEnv);
 
 export const formatErrors = (
   /** @type {import('zod').ZodFormattedError<Map<string,string>,string>} */
@@ -15,11 +16,22 @@ export const formatErrors = (
     .filter(Boolean);
 
 if (!_clientEnv.success) {
-  console.error(
-    "❌ Invalid environment variables:\n",
-    ...formatErrors(_clientEnv.error.format()),
-  );
-  throw new Error("Invalid environment variables");
+  console.warn('Failed to load client environment variables. Attempting to load alternatives.')
+
+  const result = dotenv.config()
+  if (result.error) {
+    throw new Error('Backup environment variables failed');
+  }
+
+  _clientEnv = clientSchema.safeParse(result.parsed);
+
+  if (!_clientEnv.success) {
+    console.error(
+      "❌ Invalid environment variables:\n",
+      ...formatErrors(_clientEnv.error.format()),
+    );
+    throw new Error("Invalid environment variables");
+  }
 }
 
 for (let key of Object.keys(_clientEnv.data)) {
