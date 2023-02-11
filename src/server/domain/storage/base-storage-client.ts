@@ -1,6 +1,6 @@
 import { cert, initializeApp, ServiceAccount } from "firebase-admin/app";
 import { getStorage, Storage } from "firebase-admin/storage";
-import { env } from "../../../env/server.mjs";
+import { env } from "../../../env/server.js";
 
 export default abstract class BaseStorageClient {
   protected storage: Storage;

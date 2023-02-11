@@ -3,7 +3,7 @@ import ws from "ws";
 import fetch from "node-fetch";
 import { appRouter } from "./trpc/router/_app";
 import { createContext } from "./trpc/context";
-import { env } from "../env/server.mjs";
+import { env } from "../env/server";
 
 if (!global.fetch) {
   (global as any).fetch = fetch;

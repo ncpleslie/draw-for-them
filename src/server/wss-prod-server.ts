@@ -3,7 +3,7 @@ import http from "http";
 import next from "next";
 import { parse } from "url";
 import ws from "ws";
-import { env } from "../env/server.mjs";
+import { env } from "../env/server";
 import { createContext } from "./trpc/context";
 import { appRouter } from "./trpc/router/_app";
 
