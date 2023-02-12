@@ -63,7 +63,7 @@ const UserSelectModalBody: React.FC<UserSelectModalBodyProps> = ({
   }
 
   return (
-    <div className="mt-8 flex max-h-[70vh] flex-row flex-wrap justify-center gap-2">
+    <div className="mt-8 flex max-h-[70vh] flex-row flex-wrap justify-center gap-4">
       {friends?.map((friend) => (
         <button
           className="neu-btn-small w-full rounded-2xl text-icon-inactive transition-all duration-300 hover:bg-slate-100/50 active:text-icon-active"

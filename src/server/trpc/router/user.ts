@@ -77,7 +77,9 @@ export const userRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      return await ctx.userService.getUsersByNameAsync(input.name);
+      return await ctx.userService.getUsersByNameAsync(
+        input.name.toLowerCase()
+      );
     }),
 
   sendUserImage: protectedProcedure
