@@ -56,7 +56,7 @@ const FriendHistoryModalBody: React.FC<FriendHistoryModalBodyProps> = ({
   return (
     <div className="mt-8 flex flex-col justify-center gap-4 text-icon-inactive">
       <div className="flex flex-row justify-between">
-        <p>Sent to {friend?.name}</p>
+        <p>Sent to {friend?.friends[0]?.name}</p>
         <p>({friend?.sentImages.length})</p>
       </div>
       <div className="neu-container-depressed rounded-xl p-4">
@@ -67,7 +67,7 @@ const FriendHistoryModalBody: React.FC<FriendHistoryModalBodyProps> = ({
         ))}
       </div>
       <div className="flex flex-row justify-between">
-        <p>Received from {friend?.name}</p>
+        <p>Received from {friend?.friends[0]?.name}</p>
         <p>({friend?.receivedImages.length})</p>
       </div>
       <div className="neu-container-depressed rounded-xl p-4">
@@ -81,7 +81,7 @@ const FriendHistoryModalBody: React.FC<FriendHistoryModalBodyProps> = ({
 
 const Profile: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ user, profile }) => {
+> = ({ profile }) => {
   const router = useRouter();
   const [name, setName] = useState(profile?.name);
   const [selectedFriend, setSelectedFriend] =

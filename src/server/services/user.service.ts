@@ -67,7 +67,7 @@ export default class UserService {
     currentUserId: string,
     friendId: string
   ) {
-    const history = await this.db.findMany({
+    const history = await this.db.findFirst({
       where: { id: currentUserId },
       include: {
         friends: {
@@ -78,10 +78,12 @@ export default class UserService {
         sentImages: {
           where: {
             senderId: currentUserId,
+            receiverId: friendId,
           },
         },
         receivedImages: {
           where: {
+            senderId: friendId,
             receiverId: currentUserId,
           },
         },
@@ -92,7 +94,7 @@ export default class UserService {
       throw new Error("Unable to find current user's friend history");
     }
 
-    return history[0];
+    return history;
   }
 
   public async addUserAsFriendByIdAsync(

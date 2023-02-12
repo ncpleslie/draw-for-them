@@ -30,7 +30,7 @@ const Header = ({}) => {
       <>
         {router.pathname !== "/" ? (
           <div className="mt-4">
-            <Btn className="h-12 w-12" onClicked={() => router.push("/")}>
+            <Btn className="h-12 w-12" onClicked={() => router.back()}>
               <Icon.Back />
             </Btn>
           </div>
