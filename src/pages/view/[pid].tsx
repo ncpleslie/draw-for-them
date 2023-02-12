@@ -3,8 +3,8 @@ import { trpc } from "../../utils/trpc";
 import { useRouter } from "next/router";
 
 import FullScreenCenter from "../../components/ui/FullScreenCenter";
-import Header from "../../components/header/Header";
 import LoadingIndicator from "../../components/ui/LoadingIndicator";
+import AuthAppShell from "../../layout/AuthAppShell";
 
 const View: NextPage = () => {
   const router = useRouter();
@@ -19,9 +19,7 @@ const View: NextPage = () => {
   });
 
   return (
-    <main className="app-container h-[100vh] overflow-hidden">
-      <Header />
-
+    <AuthAppShell>
       <div className="flex flex-col items-center justify-center p-4">
         {isLoading && (
           <FullScreenCenter>
@@ -37,7 +35,7 @@ const View: NextPage = () => {
 
         {error && <div>I&apos;m sorry. This image is no longer available</div>}
       </div>
-    </main>
+    </AuthAppShell>
   );
 };
 

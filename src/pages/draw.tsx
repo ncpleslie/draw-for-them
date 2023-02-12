@@ -2,20 +2,15 @@ import { NextPage } from "next";
 import { getSession, GetSessionParams } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
-import Header from "../components/header/Header";
 import FullScreenCenter from "../components/ui/FullScreenCenter";
 import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { Routes } from "../enums/routes.enum";
 import { trpc } from "../utils/trpc";
 import { toast } from "react-toastify";
-import {
-  BaseModalProps,
-  useModal,
-  useModalStore,
-} from "../components/ui/modal/Modal";
+import { BaseModalProps, useModal } from "../components/ui/modal/Modal";
 import { User } from "@prisma/client";
 import Icon from "../components/ui/Icon";
-import AppShell from "../components/AppShell";
+import AuthAppShell from "../layout/AuthAppShell";
 
 const DrawingArea = dynamic(() => import("../components/draw/DrawingArea"), {
   ssr: false,
@@ -68,7 +63,7 @@ const UserSelectModalBody: React.FC<UserSelectModalBodyProps> = ({
   }
 
   return (
-    <div className="mt-8 flex justify-center">
+    <div className="mt-8 flex max-h-[70vh] flex-row flex-wrap justify-center gap-2">
       {friends?.map((friend) => (
         <button
           className="neu-btn-small w-full rounded-2xl text-icon-inactive transition-all duration-300 hover:bg-slate-100/50 active:text-icon-active"
@@ -118,11 +113,11 @@ const Draw: NextPage = () => {
   };
 
   return (
-    <AppShell>
+    <AuthAppShell>
       <Suspense>
         <DrawingArea onSave={onSave} />
       </Suspense>
-    </AppShell>
+    </AuthAppShell>
   );
 };
 

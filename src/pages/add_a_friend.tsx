@@ -3,12 +3,12 @@ import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { InferGetServerSidePropsType, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import Header from "../components/header/Header";
 import Btn from "../components/ui/Btn";
 import FocusableInput from "../components/ui/FocusableInput";
 import Icon from "../components/ui/Icon";
 import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { Routes } from "../enums/routes.enum";
+import AuthAppShell from "../layout/AuthAppShell";
 import { createContext } from "../server/trpc/context";
 import { trpc } from "../utils/trpc";
 
@@ -79,8 +79,7 @@ const AddAFriend: NextPage<
   }, [addFriendSuccess]);
 
   return (
-    <div className="app-container">
-      <Header />
+    <AuthAppShell>
       <div className="max-w-screen flex max-h-full min-h-screen flex-col flex-wrap items-center pt-8">
         <div className="flex h-full w-full flex-col items-center justify-center gap-8 md:h-1/2 md:w-1/2">
           <div className="neu-container-raised flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 text-center">
@@ -178,7 +177,7 @@ const AddAFriend: NextPage<
           )}
         </div>
       </div>
-    </div>
+    </AuthAppShell>
   );
 };
 

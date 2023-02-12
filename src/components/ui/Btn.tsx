@@ -3,6 +3,7 @@ import Icon from "./Icon";
 
 interface BtnProps {
   onClicked?: () => void;
+  title?: string;
   loading?: boolean;
   active?: boolean;
   className?: string;
@@ -16,6 +17,7 @@ const Btn: React.FC<PropsWithChildren<BtnProps>> = ({
   className,
   type,
   loading,
+  title,
   onClicked,
 }) => {
   const btnContent = loading ? (
@@ -28,8 +30,9 @@ const Btn: React.FC<PropsWithChildren<BtnProps>> = ({
 
   return (
     <button
+      title={title}
       style={style}
-      className={`neu-btn-small flex flex-col justify-center items-center transition-all text-white text-4xl pb-2 pt-1 px-4 rounded-full ${className}`}
+      className={`neu-btn-small flex flex-col items-center justify-center rounded-full px-4 pb-2 pt-2 text-4xl text-white transition-all ${className}`}
       onClick={onClicked}
       type={type || "button"}
     >

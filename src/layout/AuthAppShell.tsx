@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
-import Header from "./header/Header";
+import Header from "../components/header/Header";
 
-const AppShell: React.FC<PropsWithChildren> = ({ children }) => {
+const AuthAppShell: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
       <main className="app-container h-screen overflow-hidden text-icon-inactive">
@@ -12,4 +12,4 @@ const AppShell: React.FC<PropsWithChildren> = ({ children }) => {
   );
 };
 
-export default AppShell;
+export default AuthAppShell;

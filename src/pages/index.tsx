@@ -6,9 +6,8 @@ import { trpc } from "../utils/trpc";
 import { createContext } from "../server/trpc/context";
 import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { Routes } from "../enums/routes.enum";
-import Header from "../components/header/Header";
 import { NotificationDrawEvent } from "../models/draw_event.model";
-import AppShell from "../components/AppShell";
+import AuthAppShell from "../layout/AuthAppShell";
 
 export async function getServerSideProps(context: CreateNextContextOptions) {
   const ctx = await createContext(context);
@@ -87,7 +86,7 @@ const Home: NextPage<
   };
 
   return (
-    <AppShell>
+    <AuthAppShell>
       <div className="flex w-screen flex-row flex-wrap items-center justify-center md:h-[90dvh] md:flex-nowrap">
         <DashboardBtn
           className="m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
@@ -121,7 +120,7 @@ const Home: NextPage<
           </div>
         </DashboardBtn>
       </div>
-    </AppShell>
+    </AuthAppShell>
   );
 };
 

@@ -23,6 +23,9 @@ import {
   faAngleUp,
   faBars,
   faTimeline,
+  faUserGroup,
+  faUserPen,
+  faCheck,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Pen: React.FC = () => {
@@ -117,6 +120,18 @@ const History: React.FC = () => {
   return <FontAwesomeIcon icon={faTimeline} />;
 };
 
+const UserGroup: React.FC = () => {
+  return <FontAwesomeIcon icon={faUserGroup} />;
+};
+
+const UserEdit: React.FC = () => {
+  return <FontAwesomeIcon icon={faUserPen} />;
+};
+
+const Check: React.FC = () => {
+  return <FontAwesomeIcon icon={faCheck} />;
+};
+
 const icon = {
   Pen,
   Circle,
@@ -141,6 +156,9 @@ const icon = {
   AngleUp,
   Bars,
   History,
+  UserGroup,
+  UserEdit,
+  Check,
 };
 
 export default icon;
