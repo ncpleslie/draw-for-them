@@ -4,6 +4,7 @@ import { protectedProcedure, router } from "../trpc";
 import { EventEmitterEvent } from "../../../enums/event-emitter-event.enum";
 import { observable } from "@trpc/server/observable";
 import { NotificationDrawEvent } from "../../../models/draw_event.model";
+import { awaitableDelay } from "../../../utils/helper.utils";
 
 const ee = new EventEmitter();
 
@@ -17,6 +18,20 @@ export const userRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
       await ctx.userService.addUserAsFriendByIdAsync(currentUserId, input.id);
+    }),
+
+  deleteFriendById: protectedProcedure
+    .input(
+      z.object({
+        id: z.string().trim(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const currentUserId = ctx.session.user.id;
+      return await ctx.userService.deleteFriendByIdAsync(
+        currentUserId,
+        input.id
+      );
     }),
 
   getAllImageEventsForUser: protectedProcedure.query(async ({ ctx }) => {
@@ -73,10 +88,12 @@ export const userRouter = router({
   getUsersByName: protectedProcedure
     .input(
       z.object({
-        name: z.string().trim(),
+        name: z.string().trim().min(3),
       })
     )
     .query(async ({ ctx, input }) => {
+      await awaitableDelay(500);
+
       return await ctx.userService.getUsersByNameAsync(
         input.name.toLowerCase()
       );
@@ -127,7 +144,7 @@ export const userRouter = router({
     .input(
       z
         .object({
-          name: z.string(),
+          name: z.string().trim().min(3),
         })
         .partial()
         .refine(

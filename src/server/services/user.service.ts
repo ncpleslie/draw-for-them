@@ -5,6 +5,20 @@ import DomainValidationError from "./errors/domain-validation.error";
 export default class UserService {
   constructor(private db: IUserDomain) {}
 
+  public async deleteFriendByIdAsync(userId: string, friendId: string) {
+    return await this.db.update({
+      where: { id: userId },
+      data: {
+        friends: {
+          disconnect: [{ id: friendId }],
+        },
+      },
+      include: {
+        friends: true,
+      },
+    });
+  }
+
   public async getUserFriendsAsync(userId: string) {
     const userWithFriends = await this.db.findFirst({
       where: { id: userId },

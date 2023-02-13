@@ -1,8 +1,10 @@
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { Disclosure, Transition } from "@headlessui/react";
 import { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { InferGetServerSidePropsType, NextPage } from "next";
 import { useRouter } from "next/router";
 import { use, useEffect, useState } from "react";
+import SlideDownFade from "../components/transitions/SlideDownFade";
 import Btn from "../components/ui/Btn";
 import FocusableInput from "../components/ui/FocusableInput";
 import Icon from "../components/ui/Icon";
@@ -82,50 +84,64 @@ const FriendHistoryModalBody: React.FC<FriendHistoryModalBodyProps> = ({
 const Profile: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ profile }) => {
+  const utils = trpc.useContext();
   const router = useRouter();
+  const [parent] = useAutoAnimate({ duration: 250 });
+
   const [name, setName] = useState(profile?.name);
   const [selectedFriend, setSelectedFriend] =
     useState<ArrayElement<typeof profile.friends>>();
+  const [friends, setFriends] = useState(profile?.friends);
   const [showFriends, setShowFriends] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [nameInput, setNameInput] = useState("");
 
-  const utils = trpc.useContext();
-
+  // Update the current user's profile.
   const {
-    data: updateProfileData,
-    mutate: mutateUpdateProfile,
-    isLoading: isLoadingEdit,
-    error,
+    data: editProfileData,
+    mutate: editProfileMutate,
+    isLoading: editProfileLoading,
+    error: editProfileError,
   } = trpc.user.updateUserProfile.useMutation({});
 
-  const handleFriendSearch = async (e: React.FormEvent): Promise<void> => {
-    e.preventDefault();
+  // Fetch friend's history data.
+  const { data: friendHistoryData, refetch: friendHistoryQuery } =
+    trpc.user.getHistoryByUserId.useQuery(
+      { friendId: selectedFriend?.id || "" },
+      {
+        enabled: false,
+      }
+    );
 
-    mutateUpdateProfile({ name: nameInput });
-  };
-
-  useEffect(() => {
-    if (updateProfileData && updateProfileData.name) {
-      setName(updateProfileData.name);
-    }
-  }, [updateProfileData]);
-
-  const { data, refetch } = trpc.user.getHistoryByUserId.useQuery(
-    { friendId: selectedFriend?.id || "" },
-    {
-      enabled: false,
-    }
-  );
+  // Delete friend from friend list
+  const { data: updatedFriendList, mutate: deleteFriendMutate } =
+    trpc.user.deleteFriendById.useMutation();
 
   const { show: showFriendHistoryModal } = useModal(
-    (state) => <FriendHistoryModalBody friend={data} state={state} />,
+    (state) => (
+      <FriendHistoryModalBody friend={friendHistoryData} state={state} />
+    ),
     selectedFriend?.name || ""
   );
 
+  // Update friend list when new friend list data is received.
+  useEffect(() => {
+    if (updatedFriendList) {
+      setFriends(updatedFriendList.friends);
+    }
+  }, [updatedFriendList]);
+
+  // Update selected friend name when friend's profile data updates.
+  useEffect(() => {
+    if (editProfileData && editProfileData.name) {
+      setName(editProfileData.name);
+    }
+  }, [editProfileData]);
+
+  // Fetch friend profile data when new friend is selected.
   useEffect(() => {
     if (selectedFriend) {
-      refetch();
+      friendHistoryQuery();
     }
 
     return () => {
@@ -135,9 +151,10 @@ const Profile: NextPage<
     };
   }, [selectedFriend]);
 
+  // Show friend modal when friend history data has loaded.
   useEffect(() => {
     (async () => {
-      if (data) {
+      if (friendHistoryData) {
         await showFriendHistoryModal();
       }
     })();
@@ -145,7 +162,13 @@ const Profile: NextPage<
     return () => {
       setSelectedFriend(undefined);
     };
-  }, [data]);
+  }, [friendHistoryData]);
+
+  const updateProfile = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+
+    editProfileMutate({ name: nameInput });
+  };
 
   const onProfileEditClicked = async () => {
     setShowFriends(false);
@@ -155,6 +178,10 @@ const Profile: NextPage<
   const onFriendListClicked = async () => {
     setShowEdit(false);
     setShowFriends((prev) => !prev);
+  };
+
+  const deleteFriend = (friend: ArrayElement<typeof profile.friends>) => {
+    deleteFriendMutate({ id: friend.id });
   };
 
   if (!profile) {
@@ -184,54 +211,12 @@ const Profile: NextPage<
             </Btn>
           </div>
         </div>
-        <Transition
-          className="flex w-full justify-center"
-          enter="transition duration-300 ease-out"
-          enterFrom="transform -translate-y-4 opacity-0"
-          enterTo="transform scale-100 opacity-100"
-          leave="transition duration-75 ease-out"
-          leaveFrom="transform scale-100 opacity-100"
-          leaveTo="transform -translate-y-4 opacity-0"
-          show={showFriends}
-        >
+
+        <SlideDownFade show={showEdit}>
           <div className="neu-container-raised m-8 flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2">
-            <h2>Friends ({profile.friends.length})</h2>
-
-            {profile.friends.map((friend) => (
-              <div
-                onClick={() => setSelectedFriend(friend)}
-                typeof="button"
-                tabIndex={1}
-                className="neu-btn flex w-full cursor-pointer flex-row items-center justify-between rounded-xl p-4 text-xl"
-                key={friend.id}
-                title={`Show timeline for ${friend.name}`}
-              >
-                <p>{friend.name}</p>
-                <Btn
-                  title={`Show timeline for ${friend.name}`}
-                  onClicked={() => setSelectedFriend(friend)}
-                >
-                  <Icon.History />
-                </Btn>
-              </div>
-            ))}
-          </div>
-        </Transition>
-
-        <Transition
-          className="flex w-full justify-center"
-          enter="transition duration-300 ease-out"
-          enterFrom="transform -translate-y-4 opacity-0"
-          enterTo="transform scale-100 opacity-100"
-          leave="transition duration-75 ease-out"
-          leaveFrom="transform scale-100 opacity-100"
-          leaveTo="transform -translate-y-4 opacity-0"
-          show={showEdit}
-        >
-          <div className="neu-container-raised m-8 flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 transition-all duration-500 md:h-1/2 md:w-1/2">
             <h2 className="text-lg">Edit Profile</h2>
             <form
-              onSubmit={handleFriendSearch}
+              onSubmit={updateProfile}
               className="flex w-full flex-col items-center justify-center gap-4 md:w-1/2 "
             >
               <label htmlFor="friend">Name</label>
@@ -243,17 +228,49 @@ const Profile: NextPage<
                   setNameInput((e.target as HTMLInputElement).value)
                 }
               />
-              {error && (
+              {editProfileError && (
                 <div className="neu-container-raised-error mt-4 rounded-lg p-2 text-center">
-                  <p>{error?.shape?.data.zodError?.formErrors}</p>
+                  <p>{editProfileError?.shape?.data.zodError?.formErrors}</p>
                 </div>
               )}
-              <Btn type="submit" className="mt-4" loading={isLoadingEdit}>
+              <Btn type="submit" className="mt-4" loading={editProfileLoading}>
                 <Icon.Check />
               </Btn>
             </form>
           </div>
-        </Transition>
+        </SlideDownFade>
+
+        <SlideDownFade show={showFriends}>
+          <div
+            ref={parent}
+            className="neu-container-raised m-8 flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2"
+          >
+            <h2>Friends ({friends.length})</h2>
+            {friends.map((friend) => (
+              <div
+                className="neu-container-depressed flex w-full flex-row items-center justify-between rounded-xl p-4 text-xl"
+                key={friend.id}
+              >
+                <p>{friend.name}</p>
+                <div className="flex gap-4">
+                  <Btn
+                    title={`Show timeline for ${friend.name}`}
+                    onClicked={() => setSelectedFriend(friend)}
+                  >
+                    <Icon.History />
+                  </Btn>
+                  <Btn
+                    className="!text-red-700"
+                    title={`Show timeline for ${friend.name}`}
+                    onClicked={() => deleteFriend(friend)}
+                  >
+                    <Icon.Trash />
+                  </Btn>
+                </div>
+              </div>
+            ))}
+          </div>
+        </SlideDownFade>
       </div>
     </AuthAppShell>
   );
