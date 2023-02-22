@@ -93,14 +93,23 @@ const Draw: NextPage = () => {
   );
 
   const onSave = async (image: string) => {
+    if (!data || !data.length) {
+      return;
+    }
+
     try {
-      const selectedFriend = await show();
-      if (!selectedFriend) {
-        return;
+      let selectedFriendId = data[0]!.id;
+      if (data.length > 1) {
+        const selectedFriend = await show();
+        if (!selectedFriend) {
+          return;
+        }
+
+        selectedFriendId = selectedFriend.id;
       }
 
       await sendImage.mutateAsync({
-        userId: selectedFriend.id,
+        userId: selectedFriendId,
         imageData: image,
       });
       toast.success("That masterpiece was sent!");
