@@ -26,6 +26,7 @@ import {
   faUserGroup,
   faUserPen,
   faCheck,
+  faHouse,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Pen: React.FC = () => {
@@ -132,6 +133,10 @@ const Check: React.FC = () => {
   return <FontAwesomeIcon icon={faCheck} />;
 };
 
+const Home: React.FC = () => {
+  return <FontAwesomeIcon icon={faHouse} />;
+};
+
 const icon = {
   Pen,
   Circle,
@@ -159,6 +164,7 @@ const icon = {
   UserGroup,
   UserEdit,
   Check,
+  Home,
 };
 
 export default icon;

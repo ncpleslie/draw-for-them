@@ -8,6 +8,7 @@ import { trpc } from "../../utils/trpc";
 import { useEffect, useState } from "react";
 import Menu from "./menu/Menu";
 import { NotificationDrawEvent } from "../../models/draw_event.model";
+import { Routes } from "../../enums/routes.enum";
 
 const Header = ({}) => {
   const router = useRouter();
@@ -28,10 +29,16 @@ const Header = ({}) => {
   return (
     <div className="app-container flex flex-row justify-between px-4">
       <>
-        {router.pathname !== "/" ? (
-          <div className="mt-4">
+        {router.pathname !== Routes.Root ? (
+          <div className="mt-4 flex flex-row gap-4">
             <Btn className="h-12 w-12" onClicked={() => router.back()}>
               <Icon.Back />
+            </Btn>
+            <Btn
+              className="h-12 w-12"
+              onClicked={() => router.push(Routes.Root)}
+            >
+              <Icon.Home />
             </Btn>
           </div>
         ) : (
