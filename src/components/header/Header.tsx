@@ -38,7 +38,7 @@ const Header = ({}) => {
               className="h-12 w-12"
               onClicked={() => router.push(Routes.Root)}
             >
-              <div className="text-3xl">
+              <div className="text-2xl">
                 <Icon.Home />
               </div>
             </Btn>

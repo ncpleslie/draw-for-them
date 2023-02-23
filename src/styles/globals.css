@@ -73,6 +73,13 @@
   color: #15e38a;
 }
 
+.neu-btn:active {
+  box-shadow: -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset -12px -12px 12px 0 rgba(255, 255, 255, 1),
+    inset 12px 12px 12px 0 rgba(0, 0, 0, 0.3);
+  color: #15e38a;
+}
+
 .neu-btn:active:focus {
   box-shadow: -12px -12px 12px 0 rgba(255, 255, 255, 1),
     inset -12px -12px 12px 0 rgba(255, 255, 255, 1),
@@ -113,6 +120,24 @@
   box-shadow: 7px 7px 13px #bebebe, -7px -7px 13px #ffffff;
   @apply outline-icon-active ring-icon-active;
   @apply bg-neu;
+}
+
+.neu-btn-small:active {
+  box-shadow: -3px -3px 3px 0 rgba(255, 255, 255, 1),
+    3px 3px 3px 0 rgba(0, 0, 0, 0.3),
+    inset -3px -3px 3px 0 rgba(255, 255, 255, 1),
+    inset 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
+  color: #15e38a;
+  @apply -translate-y-1 scale-y-95 transition duration-300 ease-in-out;
+}
+
+.neu-btn-small:focus {
+  box-shadow: -3px -3px 3px 0 rgba(255, 255, 255, 1),
+    3px 3px 3px 0 rgba(0, 0, 0, 0.3),
+    inset -3px -3px 3px 0 rgba(255, 255, 255, 1),
+    inset 3px 3px 3px 0 rgba(0, 0, 0, 0.3);
+  color: #15e38a;
+  @apply -translate-y-1 scale-y-95 transition duration-300 ease-in-out;
 }
 
 .neu-btn-small:active:focus {

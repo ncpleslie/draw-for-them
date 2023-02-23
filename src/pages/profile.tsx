@@ -66,7 +66,7 @@ const Profile: NextPage<
   return (
     <AuthAppShell>
       <div className="flex flex-col items-center justify-center">
-        <div className="neu-container-raised m-8 flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2">
+        <div className="neu-container-raised m-8 flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2">
           <div className="text-center">
             <h1 className="text-2xl">Hello there, {name}</h1>
           </div>

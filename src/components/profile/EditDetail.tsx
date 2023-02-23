@@ -32,7 +32,7 @@ const EditDetail: React.FC<EditDetailProps> = ({ onNameEdited }) => {
   }, [editProfileData]);
 
   return (
-    <div className="neu-container-raised m-8 flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2">
+    <div className="neu-container-raised mt-8 flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2">
       <h2 className="text-lg">Edit Profile</h2>
       <form
         onSubmit={updateProfile}

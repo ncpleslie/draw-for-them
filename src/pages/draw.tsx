@@ -74,7 +74,9 @@ const UserSelectModalBody: React.FC<UserSelectModalBodyProps> = ({
             <div className="text-5xl">
               <Icon.User />
             </div>
-            <p className="text-2xl">{friend.name || friend.email}</p>
+            <p className="w-full truncate text-2xl text-[2.5vh]">
+              {friend.name || friend.email}
+            </p>
           </div>
         </button>
       ))}

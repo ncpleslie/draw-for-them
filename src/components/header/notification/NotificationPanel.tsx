@@ -19,7 +19,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ events }) => {
       leaveFrom="transform scale-100 opacity-100"
       leaveTo="transform scale-95 opacity-0"
     >
-      <Popover.Panel className="absolute left-1/2 mt-3 w-96 -translate-x-[19rem] transform px-4">
+      <Popover.Panel className="absolute left-1/2 mt-3 w-80 -translate-x-[17.25rem] transform px-4 md:w-96 md:-translate-x-[19rem]">
         <div className="max-h-96 overflow-y-auto rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
           <div
             className="relative flex flex-col justify-center gap-4 bg-white py-2"

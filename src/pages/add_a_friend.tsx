@@ -82,7 +82,7 @@ const AddAFriend: NextPage<
   return (
     <AuthAppShell>
       <div className="flex flex-col items-center justify-center">
-        <div className="neu-container-raised m-4 flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:h-1/2 md:w-1/2">
+        <div className="neu-container-raised m-8 flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:h-1/2 md:w-1/2">
           <div>
             <h1 className="text-2xl">
               {friends?.length > 0
@@ -160,36 +160,35 @@ const AddAFriend: NextPage<
         >
           {!!foundUsers && foundUsers.length > 0 && (
             <div className="neu-container-raised m-4 flex max-h-[50vh] w-full flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2">
-              <h3 className="text-2xl">We have found you some friends!</h3>
+              <h3 className="text-center text-2xl">
+                We have found you some friends!
+              </h3>
               <div className="flex w-full flex-col gap-4 overflow-y-auto">
                 {foundUsers!.map((user) => (
                   <div
                     key={user.id}
-                    className="neu-container-depressed flex flex-col items-center justify-center gap-4 rounded-xl p-8"
+                    className="neu-container-depressed flex flex-row items-center justify-between gap-4 rounded-xl p-8"
                     onClick={() => handleAddAFriend(user)}
                   >
-                    <div className="neu-container rounded p-4 text-5xl text-icon-inactive">
-                      <Icon.User />
-                    </div>
-
                     <div>
-                      {user.name && <p>Name: {user.name}</p>}
-                      <p>Email: {user.email}</p>
+                      <p className="text-bold text-2xl"> {user.name}</p>
                     </div>
 
                     <Btn
                       onClicked={() => handleAddAFriend(user)}
                       active={!addFriendLoading}
-                      className="h-12 w-48"
+                      className="h-12 w-12"
                       loading={addFriendLoading}
                     >
                       {addFriendSuccess && (
-                        <div className="flex items-center justify-center text-icon-active">
+                        <div className="flex items-center justify-center text-2xl text-icon-active">
                           <Icon.UserAdded />
                         </div>
                       )}
                       {!addFriendLoading && !addFriendSuccess && (
-                        <Icon.AddUser />
+                        <div className="text-2xl">
+                          <Icon.AddUser />
+                        </div>
                       )}
                     </Btn>
                   </div>
