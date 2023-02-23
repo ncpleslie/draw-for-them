@@ -82,7 +82,7 @@ const AddAFriend: NextPage<
   return (
     <AuthAppShell>
       <div className="flex flex-col items-center justify-center">
-        <div className="neu-container-raised m-8 flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:h-1/2 md:w-1/2">
+        <div className="neu-container-raised mt-8 mb-6 flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:m-8 md:h-1/2 md:w-1/2">
           <div>
             <h1 className="text-2xl">
               {friends?.length > 0
@@ -128,7 +128,7 @@ const AddAFriend: NextPage<
         </FadeIn>
 
         <FadeIn show={!isFetched && !searchFriendLoading}>
-          <div className="neu-container-raised m-4 flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2">
+          <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 md:m-4 md:h-1/2 md:w-1/2">
             <div className="text-5xl text-icon-inactive">
               <Icon.Question />
             </div>
@@ -144,7 +144,7 @@ const AddAFriend: NextPage<
             !searchFriendLoading
           }
         >
-          <div className="neu-container-raised m-4 flex h-full w-full flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:h-1/2 md:w-1/2">
+          <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:m-4 md:h-1/2 md:w-1/2">
             <div className="text-5xl text-icon-inactive">
               <Icon.Question />
             </div>
@@ -159,19 +159,21 @@ const AddAFriend: NextPage<
           show={!!foundUsers && foundUsers.length > 0 && !searchFriendLoading}
         >
           {!!foundUsers && foundUsers.length > 0 && (
-            <div className="neu-container-raised m-4 flex max-h-[50vh] w-full flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2">
-              <h3 className="text-center text-2xl">
+            <div className="neu-container-raised flex max-h-[50vh] w-[90dvw] flex-col items-center justify-center gap-2 rounded-xl p-4 md:m-4 md:h-1/2 md:w-1/2 md:gap-6">
+              <h3 className="text-center text-lg md:text-2xl">
                 We have found you some friends!
               </h3>
               <div className="flex w-full flex-col gap-4 overflow-y-auto">
                 {foundUsers!.map((user) => (
                   <div
                     key={user.id}
-                    className="neu-container-depressed flex flex-row items-center justify-between gap-4 rounded-xl p-8"
+                    className="neu-container-depressed flex flex-row items-center justify-between gap-4 rounded-xl p-4 md:p-8"
                     onClick={() => handleAddAFriend(user)}
                   >
                     <div>
-                      <p className="text-bold text-2xl"> {user.name}</p>
+                      <p className="text-bold text-lg md:text-2xl">
+                        {user.name}
+                      </p>
                     </div>
 
                     <Btn

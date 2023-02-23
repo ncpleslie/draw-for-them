@@ -58,7 +58,7 @@ const FriendsDetail: React.FC<FriendsDetailProps> = ({ friends }) => {
   return (
     <div
       ref={parent}
-      className="neu-container-raised mt-8 flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 md:h-1/2 md:w-1/2"
+      className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 md:mt-8 md:h-1/2 md:w-1/2"
     >
       <h2>Friends ({friendsList.length})</h2>
       {friendsList.map((friend) => (
