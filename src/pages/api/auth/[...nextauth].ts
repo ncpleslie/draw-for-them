@@ -21,13 +21,16 @@ export const authOptions: NextAuthOptions = {
   // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
+    // This magic link auth process is based off https://www.ramielcreations.com/nexth-auth-magic-code
+    // and https://github.com/nextauthjs/next-auth/issues/4965#issuecomment-1189094806
     EmailProvider({
       server: env.EMAIL_SERVER,
       from: env.EMAIL_FROM,
       maxAge: 5 * 60,
       async generateVerificationToken() {
-        const random = Math.floor(1000000 + Math.random() * 900000).toString();
-        return Buffer.from(random).toString("hex").slice(0, 6);
+        // This isn't crypto safe.
+        // Needs updating
+        return [...Array(6)].map((_) => (Math.random() * 10) | 0).join``;
       },
       async sendVerificationRequest({
         identifier: email,
