@@ -22,4 +22,7 @@ const config = {
     NODE_ENV: process.env.NODE_ENV
   },
 };
-export default withSuperjson()(withPWA(config));
+
+
+
+export default withSuperjson()(withPWA({ dest: 'public' })(config));
