@@ -1,17 +1,24 @@
 import { NextPage } from "next";
 import { Routes } from "../enums/routes.enum";
-
-export async function getServerSideProps() {
-  return {
-    redirect: {
-      destination: Routes.SignIn,
-      permanent: false,
-    },
-  };
-}
+import { signOut } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import FullScreenCenter from "../components/ui/FullScreenCenter";
+import LoadingIndicator from "../components/ui/LoadingIndicator";
 
 const SignOut: NextPage = () => {
-  return <div>Signed Out</div>;
+  const router = useRouter();
+
+  useEffect(() => {
+    signOut();
+    router.replace(Routes.SignIn);
+  }, []);
+
+  return (
+    <FullScreenCenter>
+      <LoadingIndicator />
+    </FullScreenCenter>
+  );
 };
 
 export default SignOut;

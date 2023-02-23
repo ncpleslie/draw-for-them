@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import { InferGetServerSidePropsType, NextPage } from "next";
 import { CtxOrReq } from "next-auth/client/_utils";
 import { BuiltInProviderType } from "next-auth/providers";
 import {
@@ -40,17 +40,13 @@ export async function getServerSideProps(context: CtxOrReq | undefined) {
   };
 }
 
-interface SignInProps {
-  csrfToken?: string;
-  providers: Record<
-    LiteralUnion<BuiltInProviderType, string>,
-    ClientSafeProvider
-  > | null;
-}
-
-const SignIn: NextPage<SignInProps> = ({ providers, csrfToken }) => {
+const SignIn: NextPage<
+  InferGetServerSidePropsType<typeof getServerSideProps>
+> = ({ providers, csrfToken }) => {
   const { data: session, status } = useSession();
   const router = useRouter();
+
+  console.log(providers);
 
   useEffect(() => {
     if (session) {
@@ -81,15 +77,15 @@ const SignIn: NextPage<SignInProps> = ({ providers, csrfToken }) => {
             <EmailLogin csrfToken={csrfToken} onSubmit={handleEmailSubmit} />
           )}
         </div>
-        <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
-          {providers?.google && (
+        {providers?.google && (
+          <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
             <>
               <Btn onClicked={() => signIn(providers.google.id)}>
                 <p className="text-xl">Sign in with google</p>
               </Btn>
             </>
-          )}
-        </div>
+          </div>
+        )}
       </div>
     </>
   );
