@@ -1,0 +1,34 @@
+{
+  "name": "Draw For Them",
+  "description": "Draw For Them - An ephemeral image sharing social network",
+  "short_name": "DFT",
+  "theme_color": "#15e38a",
+  "background_color": "#eeeeee",
+  "display": "fullscreen",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "favicon-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-64x64.png",
+      "sizes": "64x64",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+    {
+      "src": "favicon-256x256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    }
+  ],
+  "splash_pages": null
+}

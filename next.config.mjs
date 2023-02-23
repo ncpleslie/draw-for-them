@@ -5,6 +5,7 @@
  */
 
 import { withSuperjson } from "next-superjson"
+import withPWA from "next-pwa"
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -21,4 +22,4 @@ const config = {
     NODE_ENV: process.env.NODE_ENV
   },
 };
-export default withSuperjson()(config);
+export default withSuperjson()(withPWA(config));
