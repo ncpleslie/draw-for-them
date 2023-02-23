@@ -11,10 +11,6 @@
     -webkit-tap-highlight-color: transparent;
     outline: none !important;
   }
-
-  input {
-    -webkit-appearance: none;
-  }
 }
 
 .app-container {

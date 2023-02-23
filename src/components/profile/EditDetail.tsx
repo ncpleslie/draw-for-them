@@ -38,7 +38,7 @@ const EditDetail: React.FC<EditDetailProps> = ({ onNameEdited }) => {
         onSubmit={updateProfile}
         className="flex w-full flex-col items-center justify-center gap-4 md:w-1/2 "
       >
-        <label htmlFor="friend">Name</label>
+        <label htmlFor="name">Name</label>
         <FocusableInput
           type={"text"}
           id={"name"}

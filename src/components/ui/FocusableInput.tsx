@@ -23,6 +23,9 @@ const FocusableInput: React.FC<PropsWithChildren<FocusableInputProps>> = ({
     <div className="flex w-full flex-col">
       <input
         className="neu-container rounded-xl px-3 py-2 text-icon-hover focus:border-icon-active focus:outline-none"
+        style={{
+          WebkitAppearance: "none",
+        }}
         type={type}
         id={id}
         placeholder={placeholder}
