@@ -1,22 +1,14 @@
 import { InferGetServerSidePropsType, NextPage } from "next";
 import { CtxOrReq } from "next-auth/client/_utils";
-import { BuiltInProviderType } from "next-auth/providers";
 import {
-  useSession,
   getProviders,
   signIn,
-  ClientSafeProvider,
-  LiteralUnion,
   getCsrfToken,
   getSession,
 } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
 import EmailLogin from "../components/signin/EmailLogin";
 import Btn from "../components/ui/Btn";
-import FullScreenCenter from "../components/ui/FullScreenCenter";
-import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { Routes } from "../enums/routes.enum";
 import UnauthAppShell from "../layout/UnauthAppShell";
 import EmailSignUpFormData from "../models/email-signup-form-data.model";
