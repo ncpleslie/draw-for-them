@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import FullScreenCenter from "../components/ui/FullScreenCenter";
 import LoadingIndicator from "../components/ui/LoadingIndicator";
+import UnauthAppShell from "../layout/UnauthAppShell";
 
 const SignOut: NextPage = () => {
   const router = useRouter();
@@ -15,9 +16,11 @@ const SignOut: NextPage = () => {
   }, []);
 
   return (
-    <FullScreenCenter>
-      <LoadingIndicator />
-    </FullScreenCenter>
+    <UnauthAppShell>
+      <FullScreenCenter>
+        <LoadingIndicator />
+      </FullScreenCenter>
+    </UnauthAppShell>
   );
 };
 

@@ -18,6 +18,7 @@ import Btn from "../components/ui/Btn";
 import FullScreenCenter from "../components/ui/FullScreenCenter";
 import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { Routes } from "../enums/routes.enum";
+import UnauthAppShell from "../layout/UnauthAppShell";
 import EmailSignUpFormData from "../models/email-signup-form-data.model";
 
 export async function getServerSideProps(context: CtxOrReq | undefined) {
@@ -46,8 +47,6 @@ const SignIn: NextPage<
   const { data: session, status } = useSession();
   const router = useRouter();
 
-  console.log(providers);
-
   useEffect(() => {
     if (session) {
       router.replace(Routes.Root);
@@ -60,18 +59,20 @@ const SignIn: NextPage<
 
   if (status === "loading") {
     return (
-      <FullScreenCenter>
-        <LoadingIndicator />
-      </FullScreenCenter>
+      <UnauthAppShell>
+        <FullScreenCenter>
+          <LoadingIndicator />
+        </FullScreenCenter>
+      </UnauthAppShell>
     );
   }
 
   return (
-    <>
+    <UnauthAppShell>
       <Head>
         <title>Draw For Them | Sign In</title>
       </Head>
-      <div className="app-container flex h-[100vh] w-full flex-col items-center justify-center gap-10">
+      <div className="app-container flex h-full w-full flex-col items-center justify-center gap-10">
         <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
           {providers?.email && (
             <EmailLogin csrfToken={csrfToken} onSubmit={handleEmailSubmit} />
@@ -87,7 +88,7 @@ const SignIn: NextPage<
           </div>
         )}
       </div>
-    </>
+    </UnauthAppShell>
   );
 };
 
