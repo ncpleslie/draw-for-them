@@ -44,28 +44,9 @@ export async function getServerSideProps(context: CtxOrReq | undefined) {
 const SignIn: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ providers, csrfToken }) => {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (session) {
-      router.replace(Routes.Root);
-    }
-  }, [session, router]);
-
   const handleEmailSubmit = async (emailFormData: EmailSignUpFormData) => {
     await signIn("email", { email: emailFormData.email });
   };
-
-  if (status === "loading") {
-    return (
-      <UnauthAppShell>
-        <FullScreenCenter>
-          <LoadingIndicator />
-        </FullScreenCenter>
-      </UnauthAppShell>
-    );
-  }
 
   return (
     <UnauthAppShell>
