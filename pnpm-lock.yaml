@@ -15,6 +15,7 @@ specifiers:
   '@trpc/server': 10.0.0-rc.4
   '@types/next-pwa': ^5.6.2
   '@types/node': ^18.0.0
+  '@types/nodemailer': ^6.4.7
   '@types/react': ^18.0.14
   '@types/react-dom': ^18.0.5
   '@types/ws': ^8.5.3
@@ -89,6 +90,7 @@ dependencies:
 devDependencies:
   '@types/next-pwa': 5.6.2_biqbaboplfbrettd7655fr4n2y
   '@types/node': 18.11.9
+  '@types/nodemailer': 6.4.7
   '@types/react': 18.0.25
   '@types/react-dom': 18.0.9
   '@types/ws': 8.5.3
@@ -2045,6 +2047,12 @@ packages:
 
   /@types/node/18.11.9:
     resolution: {integrity: sha512-CRpX21/kGdzjOpFsZSkcrXMGIBWMGNIHXXBVFSH+ggkftxg+XYP20TESbh+zFvFj3EQOl5byk0HTRn1IL6hbqg==}
+
+  /@types/nodemailer/6.4.7:
+    resolution: {integrity: sha512-f5qCBGAn/f0qtRcd4SEn88c8Fp3Swct1731X4ryPKqS61/A3LmmzN8zaEz7hneJvpjFbUUgY7lru/B/7ODTazg==}
+    dependencies:
+      '@types/node': 18.11.9
+    dev: true
 
   /@types/prop-types/15.7.5:
     resolution: {integrity: sha512-JCB8C6SnDoQf0cNycqd/35A7MjcnK+ZTqE7judS6o7utxUCg6imJg3QK2qzHKszlTjcj2cn+NwMB2i96ubpj7w==}
