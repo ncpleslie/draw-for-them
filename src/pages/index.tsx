@@ -89,22 +89,22 @@ const Home: NextPage<
     <AuthAppShell>
       <div className="flex w-screen flex-row flex-wrap items-center justify-center md:h-[90dvh] md:flex-nowrap">
         <DashboardBtn
-          className="m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
+          className="m-4 min-h-[39dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
           link={Routes.Draw}
         >
-          <>
+          <div className="flex flex-col items-center justify-center text-8xl md:text-9xl">
             <Icon.Pen />
             Draw
-          </>
+          </div>
         </DashboardBtn>
         <DashboardBtn
-          className="relative m-4 h-[42dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
+          className="relative m-4 min-h-[39dvh] w-[90dvw] md:w-[50%] xl:h-[85dvh]"
           disabled={!viewLink}
           link={viewLink ? viewLink : ""}
         >
-          <div className="relative flex flex-col">
+          <div className="relative flex flex-col text-8xl md:text-9xl">
             {drawEvents && drawEvents.length > 0 ? (
-              <div className="absolute right-10 -top-10 grid grid-cols-1 grid-rows-1 place-items-center text-5xl text-icon-active">
+              <div className="absolute right-7 -top-5 grid grid-cols-1 grid-rows-1 place-items-center text-5xl text-icon-active md:right-10 md:-top-10">
                 <div className="z-20 col-start-1 col-end-1 row-start-1 row-end-1 text-3xl text-white">
                   {drawEvents.length}
                 </div>

@@ -16,6 +16,7 @@ const DrawingArea: React.FC<DrawingAreaProps> = ({ onSave }) => {
   const [trash, setTrash] = useState(false);
   const [save, setSave] = useState(false);
   const [loading, setLoading] = useState(false);
+  const margin = 150;
 
   const handleOnUndoClicked = () => setUndo((prev) => !prev);
 
@@ -68,7 +69,7 @@ const DrawingArea: React.FC<DrawingAreaProps> = ({ onSave }) => {
     onSave: handleOnSave,
   };
 
-  const containerRef = useRef(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [drawAreaHeight, setDrawAreaHeight] = useState(0);
 
   const observer = useRef(
@@ -81,13 +82,13 @@ const DrawingArea: React.FC<DrawingAreaProps> = ({ onSave }) => {
         return;
       }
 
-      const margin = 150;
       setDrawAreaHeight(entries[0]!.contentRect.height - margin);
     })
   );
 
   useEffect(() => {
     if (containerRef.current) {
+      setDrawAreaHeight(containerRef.current.clientHeight - margin);
       observer.current.observe(containerRef.current);
     }
 
