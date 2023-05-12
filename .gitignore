@@ -42,3 +42,6 @@ yarn-error.log*
 
 dist/
 firebase-config.json
+
+public/sw*
+public/workbox*

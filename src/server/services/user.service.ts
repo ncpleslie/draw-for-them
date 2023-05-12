@@ -39,11 +39,13 @@ export default class UserService {
           {
             email: {
               contains: name,
+              mode: "insensitive",
             },
           },
           {
             name: {
               contains: name,
+              mode: "insensitive",
             },
           },
         ],
