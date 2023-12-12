@@ -71,6 +71,9 @@ dependencies:
   nodemailer:
     specifier: ^6.9.7
     version: 6.9.7
+  prisma:
+    specifier: ^4.9.0
+    version: 4.9.0
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -151,9 +154,6 @@ devDependencies:
   prettier-plugin-tailwindcss:
     specifier: ^0.1.13
     version: 0.1.13(prettier@2.7.1)
-  prisma:
-    specifier: ^4.9.0
-    version: 4.9.0
   tailwindcss:
     specifier: ^3.2.0
     version: 3.2.4(postcss@8.4.19)(ts-node@10.9.1)
@@ -1808,6 +1808,7 @@ packages:
   /@prisma/engines@4.9.0:
     resolution: {integrity: sha512-t1pt0Gsp+HcgPJrHFc+d/ZSAaKKWar2G/iakrE07yeKPNavDP3iVKPpfXP22OTCHZUWf7OelwKJxQgKAm5hkgw==}
     requiresBuild: true
+    dev: false
 
   /@protobufjs/aspromise@1.1.2:
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==}
@@ -6236,6 +6237,7 @@ packages:
     requiresBuild: true
     dependencies:
       '@prisma/engines': 4.9.0
+    dev: false
 
   /prop-types@15.8.1:
     resolution: {integrity: sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==}
