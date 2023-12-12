@@ -1,5 +1,4 @@
 import { PropsWithChildren } from "react";
-import Header from "../components/header/Header";
 
 const UnauthAppShell: React.FC<PropsWithChildren> = ({ children }) => {
   return (

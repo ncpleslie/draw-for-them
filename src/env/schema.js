@@ -21,10 +21,12 @@ export const serverSchema = z.object({
     // Since NextAuth automatically uses the VERCEL_URL if present.
     (str) => process.env.VERCEL_URL ?? str,
     // VERCEL_URL doesnt include `https` so it cant be validated as a URL
-    process.env.VERCEL ? z.string() : z.string().url(),
+    process.env.VERCEL ? z.string() : z.string().url()
   ),
   EMAIL_SERVER: z.string(),
   EMAIL_FROM: z.string(),
+  RESEND_API_KEY: z.string(),
+  RESEND_DOMAIN: z.string(),
   GOOGLE_ID: z.string(),
   GOOGLE_SECRET: z.string(),
 
@@ -42,7 +44,7 @@ export const serverSchema = z.object({
   STORAGE_TOKEN_URI: z.string(),
   STORAGE_AUTH_PROVIDER_CERT_URL: z.string(),
   STORAGE_CLIENT_CERT_URL: z.string(),
-  STORAGE_BUCKET: z.string()
+  STORAGE_BUCKET: z.string(),
 });
 
 /**

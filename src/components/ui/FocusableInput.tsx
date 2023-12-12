@@ -1,4 +1,4 @@
-import { ChangeEvent, PropsWithChildren } from "react";
+import { ChangeEvent, PropsWithChildren, useState } from "react";
 
 interface FocusableInputProps {
   type: React.HTMLInputTypeAttribute | undefined;
@@ -19,6 +19,14 @@ const FocusableInput: React.FC<PropsWithChildren<FocusableInputProps>> = ({
   onChange,
   onFocus,
 }) => {
+  const [value, setValue] = useState("");
+
+  const update = (e: ChangeEvent) => {
+    const value = (e.target as HTMLInputElement).value;
+    setValue(value);
+    onChange?.(e);
+  };
+
   return (
     <div className="flex w-full flex-col">
       <input
@@ -32,7 +40,8 @@ const FocusableInput: React.FC<PropsWithChildren<FocusableInputProps>> = ({
         required={required}
         name={name}
         onFocus={onFocus}
-        onChange={onChange}
+        onChange={update}
+        value={value}
       />
     </div>
   );

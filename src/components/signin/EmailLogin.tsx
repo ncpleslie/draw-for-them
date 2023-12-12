@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { SignUpFormId } from "../../enums/signup-form-id.enum";
 import EmailSignUpFormData from "../../models/email-signup-form-data.model";
 import Btn from "../ui/Btn";
@@ -14,6 +14,10 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
     [SignUpFormId.Email]: "",
   });
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setForm({ [SignUpFormId.Email]: "" });
+  }, []);
 
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,11 +52,11 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
       </div>
       <div className="flex flex-row gap-8">
         <Btn type="submit" loading={loading}>
-          <p className="text-xl">Sign Up</p>
+          <p className="text-lg">Sign Up</p>
         </Btn>
 
         <Btn type="submit" loading={loading}>
-          <p className="text-xl">Sign In</p>
+          <p className="text-lg">Sign In</p>
         </Btn>
       </div>
     </form>

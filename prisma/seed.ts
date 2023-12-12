@@ -8,7 +8,18 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  // This is deliberately left blank.
+  // Generate guest user
+  await prisma.user.upsert({
+    create: {
+      id: "guest",
+      email: "guest@guest.com",
+      emailVerified: new Date(),
+      name: "Guest",
+    },
+    where: { id: "guest" },
+    update: {},
+  });
+  console.log("Generated guest user");
 }
 
 main()

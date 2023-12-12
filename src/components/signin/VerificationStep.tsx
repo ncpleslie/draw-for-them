@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { KeyboardEvent, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import Btn from "../ui/Btn";
 import FocusableInput from "../ui/FocusableInput";
 
@@ -9,7 +9,7 @@ interface VerificationStepProps {
 }
 
 /**
- * User has inserted the email and now he can put the verification code
+ * User has inserted the email and now he can put in the verification code
  */
 export const VerificationStep: React.FC<VerificationStepProps> = ({
   email,
@@ -32,7 +32,10 @@ export const VerificationStep: React.FC<VerificationStepProps> = ({
   };
 
   return (
-    <div className="mx-4 mt-4 flex flex-col items-center justify-between gap-4">
+    <form
+      onSubmit={onReady}
+      className="mx-4 mt-4 flex flex-col items-center justify-between gap-4"
+    >
       <h2 className="text-center text-lg">
         Insert the magic code you received in your email
       </h2>
@@ -47,6 +50,6 @@ export const VerificationStep: React.FC<VerificationStepProps> = ({
       <Btn type="submit" onClicked={onReady}>
         <p className="text-xl">Continue</p>
       </Btn>
-    </div>
+    </form>
   );
 };

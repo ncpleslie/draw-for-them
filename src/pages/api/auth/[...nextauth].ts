@@ -1,12 +1,10 @@
 import NextAuth, { Theme, type NextAuthOptions } from "next-auth";
-// import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
-// Prisma adapter for NextAuth, optional and can be removed
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { Routes } from "../../../enums/routes.enum";
-import { createTransport } from "nodemailer";
 import { prisma } from "../../../server/domain/db/client";
 import { env } from "../../../env/server";
+import { Resend } from "resend";
 
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
@@ -27,43 +25,33 @@ export const authOptions: NextAuthOptions = {
       server: env.EMAIL_SERVER,
       from: env.EMAIL_FROM,
       maxAge: 5 * 60,
+      name: "email",
       async generateVerificationToken() {
         // This isn't crypto safe.
         // Needs updating
         return [...Array(6)].map((_) => (Math.random() * 10) | 0).join(``);
       },
-      async sendVerificationRequest({
-        identifier: email,
-        url,
-        token,
-        provider,
-        theme,
-      }) {
-        const { server, from } = provider;
+      async sendVerificationRequest({ identifier: email, url, token, theme }) {
         const { host } = new URL(url);
 
-        const result = await createTransport(server).sendMail({
+        const resend = new Resend(env.RESEND_API_KEY);
+        await resend.emails.send({
+          from: env.EMAIL_FROM,
           to: email,
-          from,
           subject: `Draw For Them Access Code: ${token}`,
-          text: text({ url, host, token }),
           html: html({ url, host, theme, token }),
         });
-        const failed = result.rejected.concat(result.pending).filter(Boolean);
-        if (failed.length) {
-          throw new Error(`Email(s) (${failed.join(", ")}) could not be sent`);
-        }
       },
     }),
-    // EmailProvider({
-    //   server: env.EMAIL_SERVER,
-    //   from: env.EMAIL_FROM,
-    // }),
-    // GoogleProvider({
-    //   clientId: env.GOOGLE_ID,
-    //   clientSecret: env.GOOGLE_SECRET,
-    // }),
-    // ...add more providers here
+    // {
+    //   name: "anonymous",
+    //   type: "oauth",
+    //   id: "anonymous",
+    //   authorization: { params: { prompt: "none" }, url: "" },
+    //   profile(profile) {
+    //     return { name: "Guest", email: "guest@guest.com", id: "guest" } as User;
+    //   },
+    // },
   ],
   pages: {
     signIn: Routes.SignIn,
@@ -75,6 +63,18 @@ export const authOptions: NextAuthOptions = {
 };
 
 export default NextAuth(authOptions);
+
+// export default async (req: NextApiRequest, res: NextApiResponse) => {
+//   console.log("ERRRRRO", req.query.error);
+//   const isSilentAuthError = req.query.error === "OAuthSignin";
+
+//   if (isSilentAuthError) {
+//     res.redirect(302, req.cookies["next-auth.callback-url"] ?? "/");
+//     return;
+//   }
+
+//   return NextAuth(authOptions)(req, res);
+// };
 
 /**
  * Email HTML body
