@@ -20,13 +20,11 @@ export const VerificationStep: React.FC<VerificationStepProps> = ({
 
   const onReady = (e: React.FormEvent) => {
     e.preventDefault();
-    useCallback(() => {
-      router.replace(
-        `/api/auth/callback/email?email=${encodeURIComponent(
-          email
-        )}&token=${code}${callbackUrl ? `&callbackUrl=${callbackUrl}` : ""}`
-      );
-    }, [callbackUrl, code, email]);
+    router.replace(
+      `/api/auth/callback/email?email=${encodeURIComponent(
+        email
+      )}&token=${code}${callbackUrl ? `&callbackUrl=${callbackUrl}` : ""}`
+    );
   };
 
   const handleFormUpdate = (e: React.ChangeEvent) => {
