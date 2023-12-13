@@ -4,10 +4,12 @@ Draw For Them is an ephemeral image sharing and drawing application that allows 
 
 ## How to run
 
-Head on over to https://draw-for-them-production.up.railway.app/
+Head on over to https://drawforthem.nickleslie.dev
 
-Alternatively, clone this repo, create a `.env` in the root of the application that is the same as the `.env.example` file.
+## Features
 
-- Add a `NEXTAUTH_SECRET`
-- Add a email server to the `EMAIL_SERVER` and `EMAIL_FROM` fields. You can authorize smtp on a gmail account for testing purposes
-- Update the `STORAGE_*` values. This application is using Firebase for storage at this stage
+Features to come
+
+## Development
+
+`Development steps to come`

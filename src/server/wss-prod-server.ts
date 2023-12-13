@@ -39,7 +39,7 @@ app.prepare().then(() => {
   });
   server.listen(env.PORT, "0.0.0.0", () => {
     const address = server.address();
-    console.log(`Next address: ${address?.toString()}`);
+    console.log(`Next address: ${JSON.stringify(address)}`);
     console.log(
       `> Server listening at http://localhost:${env.PORT} as ${env.NODE_ENV}`
     );
