@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import Btn from "../ui/Btn";
 import FocusableInput from "../ui/FocusableInput";
 
@@ -18,13 +18,16 @@ export const VerificationStep: React.FC<VerificationStepProps> = ({
   const router = useRouter();
   const [code, setCode] = useState("");
 
-  const onReady = useCallback(() => {
-    router.replace(
-      `/api/auth/callback/email?email=${encodeURIComponent(
-        email
-      )}&token=${code}${callbackUrl ? `&callbackUrl=${callbackUrl}` : ""}`
-    );
-  }, [callbackUrl, code, email]);
+  const onReady = (e: React.FormEvent) => {
+    e.preventDefault();
+    useCallback(() => {
+      router.replace(
+        `/api/auth/callback/email?email=${encodeURIComponent(
+          email
+        )}&token=${code}${callbackUrl ? `&callbackUrl=${callbackUrl}` : ""}`
+      );
+    }, [callbackUrl, code, email]);
+  };
 
   const handleFormUpdate = (e: React.ChangeEvent) => {
     const value = (e.target as HTMLInputElement).value;
@@ -47,7 +50,7 @@ export const VerificationStep: React.FC<VerificationStepProps> = ({
         onChange={(e) => handleFormUpdate(e)}
       />
 
-      <Btn type="submit" onClicked={onReady}>
+      <Btn type="submit">
         <p className="text-xl">Continue</p>
       </Btn>
     </form>
