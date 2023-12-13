@@ -37,9 +37,11 @@ app.prepare().then(() => {
     console.log("SIGTERM");
     handler.broadcastReconnectNotification();
   });
-  server.listen(env.PORT);
-
-  console.log(
-    `> Server listening at http://localhost:${env.PORT} as ${env.NODE_ENV}`
-  );
+  server.listen(env.PORT, "0.0.0.0", () => {
+    const address = server.address();
+    console.log(`Next address: ${address}`);
+    console.log(
+      `> Server listening at http://localhost:${env.PORT} as ${env.NODE_ENV}`
+    );
+  });
 });
