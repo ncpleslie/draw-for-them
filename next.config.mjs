@@ -4,8 +4,8 @@
  * This is especially useful for Docker builds.
  */
 
-import { withSuperjson } from "next-superjson"
-import withPWA from "next-pwa"
+import { withSuperjson } from "next-superjson";
+import withPWA from "next-pwa";
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -19,10 +19,8 @@ const config = {
     // Will be available on both server and client
     APP_URL: process.env.APP_URL,
     WS_URL: process.env.WS_URL,
-    NODE_ENV: process.env.NODE_ENV
+    NODE_ENV: process.env.NODE_ENV,
   },
 };
 
-
-
-export default withSuperjson()(withPWA({ dest: 'public' })(config));
+export default withSuperjson()(withPWA({ dest: "public" })(config));
