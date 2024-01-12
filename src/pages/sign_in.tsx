@@ -7,11 +7,9 @@ import {
   getSession,
 } from "next-auth/react";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import EmailLogin from "../components/signin/EmailLogin";
 import { VerificationStep } from "../components/signin/VerificationStep";
-import Btn from "../components/ui/Btn";
 import { Routes } from "../enums/routes.enum";
 import UnauthAppShell from "../layout/UnauthAppShell";
 import type EmailSignUpFormData from "../models/email-signup-form-data.model";
@@ -64,7 +62,7 @@ const SignIn: NextPage<
                 </p>
                 <p className="text-lg">
                   Find your friends, draw an image, and send it to them. Once
-                  they view it, it's gone forever
+                  they view it, it&apos;s gone forever
                 </p>
               </blockquote>
             </div>
@@ -79,7 +77,7 @@ const SignIn: NextPage<
                   Enter your email below to create your account
                 </p>
                 <p className="text-muted-foreground text-sm">
-                  You'll be emailed a magic code to continue the sign up
+                  You&apos;ll be emailed a magic code to continue the sign up
                 </p>
               </div>
               <div className="mx-4 grid gap-6 md:mx-0">
