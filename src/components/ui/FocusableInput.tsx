@@ -18,7 +18,7 @@ const FocusableInput: React.FC<PropsWithChildren<FocusableInputProps>> = ({
   placeholder,
   required,
   name,
-  autocomplete,
+  autocomplete = true,
   onChange,
   onFocus,
 }) => {

@@ -21,6 +21,23 @@ export default class UserService {
    * @returns - The user with the friend deleted.
    */
   public async deleteFriendByIdAsync(userId: string, friendId: string) {
+    const user = await this.db.findUnique({
+      where: { id: userId },
+      include: { friends: true },
+    });
+
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    const friendIndex = user.friends.findIndex(
+      (friend) => friend.id === friendId
+    );
+
+    if (friendIndex === -1) {
+      return user;
+    }
+
     return await this.db.update({
       where: { id: userId },
       data: {

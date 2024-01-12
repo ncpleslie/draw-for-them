@@ -82,7 +82,7 @@ const AddAFriend: NextPage<
   return (
     <AuthAppShell>
       <div className="flex h-full flex-col items-center justify-start">
-        <div className="neu-container-raised mt-8 mb-6 flex  w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:m-8 md:h-1/2 md:w-1/2">
+        <div className="neu-container-raised mt-8 mb-6 flex  w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:m-8    md:w-1/2">
           <div>
             <h1 className="text-2xl">
               {friends?.length > 0
@@ -129,7 +129,7 @@ const AddAFriend: NextPage<
         </FadeIn>
 
         <FadeIn show={!isFetched && !searchFriendLoading}>
-          <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 md:m-4 md:h-1/2 md:w-1/2">
+          <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 md:m-4 md:w-1/2">
             <div className="text-5xl text-icon-inactive">
               <Icon.Question />
             </div>
@@ -145,7 +145,7 @@ const AddAFriend: NextPage<
             !searchFriendLoading
           }
         >
-          <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:m-4 md:h-1/2 md:w-1/2">
+          <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:m-4 md:w-1/2">
             <div className="text-5xl text-icon-inactive">
               <Icon.Question />
             </div>
@@ -160,7 +160,7 @@ const AddAFriend: NextPage<
           show={!!foundUsers && foundUsers.length > 0 && !searchFriendLoading}
         >
           {!!foundUsers && foundUsers.length > 0 && (
-            <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-2 rounded-xl p-4 md:m-4 md:h-1/2 md:w-1/2 md:gap-6">
+            <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-2 rounded-xl p-4 md:m-4 md:w-1/2 md:gap-6">
               <h3 className="text-center text-lg md:text-2xl">
                 We have found you some friends!
               </h3>

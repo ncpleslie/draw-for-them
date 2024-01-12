@@ -37,14 +37,14 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
   return (
     <form
       onSubmit={handleFormSubmit}
-      className="mx-4 mt-4 flex flex-col items-center justify-between gap-4"
+      className="mx-4 mt-4 flex w-full flex-col items-center justify-between gap-4"
     >
-      <div className="flex h-full flex-col justify-center gap-4">
+      <div className="flex h-full w-full flex-col justify-center gap-4">
         <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
         <FocusableInput
           type={"email"}
           id={SignUpFormId.Email}
-          placeholder={"Email"}
+          placeholder={"stickman@example.com"}
           name={SignUpFormId.Email}
           required
           onChange={(e) => handleFormUpdate(SignUpFormId.Email, e)}
@@ -52,11 +52,7 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
       </div>
       <div className="flex flex-row gap-8">
         <Btn type="submit" loading={loading}>
-          <p className="text-lg">Sign Up</p>
-        </Btn>
-
-        <Btn type="submit" loading={loading}>
-          <p className="text-lg">Sign In</p>
+          <p className="text-lg">Continue</p>
         </Btn>
       </div>
     </form>
