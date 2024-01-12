@@ -23,12 +23,11 @@ export const serverSchema = z.object({
     // VERCEL_URL doesnt include `https` so it cant be validated as a URL
     process.env.VERCEL ? z.string() : z.string().url()
   ),
-  EMAIL_SERVER: z.string(),
+
+  // Email Processing
   EMAIL_FROM: z.string(),
   RESEND_API_KEY: z.string(),
   RESEND_DOMAIN: z.string(),
-  GOOGLE_ID: z.string(),
-  GOOGLE_SECRET: z.string(),
 
   // Database
   DATABASE_URL: z.string().url(),
@@ -53,15 +52,18 @@ export const serverSchema = z.object({
  * To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 export const clientSchema = z.object({
-  // NEXT_PUBLIC_BAR: z.string(),
+  NEXT_PUBLIC_APP_URL: z.string(),
+  NEXT_PUBLIC_WS_URL: z.string(),
+  NODE_ENV: z.enum(["development", "test", "production"]),
 });
 
-/**
- * You can't destruct `process.env` as a regular object, so you have to do
- * it manually here. This is because Next.js evaluates this at build time,
- * and only used environment variables are included in the build.
- * @type {{ [k in keyof z.infer<typeof clientSchema>]: z.infer<typeof clientSchema>[k] | undefined }}
- */
-export const clientEnv = {
-  // NEXT_PUBLIC_BAR: process.env.NEXT_PUBLIC_BAR,
-};
+export const formatErrors = (
+  /** @type {import('zod').ZodFormattedError<Map<string,string>,string>} */
+  errors
+) =>
+  Object.entries(errors)
+    .map(([name, value]) => {
+      if (value && "_errors" in value)
+        return `${name}: ${value._errors.join(", ")}\n`;
+    })
+    .filter(Boolean);

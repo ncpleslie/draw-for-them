@@ -1,9 +1,9 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 const UnauthAppShell: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
-      <main className="app-container h-screen h-[100dvh] overflow-hidden overflow-y-hidden text-icon-inactive">
+      <main className="app-container overflow-x-hidden text-icon-inactive h-d-screen">
         {children}
       </main>
     </>

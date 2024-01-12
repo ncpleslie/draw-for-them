@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { trpc } from "../../utils/trpc";
+import type { trpc } from "../../utils/trpc";
 import LoadingIndicator from "../ui/LoadingIndicator";
-import { BaseModalProps } from "../ui/modal/Modal";
+import type { BaseModalProps } from "../ui/modal/Modal";
 
 interface FriendDetailModalBodyProps extends BaseModalProps {
   friend?: { id: string; name: string | null };

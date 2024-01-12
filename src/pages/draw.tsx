@@ -1,5 +1,6 @@
-import { NextPage } from "next";
-import { getSession, GetSessionParams } from "next-auth/react";
+import type { NextPage } from "next";
+import type { GetSessionParams } from "next-auth/react";
+import { getSession } from "next-auth/react";
 import dynamic from "next/dynamic";
 import { Suspense } from "react";
 import FullScreenCenter from "../components/ui/FullScreenCenter";
@@ -7,8 +8,9 @@ import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { Routes } from "../enums/routes.enum";
 import { trpc } from "../utils/trpc";
 import { toast } from "react-toastify";
-import { BaseModalProps, useModal } from "../components/ui/modal/Modal";
-import { User } from "@prisma/client";
+import type { BaseModalProps} from "../components/ui/modal/Modal";
+import { useModal } from "../components/ui/modal/Modal";
+import type { User } from "@prisma/client";
 import Icon from "../components/ui/Icon";
 import AuthAppShell from "../layout/AuthAppShell";
 

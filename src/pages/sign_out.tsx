@@ -1,4 +1,4 @@
-import { NextPage } from "next";
+import type { NextPage } from "next";
 import { Routes } from "../enums/routes.enum";
 import { signOut } from "next-auth/react";
 import { useEffect } from "react";

@@ -17,10 +17,14 @@ const config = {
   },
   publicRuntimeConfig: {
     // Will be available on both server and client
-    APP_URL: process.env.APP_URL,
-    WS_URL: process.env.WS_URL,
+    NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
+    NEXT_PUBLIC_WS_URL: process.env.NEXT_PUBLIC_WS_URL,
     NODE_ENV: process.env.NODE_ENV,
   },
 };
 
-export default withSuperjson()(withPWA({ dest: "public" })(config));
+export default withSuperjson()(
+  withPWA({ disable: process.env.NODE_ENV === "development", dest: "public" })(
+    config
+  )
+);

@@ -1,4 +1,5 @@
-import { ChangeEvent, PropsWithChildren, useState } from "react";
+import type { ChangeEvent, PropsWithChildren } from "react";
+import { useState } from "react";
 
 interface FocusableInputProps {
   type: React.HTMLInputTypeAttribute | undefined;
@@ -6,6 +7,7 @@ interface FocusableInputProps {
   placeholder?: string;
   required?: boolean;
   name?: string;
+  autocomplete?: boolean;
   onChange?: (e: ChangeEvent) => void;
   onFocus?: () => void;
 }
@@ -16,6 +18,7 @@ const FocusableInput: React.FC<PropsWithChildren<FocusableInputProps>> = ({
   placeholder,
   required,
   name,
+  autocomplete,
   onChange,
   onFocus,
 }) => {
@@ -42,6 +45,7 @@ const FocusableInput: React.FC<PropsWithChildren<FocusableInputProps>> = ({
         onFocus={onFocus}
         onChange={update}
         value={value}
+        autoComplete={autocomplete ? "on" : "off"}
       />
     </div>
   );

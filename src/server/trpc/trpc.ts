@@ -1,7 +1,7 @@
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
-import DomainNotFoundError from "../services/errors/domain-not-found.error";
+import DomainNotFoundError from "../services/errors/not-found.error";
 
 import { type Context } from "./context";
 

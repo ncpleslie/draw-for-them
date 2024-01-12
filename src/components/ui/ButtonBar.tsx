@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ButtonBarBtn from "../../models/button-bar-btn.model";
+import type ButtonBarBtn from "../../models/button-bar-btn.model";
 import Btn from "./Btn";
 
 interface ButtonBarProps {

@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import Icon from "./Icon";
 
 interface BtnProps {

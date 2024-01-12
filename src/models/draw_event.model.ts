@@ -1,4 +1,4 @@
-import { ImageEvent, User } from "@prisma/client";
+import type { ImageEvent, ImageEventWithSender } from "../server/domain/db/client";
 
 export default class BaseDrawEvent {
   constructor(data: ImageEvent) {
@@ -16,8 +16,6 @@ export default class BaseDrawEvent {
     };
   }
 }
-
-type ImageEventWithSender = ImageEvent & { sender: User };
 
 export class NotificationDrawEvent extends BaseDrawEvent {
   constructor(data: any);

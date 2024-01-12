@@ -1,3 +1,6 @@
+/**
+ * Routes enum of all routes in the app.
+ */
 export enum Routes {
   Root = "/",
   Draw = "/draw",

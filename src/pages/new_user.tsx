@@ -1,6 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { NextPage, InferGetServerSidePropsType } from "next";
+import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
+import type { NextPage, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Btn from "../components/ui/Btn";

@@ -4,7 +4,7 @@ import DashboardBtn from "../components/ui/DashboardBtn";
 import Icon from "../components/ui/Icon";
 import { trpc } from "../utils/trpc";
 import { createContext } from "../server/trpc/context";
-import { CreateNextContextOptions } from "@trpc/server/adapters/next";
+import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { Routes } from "../enums/routes.enum";
 import { NotificationDrawEvent } from "../models/draw_event.model";
 import AuthAppShell from "../layout/AuthAppShell";

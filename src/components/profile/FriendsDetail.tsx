@@ -1,6 +1,6 @@
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useEffect, useState } from "react";
-import { ArrayElement } from "../../utils/helper.utils";
+import type { ArrayElement } from "../../utils/helper.utils";
 import { trpc } from "../../utils/trpc";
 import Btn from "../ui/Btn";
 import Icon from "../ui/Icon";

@@ -46,6 +46,7 @@ export const VerificationStep: React.FC<VerificationStepProps> = ({
         type="text"
         placeholder="e.g. 123456"
         onChange={(e) => handleFormUpdate(e)}
+        autocomplete={false}
       />
 
       <Btn type="submit">

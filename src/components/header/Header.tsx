@@ -7,7 +7,7 @@ import Notification from "./notification/Notification";
 import { trpc } from "../../utils/trpc";
 import { useEffect, useState } from "react";
 import Menu from "./menu/Menu";
-import { NotificationDrawEvent } from "../../models/draw_event.model";
+import type { NotificationDrawEvent } from "../../models/draw_event.model";
 import { Routes } from "../../enums/routes.enum";
 
 const Header = ({}) => {

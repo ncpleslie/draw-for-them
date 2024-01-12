@@ -1,4 +1,9 @@
-import { PrismaClient, ImageEvent, User } from "@prisma/client";
+import type {
+  ImageEvent as PrismaImageEvent,
+  User} from "@prisma/client";
+import {
+  PrismaClient
+} from "@prisma/client";
 import { env } from "../../../env/server.js";
 
 declare global {
@@ -17,9 +22,12 @@ if (env.NODE_ENV !== "production") {
   global.prisma = prisma;
 }
 
+export type ImageEvent = PrismaImageEvent;
 export type ImageEventWithSender = ImageEvent & { sender: User };
 type UserDomainType = typeof prisma.user;
 type ImageEventType = typeof prisma.imageEvent;
 
-export interface IUserDomain extends UserDomainType {}
-export interface IImageEventDomain extends ImageEventType {}
+export type IUserDomain = UserDomainType
+export const UserDB = prisma.user as IUserDomain;
+export type IImageEventDomain = ImageEventType
+export const ImageEventDB = prisma.imageEvent as IImageEventDomain;

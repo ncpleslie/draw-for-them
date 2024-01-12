@@ -1,6 +1,6 @@
 import Icon from "../../ui/Icon";
 import Link from "next/link";
-import { NotificationDrawEvent } from "../../../models/draw_event.model";
+import type { NotificationDrawEvent } from "../../../models/draw_event.model";
 
 interface NotificationItemProps {
   event: NotificationDrawEvent;

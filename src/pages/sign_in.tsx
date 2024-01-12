@@ -1,5 +1,5 @@
-import { InferGetServerSidePropsType, NextPage } from "next";
-import { CtxOrReq } from "next-auth/client/_utils";
+import type { InferGetServerSidePropsType, NextPage } from "next";
+import type { CtxOrReq } from "next-auth/client/_utils";
 import {
   getProviders,
   signIn,
@@ -8,13 +8,13 @@ import {
 } from "next-auth/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState } from "react";
 import EmailLogin from "../components/signin/EmailLogin";
 import { VerificationStep } from "../components/signin/VerificationStep";
 import Btn from "../components/ui/Btn";
 import { Routes } from "../enums/routes.enum";
 import UnauthAppShell from "../layout/UnauthAppShell";
-import EmailSignUpFormData from "../models/email-signup-form-data.model";
+import type EmailSignUpFormData from "../models/email-signup-form-data.model";
 
 export async function getServerSideProps(context: CtxOrReq | undefined) {
   const session = await getSession(context);
@@ -39,6 +39,33 @@ export async function getServerSideProps(context: CtxOrReq | undefined) {
 const SignIn: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ providers, csrfToken, host }) => {
+  return (
+    <UnauthAppShell>
+      <Head>
+        <title>Draw For Them | Sign In</title>
+      </Head>
+      <div className="app-container flex h-full w-full flex-col items-center justify-center gap-10">
+        <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4 text-center">
+          <h1>Draw For Them</h1>
+          <p>The ephemeral drawing application</p>
+        </div>
+        {providers?.email && csrfToken && host && (
+          <EmailLoginSection csrfToken={csrfToken} host={host} />
+        )}
+      </div>
+    </UnauthAppShell>
+  );
+};
+
+interface EmailLoginSectionProps {
+  csrfToken: string;
+  host: string;
+}
+
+const EmailLoginSection: React.FC<EmailLoginSectionProps> = ({
+  csrfToken,
+  host,
+}) => {
   const [showVerificationStep, setShowVerificationStep] = useState(false);
   const [email, setEmail] = useState("");
   const handleEmailSubmit = async (emailFormData: EmailSignUpFormData) => {
@@ -48,30 +75,14 @@ const SignIn: NextPage<
   };
 
   return (
-    <UnauthAppShell>
-      <Head>
-        <title>Draw For Them | Sign In</title>
-      </Head>
-      <div className="app-container flex h-full w-full flex-col items-center justify-center gap-10">
-        <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
-          {providers?.email && !showVerificationStep && (
-            <EmailLogin csrfToken={csrfToken} onSubmit={handleEmailSubmit} />
-          )}
-          {showVerificationStep && (
-            <VerificationStep email={email} callbackUrl={`https://${host}`} />
-          )}
-        </div>
-        {providers?.google && (
-          <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
-            <>
-              <Btn onClicked={() => signIn(providers.google.id)}>
-                <p className="text-xl">Sign in with google</p>
-              </Btn>
-            </>
-          </div>
-        )}
-      </div>
-    </UnauthAppShell>
+    <div className="neu-container-raised flex w-72 flex-col items-center justify-center rounded-xl p-4">
+      {!showVerificationStep && (
+        <EmailLogin csrfToken={csrfToken} onSubmit={handleEmailSubmit} />
+      )}
+      {showVerificationStep && (
+        <VerificationStep email={email} callbackUrl={`https://${host}`} />
+      )}
+    </div>
   );
 };
 

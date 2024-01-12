@@ -1,6 +1,6 @@
-import { User } from "@prisma/client";
-import { CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { InferGetServerSidePropsType, NextPage } from "next";
+import type { User } from "@prisma/client";
+import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
+import type { InferGetServerSidePropsType, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import EditDetail from "../components/profile/EditDetail";

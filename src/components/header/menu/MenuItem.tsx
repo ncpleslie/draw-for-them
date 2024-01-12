@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 interface MenuItemProps {
   href: string;

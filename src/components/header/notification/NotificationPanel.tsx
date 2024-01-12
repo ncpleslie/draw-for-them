@@ -1,6 +1,6 @@
 import { Popover, Transition } from "@headlessui/react";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { NotificationDrawEvent } from "../../../models/draw_event.model";
+import type { NotificationDrawEvent } from "../../../models/draw_event.model";
 import NotificationItem from "./NotificationItem";
 
 interface NotificationPanelProps {

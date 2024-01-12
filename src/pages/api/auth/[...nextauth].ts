@@ -1,4 +1,5 @@
-import NextAuth, { Theme, type NextAuthOptions } from "next-auth";
+import type { Theme} from "next-auth";
+import NextAuth, { type NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { Routes } from "../../../enums/routes.enum";
@@ -7,7 +8,6 @@ import { env } from "../../../env/server";
 import { Resend } from "resend";
 
 export const authOptions: NextAuthOptions = {
-  // Include user.id on session
   callbacks: {
     session({ session, user }) {
       if (session.user) {
@@ -16,19 +16,16 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-  // Configure one or more authentication providers
   adapter: PrismaAdapter(prisma),
   providers: [
     // This magic link auth process is based off https://www.ramielcreations.com/nexth-auth-magic-code
     // and https://github.com/nextauthjs/next-auth/issues/4965#issuecomment-1189094806
     EmailProvider({
-      server: env.EMAIL_SERVER,
       from: env.EMAIL_FROM,
       maxAge: 5 * 60,
       name: "email",
       async generateVerificationToken() {
-        // This isn't crypto safe.
-        // Needs updating
+        // TODO: This isn't crypto safe. Needs updating
         return [...Array(6)].map((_) => (Math.random() * 10) | 0).join(``);
       },
       async sendVerificationRequest({ identifier: email, url, token, theme }) {
@@ -43,15 +40,6 @@ export const authOptions: NextAuthOptions = {
         });
       },
     }),
-    // {
-    //   name: "anonymous",
-    //   type: "oauth",
-    //   id: "anonymous",
-    //   authorization: { params: { prompt: "none" }, url: "" },
-    //   profile(profile) {
-    //     return { name: "Guest", email: "guest@guest.com", id: "guest" } as User;
-    //   },
-    // },
   ],
   pages: {
     signIn: Routes.SignIn,
@@ -59,22 +47,10 @@ export const authOptions: NextAuthOptions = {
     signOut: Routes.SignOut,
   },
   secret: env.NEXTAUTH_SECRET,
-  debug: true,
+  debug: env.NODE_ENV !== "production",
 };
 
 export default NextAuth(authOptions);
-
-// export default async (req: NextApiRequest, res: NextApiResponse) => {
-//   console.log("ERRRRRO", req.query.error);
-//   const isSilentAuthError = req.query.error === "OAuthSignin";
-
-//   if (isSilentAuthError) {
-//     res.redirect(302, req.cookies["next-auth.callback-url"] ?? "/");
-//     return;
-//   }
-
-//   return NextAuth(authOptions)(req, res);
-// };
 
 /**
  * Email HTML body
@@ -90,7 +66,7 @@ function html(params: {
   theme: Theme;
   token: string;
 }) {
-  const { url, host, theme, token } = params;
+  const { host, theme, token } = params;
 
   const escapedHost = host.replace(/\./g, "&#8203;.");
 
@@ -133,17 +109,4 @@ function html(params: {
   </table>
 </body>
 `;
-}
-
-/** Email Text body (fallback for email clients that don't render HTML, e.g. feature phones) */
-function text({
-  url,
-  host,
-  token,
-}: {
-  url: string;
-  host: string;
-  token: string;
-}) {
-  return `Sign in to ${host}\n${url}\n\n with magic code: ${token}`;
 }

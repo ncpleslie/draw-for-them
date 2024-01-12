@@ -1,7 +1,8 @@
+import type {
+  PropsWithChildren} from "react";
 import {
   cloneElement,
   Fragment,
-  PropsWithChildren,
   useEffect,
   useState,
 } from "react";

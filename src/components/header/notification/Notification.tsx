@@ -1,6 +1,6 @@
 import { Popover } from "@headlessui/react";
-import { FC } from "react";
-import { NotificationDrawEvent } from "../../../models/draw_event.model";
+import type { FC } from "react";
+import type { NotificationDrawEvent } from "../../../models/draw_event.model";
 import NotificationBtn from "./NotificationBtn";
 import NotificationPanel from "./NotificationPanel";
 

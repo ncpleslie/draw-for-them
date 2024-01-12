@@ -1,5 +1,5 @@
 import { Transition } from "@headlessui/react";
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 
 interface FadeInProps {
   show: boolean;

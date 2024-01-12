@@ -1,6 +1,6 @@
-import { User } from "@prisma/client";
-import { CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { InferGetServerSidePropsType, NextPage } from "next";
+import type { User } from "@prisma/client";
+import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
+import type { InferGetServerSidePropsType, NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import FadeIn from "../components/transitions/FadeIn";
@@ -81,8 +81,8 @@ const AddAFriend: NextPage<
 
   return (
     <AuthAppShell>
-      <div className="flex flex-col items-center justify-center">
-        <div className="neu-container-raised mt-8 mb-6 flex h-full w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:m-8 md:h-1/2 md:w-1/2">
+      <div className="flex h-full flex-col items-center justify-start">
+        <div className="neu-container-raised mt-8 mb-6 flex  w-[90dvw] flex-col items-center justify-center gap-6 rounded-xl p-4 text-center md:m-8 md:h-1/2 md:w-1/2">
           <div>
             <h1 className="text-2xl">
               {friends?.length > 0
@@ -97,6 +97,7 @@ const AddAFriend: NextPage<
             <label htmlFor="friend">
               Search for a friend... if you have any
             </label>
+            <p className="italic">Note: You can add yourself as a friend</p>
             <FocusableInput
               type={"search"}
               id={"friend"}
@@ -159,41 +160,19 @@ const AddAFriend: NextPage<
           show={!!foundUsers && foundUsers.length > 0 && !searchFriendLoading}
         >
           {!!foundUsers && foundUsers.length > 0 && (
-            <div className="neu-container-raised flex max-h-[50vh] w-[90dvw] flex-col items-center justify-center gap-2 rounded-xl p-4 md:m-4 md:h-1/2 md:w-1/2 md:gap-6">
+            <div className="neu-container-raised flex h-full w-[90dvw] flex-col items-center justify-center gap-2 rounded-xl p-4 md:m-4 md:h-1/2 md:w-1/2 md:gap-6">
               <h3 className="text-center text-lg md:text-2xl">
                 We have found you some friends!
               </h3>
-              <div className="flex w-full flex-col gap-4 overflow-y-auto">
+              <div className="flex w-full flex-col gap-4">
                 {foundUsers!.map((user) => (
-                  <div
+                  <FoundFriendPanel
                     key={user.id}
-                    className="neu-container-depressed flex flex-row items-center justify-between gap-4 rounded-xl p-4 md:p-8"
-                    onClick={() => handleAddAFriend(user)}
-                  >
-                    <div>
-                      <p className="text-bold text-lg md:text-2xl">
-                        {user.name}
-                      </p>
-                    </div>
-
-                    <Btn
-                      onClicked={() => handleAddAFriend(user)}
-                      active={!addFriendLoading}
-                      className="h-12 w-12"
-                      loading={addFriendLoading}
-                    >
-                      {addFriendSuccess && (
-                        <div className="flex items-center justify-center text-2xl text-icon-active">
-                          <Icon.UserAdded />
-                        </div>
-                      )}
-                      {!addFriendLoading && !addFriendSuccess && (
-                        <div className="text-2xl">
-                          <Icon.AddUser />
-                        </div>
-                      )}
-                    </Btn>
-                  </div>
+                    user={user}
+                    loading={addFriendLoading}
+                    successfullyAdded={addFriendSuccess}
+                    addFriend={handleAddAFriend}
+                  />
                 ))}
               </div>
             </div>
@@ -201,6 +180,50 @@ const AddAFriend: NextPage<
         </FadeIn>
       </div>
     </AuthAppShell>
+  );
+};
+
+interface FoundFriendPanelProps {
+  user: User;
+  loading: boolean;
+  successfullyAdded: boolean;
+  addFriend: (user: User) => void;
+}
+
+const FoundFriendPanel: React.FC<FoundFriendPanelProps> = ({
+  user,
+  loading,
+  successfullyAdded,
+  addFriend,
+}) => {
+  return (
+    <div
+      key={user.id}
+      className="neu-container-depressed flex flex-row items-center justify-between gap-4 rounded-xl p-4 md:p-8"
+      onClick={() => addFriend(user)}
+    >
+      <div>
+        <p className="text-bold text-lg md:text-2xl">{user.name}</p>
+      </div>
+
+      <Btn
+        onClicked={() => addFriend(user)}
+        active={!loading}
+        className="h-12 w-12"
+        loading={loading}
+      >
+        {successfullyAdded && (
+          <div className="flex items-center justify-center text-2xl text-icon-active">
+            <Icon.UserAdded />
+          </div>
+        )}
+        {!loading && !successfullyAdded && (
+          <div className="text-2xl">
+            <Icon.AddUser />
+          </div>
+        )}
+      </Btn>
+    </div>
   );
 };
 

@@ -1,18 +1,25 @@
-import { cert, initializeApp, ServiceAccount } from "firebase-admin/app";
-import { getStorage, Storage } from "firebase-admin/storage";
-import { env } from "../../../env/server.js";
+import type { ServiceAccount } from "firebase-admin/app";
+import { cert, initializeApp } from "firebase-admin/app";
+import type { Storage } from "firebase-admin/storage";
+import { getStorage } from "firebase-admin/storage";
 
+/**
+ * Base class for storage clients.
+ */
 export default abstract class BaseStorageClient {
   protected storage: Storage;
 
-  constructor() {
-    const config = this.createConfig();
-
+  /**
+   * Creates a new instance of the storage client.
+   * @param config - The config.
+   * @param bucket - The bucket.
+   */
+  constructor(config: ServiceAccount, bucket: string) {
     const app = initializeApp(
       {
         projectId: config.projectId,
         credential: cert(config),
-        storageBucket: env.STORAGE_BUCKET,
+        storageBucket: bucket,
       },
       config.projectId
     );
@@ -20,11 +27,22 @@ export default abstract class BaseStorageClient {
     this.storage = getStorage(app);
   }
 
-  private createConfig(): ServiceAccount {
+  /**
+   * Generates a new config for the storage client.
+   * @param storageId - The storage id.
+   * @param privateKey - The private key.
+   * @param clientEmail - The client email.
+   * @returns - The config.
+   */
+  public static createConfig(
+    storageId: string,
+    privateKey: string,
+    clientEmail: string
+  ): ServiceAccount {
     return {
-      projectId: env.STORAGE_PROJECT_ID,
-      privateKey: env.STORAGE_PRIVATE_KEY,
-      clientEmail: env.STORAGE_CLIENT_EMAIL,
+      projectId: storageId,
+      privateKey: privateKey,
+      clientEmail: clientEmail,
     };
   }
 }

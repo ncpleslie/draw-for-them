@@ -1,10 +1,10 @@
-import { PropsWithChildren } from "react";
+import type { PropsWithChildren } from "react";
 import Header from "../components/header/Header";
 
 const AuthAppShell: React.FC<PropsWithChildren> = ({ children }) => {
   return (
     <>
-      <main className="app-container h-screen h-[100dvh] overflow-hidden overflow-y-hidden text-icon-inactive">
+      <main className="app-container overflow-x-hidden text-icon-inactive h-d-screen">
         <Header />
         {children}
       </main>

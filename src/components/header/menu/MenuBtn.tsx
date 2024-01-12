@@ -1,5 +1,4 @@
 import Icon from "../../ui/Icon";
-import { Popover } from "@headlessui/react";
 import PopoverBtn from "../../ui/PopoverBtn";
 
 interface MenuBtnProps {
