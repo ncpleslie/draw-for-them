@@ -1,6 +1,8 @@
+import { User } from "@prisma/client";
 import { type IUserDomain } from "../domain/db/client";
 import NotFoundError from "./errors/not-found.error";
 import ValidationError from "./errors/validation.error";
+import { exclude } from "../../utils/helper.utils";
 
 /**
  * The user service for interacting with users in the database.
@@ -20,7 +22,10 @@ export default class UserService {
    * @param friendId - The id of the friend to delete.
    * @returns - The user with the friend deleted.
    */
-  public async deleteFriendByIdAsync(userId: string, friendId: string) {
+  public async deleteFriendByIdAsync(
+    userId: string,
+    friendId: string
+  ): Promise<User> {
     const user = await this.db.findUnique({
       where: { id: userId },
       include: { friends: true },
@@ -35,10 +40,13 @@ export default class UserService {
     );
 
     if (friendIndex === -1) {
+      user.friends.map((friend) => {
+        this.excludeEmail(friend);
+      });
       return user;
     }
 
-    return await this.db.update({
+    const userWithoutFriend = await this.db.update({
       where: { id: userId },
       data: {
         friends: {
@@ -49,6 +57,12 @@ export default class UserService {
         friends: true,
       },
     });
+
+    userWithoutFriend.friends.map((friend) => {
+      this.excludeEmail(friend);
+    });
+
+    return userWithoutFriend;
   }
 
   /**
@@ -123,7 +137,7 @@ export default class UserService {
       throw new Error("Unable to find user's profile");
     }
 
-    return this.exclude(userProfile, ["emailVerified"]);
+    return this.excludeEmail(userProfile);
   }
 
   /**
@@ -255,19 +269,11 @@ export default class UserService {
   }
 
   /**
-   * Exclude keys from object.
-   * @param user - The user to exclude keys from.
-   * @param keys - The keys to exclude.
-   * @returns - The user without the excluded keys.
-   * TODO: Move to custom model or base service
+   * Removes the email from a user.
+   * @param user - The user to remove the email from.
+   * @returns - The user without the email.
    */
-  private exclude<User, Key extends keyof User>(
-    user: User,
-    keys: Key[]
-  ): Omit<User, Key> {
-    for (const key of keys) {
-      delete user[key];
-    }
-    return user;
+  private excludeEmail(user: User): Omit<User, "email" | "emailVerified"> {
+    return exclude(user, ["email", "emailVerified"]);
   }
 }

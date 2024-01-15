@@ -1,4 +1,4 @@
-import type { Theme} from "next-auth";
+import type { Theme } from "next-auth";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
@@ -6,6 +6,7 @@ import { Routes } from "../../../enums/routes.enum";
 import { prisma } from "../../../server/domain/db/client";
 import { env } from "../../../env/server";
 import { Resend } from "resend";
+import AppConstants from "../../../constants/app.constants";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
@@ -35,7 +36,7 @@ export const authOptions: NextAuthOptions = {
         await resend.emails.send({
           from: env.EMAIL_FROM,
           to: email,
-          subject: `Draw For Them Access Code: ${token}`,
+          subject: `${AppConstants.appTitle} Access Code: ${token}`,
           html: html({ url, host, theme, token }),
         });
       },

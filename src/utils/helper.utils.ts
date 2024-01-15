@@ -13,3 +13,19 @@ export const awaitableDelay = (timeInMs: number) => {
     }, timeInMs);
   });
 };
+
+/**
+ * Exclude keys from object.
+ * @param record - The record to exclude keys from.
+ * @param keys - The keys to exclude.
+ * @returns - The record without the excluded keys.
+ */
+export const exclude = <T, Key extends keyof T>(
+  record: T,
+  keys: Key[]
+): Omit<T, Key> => {
+  for (const key of keys) {
+    delete record[key];
+  }
+  return record;
+};

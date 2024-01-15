@@ -11,8 +11,9 @@ const SignOut: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    signOut();
-    router.replace(Routes.SignIn);
+    signOut().then(() => {
+      router.replace(Routes.SignIn);
+    });
   }, []);
 
   return (

@@ -45,5 +45,3 @@ firebase-config.json
 
 public/sw*
 public/workbox*
-
-__tests__/

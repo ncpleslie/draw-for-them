@@ -27,7 +27,7 @@ const Header = ({}) => {
   }, [allImages]);
 
   return (
-    <div className="app-container flex flex-row justify-between px-4">
+    <header className="app-container flex flex-row justify-between px-4">
       <>
         {router.pathname !== Routes.Root ? (
           <div className="mt-4 flex flex-row gap-4">
@@ -52,7 +52,7 @@ const Header = ({}) => {
           <Menu />
         </div>
       </>
-    </div>
+    </header>
   );
 };
 

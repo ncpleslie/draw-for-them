@@ -14,6 +14,7 @@ import { Routes } from "../enums/routes.enum";
 import UnauthAppShell from "../layout/UnauthAppShell";
 import type EmailSignUpFormData from "../models/email-signup-form-data.model";
 import Icon from "../components/ui/Icon";
+import AppConstants from "../constants/app.constants";
 
 export async function getServerSideProps(context: CtxOrReq | undefined) {
   const session = await getSession(context);
@@ -41,7 +42,7 @@ const SignIn: NextPage<
   return (
     <UnauthAppShell>
       <Head>
-        <title>Draw For Them | Sign In</title>
+        <title>{AppConstants.appTitle} | Sign In</title>
       </Head>
       <div className="app-container flex h-full w-full flex-col items-center justify-center">
         <div className="relative grid h-full flex-col items-start justify-center md:items-center lg:container lg:max-w-none lg:grid-cols-2 lg:px-0">
@@ -53,10 +54,10 @@ const SignIn: NextPage<
             />
             <div className="relative z-20 flex items-center gap-2 text-lg font-medium">
               <Icon.Pen />
-              Draw For Them
+              {AppConstants.appTitle}
             </div>
             <div className="relative z-20 mt-auto">
-              <blockquote className="space-y-2 rounded-xl bg-black/80 p-4">
+              <blockquote className="space-y-2 rounded-xl p-4 md:bg-zinc-900/80">
                 <p className="text-lg">
                   The ephemeral image sharing application
                 </p>
