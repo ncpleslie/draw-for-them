@@ -1,4 +1,3 @@
-import type { User } from "@prisma/client";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import type { InferGetServerSidePropsType, NextPage } from "next";
 import { useRouter } from "next/router";
@@ -12,6 +11,7 @@ import { Routes } from "../enums/routes.enum";
 import AuthAppShell from "../layout/AuthAppShell";
 import { createContext } from "../server/trpc/context";
 import { trpc } from "../utils/trpc";
+import { Friend } from "../server/domain/db/client";
 
 export async function getServerSideProps(context: CreateNextContextOptions) {
   const ctx = await createContext(context);
@@ -65,7 +65,7 @@ const AddAFriend: NextPage<
     refetch();
   };
 
-  const handleAddAFriend = async (user: User) => {
+  const handleAddAFriend = async (user: Friend) => {
     if (!foundUsers?.length || addFriendSuccess) {
       return;
     }
@@ -165,7 +165,7 @@ const AddAFriend: NextPage<
                 We have found you some friends!
               </h3>
               <div className="flex w-full flex-col gap-4">
-                {foundUsers!.map((user) => (
+                {foundUsers.map((user) => (
                   <FoundFriendPanel
                     key={user.id}
                     user={user}
@@ -184,10 +184,10 @@ const AddAFriend: NextPage<
 };
 
 interface FoundFriendPanelProps {
-  user: User;
+  user: Friend;
   loading: boolean;
   successfullyAdded: boolean;
-  addFriend: (user: User) => void;
+  addFriend: (user: Friend) => void;
 }
 
 const FoundFriendPanel: React.FC<FoundFriendPanelProps> = ({

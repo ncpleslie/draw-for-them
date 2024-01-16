@@ -29,7 +29,7 @@ const View: NextPage = () => {
 
         {image && !isLoading && (
           <div className={`neu-container rounded-xl`}>
-            <img src={image} />
+            <img src={image} alt="An image drawn just for you" />
           </div>
         )}
 

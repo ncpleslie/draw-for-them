@@ -8,11 +8,12 @@ import LoadingIndicator from "../components/ui/LoadingIndicator";
 import { Routes } from "../enums/routes.enum";
 import { trpc } from "../utils/trpc";
 import { toast } from "react-toastify";
-import type { BaseModalProps} from "../components/ui/modal/Modal";
+import type { BaseModalProps } from "../components/ui/modal/Modal";
 import { useModal } from "../components/ui/modal/Modal";
 import type { User } from "@prisma/client";
 import Icon from "../components/ui/Icon";
 import AuthAppShell from "../layout/AuthAppShell";
+import { Friend } from "../server/domain/db/client";
 
 const DrawingArea = dynamic(() => import("../components/draw/DrawingArea"), {
   ssr: false,
@@ -44,7 +45,7 @@ export async function getServerSideProps(
 
 interface UserSelectModalBodyProps extends BaseModalProps {
   isLoading: boolean;
-  friends?: User[];
+  friends?: Friend[];
 }
 
 const UserSelectModalBody: React.FC<UserSelectModalBodyProps> = ({
@@ -53,7 +54,7 @@ const UserSelectModalBody: React.FC<UserSelectModalBodyProps> = ({
   state,
   close,
 }) => {
-  const onUserSelected = (user: User) => {
+  const onUserSelected = (user: Friend) => {
     if (close) {
       close(user);
       state?.toggleModal();
@@ -77,7 +78,7 @@ const UserSelectModalBody: React.FC<UserSelectModalBodyProps> = ({
               <Icon.User />
             </div>
             <p className="w-full truncate text-2xl text-[2.5vh]">
-              {friend.name || friend.email}
+              {friend.name || "Unnamed Friend"}
             </p>
           </div>
         </button>

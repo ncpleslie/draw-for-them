@@ -7,6 +7,7 @@ on:
 
 env:
   NODE_ENV: development
+  DATABASE_URL: "postgresql://postgres:@localhost:5932/draw-for-them?schema=public"
 
 jobs:
   test:
@@ -20,7 +21,7 @@ jobs:
           POSTGRES_DB: postgres
           POSTGRES_HOST_AUTH_METHOD: trust
         ports:
-          - 5933:5432
+          - 5932:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v2

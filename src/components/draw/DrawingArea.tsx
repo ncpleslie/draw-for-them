@@ -15,7 +15,7 @@ const DrawingArea: React.FC<DrawingAreaProps> = ({ onSave }) => {
   const [shape, setShape] = useState({ circle: false, square: false });
   const [trash, setTrash] = useState(false);
   const [save, setSave] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const margin = 150;
 
   const handleOnUndoClicked = () => setUndo((prev) => !prev);

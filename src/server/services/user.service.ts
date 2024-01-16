@@ -1,5 +1,4 @@
-import { User } from "@prisma/client";
-import { type IUserDomain } from "../domain/db/client";
+import { Friend, User, type IUserDomain } from "../domain/db/client";
 import NotFoundError from "./errors/not-found.error";
 import ValidationError from "./errors/validation.error";
 import { exclude } from "../../utils/helper.utils";
@@ -22,10 +21,7 @@ export default class UserService {
    * @param friendId - The id of the friend to delete.
    * @returns - The user with the friend deleted.
    */
-  public async deleteFriendByIdAsync(
-    userId: string,
-    friendId: string
-  ): Promise<User> {
+  public async deleteFriendByIdAsync(userId: string, friendId: string) {
     const user = await this.db.findUnique({
       where: { id: userId },
       include: { friends: true },
@@ -248,7 +244,10 @@ export default class UserService {
    * @param friendUserId - The id of the friend.
    * @returns - The user's friend.
    */
-  public async getUsersFriendByIdAsync(userId: string, friendUserId: string) {
+  public async getUsersFriendByIdAsync(
+    userId: string,
+    friendUserId: string
+  ): Promise<Friend> {
     const currentUser = await this.db.findFirst({
       where: { id: userId },
       include: {
@@ -320,7 +319,7 @@ export default class UserService {
   public async updateProfileAsync(
     userId: string,
     profileData: { name?: string }
-  ) {
+  ): Promise<User> {
     const user = await this.db.findFirst({
       where: { id: userId },
     });

@@ -51,6 +51,7 @@ const SignIn: NextPage<
             <img
               src="/background.jpg"
               className="absolute inset-0 hidden h-full object-none lg:block"
+              alt="An image of a stickman"
             />
             <div className="relative z-20 flex items-center gap-2 text-lg font-medium">
               <Icon.Pen />

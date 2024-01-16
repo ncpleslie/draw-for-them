@@ -27,7 +27,7 @@ export const authOptions: NextAuthOptions = {
       name: "email",
       async generateVerificationToken() {
         // TODO: This isn't crypto safe. Needs updating
-        return [...Array(6)].map((_) => (Math.random() * 10) | 0).join(``);
+        return [...Array(6)].map(() => (Math.random() * 10) | 0).join(``);
       },
       async sendVerificationRequest({ identifier: email, url, token, theme }) {
         const { host } = new URL(url);
