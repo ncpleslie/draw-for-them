@@ -156,13 +156,13 @@ export const userRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currentUserId = ctx.session.user.id;
       const receiverId = await ctx.userService.getUsersFriendByIdAsync(
-        input.userId,
-        currentUserId
+        currentUserId,
+        input.userId
       );
 
       await ctx.imageEventService.addImageByIdAsync(
         currentUserId,
-        receiverId,
+        receiverId.id,
         input.imageData
       );
 

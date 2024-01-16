@@ -54,12 +54,15 @@ export default class UserService {
         },
       },
       include: {
-        friends: true,
+        friends: {
+          select: {
+            id: true,
+            name: true,
+            email: false,
+            emailVerified: false,
+          },
+        },
       },
-    });
-
-    userWithoutFriend.friends.map((friend) => {
-      this.excludeEmail(friend);
     });
 
     return userWithoutFriend;
@@ -73,7 +76,16 @@ export default class UserService {
   public async getUserFriendsAsync(userId: string) {
     const userWithFriends = await this.db.findFirst({
       where: { id: userId },
-      include: { friends: true },
+      include: {
+        friends: {
+          select: {
+            id: true,
+            name: true,
+            email: false,
+            emailVerified: false,
+          },
+        },
+      },
     });
 
     if (!userWithFriends) {
@@ -106,6 +118,12 @@ export default class UserService {
           },
         ],
       },
+      select: {
+        id: true,
+        name: true,
+        email: false,
+        emailVerified: false,
+      },
     });
 
     return users;
@@ -134,10 +152,10 @@ export default class UserService {
     });
 
     if (!userProfile) {
-      throw new Error("Unable to find user's profile");
+      throw new NotFoundError("Unable to find user's profile");
     }
 
-    return this.excludeEmail(userProfile);
+    return userProfile;
   }
 
   /**
@@ -151,11 +169,17 @@ export default class UserService {
     friendId: string
   ) {
     const history = await this.db.findFirst({
-      where: { id: currentUserId },
+      where: { id: currentUserId, friends: { some: { id: friendId } } },
       include: {
         friends: {
           where: {
             id: friendId,
+          },
+          select: {
+            id: true,
+            name: true,
+            email: false,
+            emailVerified: false,
           },
         },
         sentImages: {
@@ -174,7 +198,7 @@ export default class UserService {
     });
 
     if (!history) {
-      throw new Error("Unable to find current user's friend history");
+      throw new NotFoundError("Unable to find current user's friend history");
     }
 
     return history;
@@ -184,13 +208,36 @@ export default class UserService {
    * Adds a user as a friend by id.
    * @param currentUserId - The id of the current user.
    * @param userToFriendId - The id of the user to friend.
+   * @returns - The updated user.
    */
   public async addUserAsFriendByIdAsync(
     currentUserId: string,
     userToFriendId: string
   ) {
-    await this.db.update({
+    const friendToAdd = await this.db.findFirst({
+      where: { id: userToFriendId },
+    });
+
+    if (!friendToAdd) {
+      throw new NotFoundError("User to friend not found");
+    }
+
+    return await this.db.update({
       where: { id: currentUserId },
+      select: {
+        id: true,
+        name: true,
+        email: false,
+        emailVerified: false,
+        friends: {
+          select: {
+            id: true,
+            name: true,
+            email: false,
+            emailVerified: false,
+          },
+        },
+      },
       data: { friends: { connect: [{ id: userToFriendId }] } },
     });
   }
@@ -198,16 +245,22 @@ export default class UserService {
   /**
    * Gets a user's friend by id.
    * @param userId - The id of the user to retrieve.
-   * @param currentUserId - The id of the current user.
+   * @param friendUserId - The id of the friend.
    * @returns - The user's friend.
    */
-  public async getUsersFriendByIdAsync(userId: string, currentUserId: string) {
+  public async getUsersFriendByIdAsync(userId: string, friendUserId: string) {
     const currentUser = await this.db.findFirst({
-      where: { id: currentUserId },
+      where: { id: userId },
       include: {
         friends: {
+          select: {
+            id: true,
+            name: true,
+            email: false,
+            emailVerified: false,
+          },
           where: {
-            id: userId,
+            id: friendUserId,
           },
         },
       },
@@ -217,13 +270,13 @@ export default class UserService {
       throw new NotFoundError("User not found");
     }
 
-    const friendId = currentUser.friends[0]?.id;
+    const friend = currentUser.friends[0];
 
-    if (!friendId) {
+    if (!friend) {
       throw new ValidationError("User has no friend with that id");
     }
 
-    return friendId;
+    return friend;
   }
 
   /**
@@ -235,7 +288,19 @@ export default class UserService {
     const user = await this.db.findFirst({
       where: { id: userId },
       include: {
-        receivedImages: { include: { sender: true }, where: { active: true } },
+        receivedImages: {
+          include: {
+            sender: {
+              select: {
+                id: true,
+                name: true,
+                email: false,
+                emailVerified: false,
+              },
+            },
+          },
+          where: { active: true },
+        },
       },
     });
 
@@ -256,7 +321,15 @@ export default class UserService {
     userId: string,
     profileData: { name?: string }
   ) {
-    const user = await this.db.update({
+    const user = await this.db.findFirst({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
+    const updatedUser = await this.db.update({
       where: {
         id: userId,
       },
@@ -265,7 +338,7 @@ export default class UserService {
       },
     });
 
-    return user;
+    return updatedUser;
   }
 
   /**

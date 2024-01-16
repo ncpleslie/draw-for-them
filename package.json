@@ -25,7 +25,8 @@
     "postinstall": "prisma generate",
     "studio": "prisma studio",
     "start": "cross-env-shell NODE_ENV=production node dist/src/server/wss-prod-server.js",
-    "test": "jest --silent=false"
+    "test": "jest --silent=false",
+    "test:ci": "run-s db-migrate-dev db-seed test"
   },
   "dependencies": {
     "@formkit/auto-animate": "1.0.0-beta.6",

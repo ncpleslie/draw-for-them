@@ -70,6 +70,14 @@ export default class ImageEventService {
    * @param imageId - The id of the image to set inactive.
    */
   public async setImageInactiveByIdAsync(imageId: string) {
+    const imageEvent = await this.db.findFirst({
+      where: { id: imageId, active: true },
+    });
+
+    if (!imageEvent) {
+      throw new NotFoundError("Image event not found.");
+    }
+
     await this.db.update({
       where: { id: imageId },
       data: { active: false },
