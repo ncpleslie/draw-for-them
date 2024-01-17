@@ -25,7 +25,7 @@
     "postinstall": "prisma generate",
     "studio": "prisma studio",
     "start": "cross-env-shell NODE_ENV=production node dist/src/server/wss-prod-server.js",
-    "test": "jest --silent=false",
+    "test": "jest --silent=false --json --outputFile=jest-results.json",
     "test:ci": "run-s db-migrate-dev db-seed test"
   },
   "dependencies": {

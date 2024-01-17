@@ -45,3 +45,5 @@ firebase-config.json
 
 public/sw*
 public/workbox*
+
+jest-results.json
