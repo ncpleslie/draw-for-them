@@ -1,4 +1,3 @@
-import { useAutoAnimate } from "@formkit/auto-animate/react";
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import type { NextPage, InferGetServerSidePropsType } from "next";
 import { useRouter } from "next/router";

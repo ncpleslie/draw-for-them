@@ -11,7 +11,7 @@ import { Routes } from "../enums/routes.enum";
 import AuthAppShell from "../layout/AuthAppShell";
 import { createContext } from "../server/trpc/context";
 import { trpc } from "../utils/trpc";
-import { Friend } from "../server/domain/db/client";
+import { type Friend } from "../server/domain/db/client";
 
 export async function getServerSideProps(context: CreateNextContextOptions) {
   const ctx = await createContext(context);

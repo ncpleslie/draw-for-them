@@ -1,4 +1,4 @@
-import { Friend, User, type IUserDomain } from "../domain/db/client";
+import { type Friend, type User, type IUserDomain } from "../domain/db/client";
 import NotFoundError from "./errors/not-found.error";
 import ValidationError from "./errors/validation.error";
 import { exclude } from "../../utils/helper.utils";

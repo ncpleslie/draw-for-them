@@ -13,7 +13,7 @@ import { useModal } from "../components/ui/modal/Modal";
 import type { User } from "@prisma/client";
 import Icon from "../components/ui/Icon";
 import AuthAppShell from "../layout/AuthAppShell";
-import { Friend } from "../server/domain/db/client";
+import { type Friend } from "../server/domain/db/client";
 
 const DrawingArea = dynamic(() => import("../components/draw/DrawingArea"), {
   ssr: false,
@@ -98,12 +98,12 @@ const Draw: NextPage = () => {
   );
 
   const onSave = async (image: string) => {
-    if (!data || !data.length) {
+    if (!data || !data.length || !data[0]?.id) {
       return;
     }
 
     try {
-      let selectedFriendId = data[0]!.id;
+      let selectedFriendId = data[0].id;
       if (data.length > 1) {
         const selectedFriend = await show();
         if (!selectedFriend) {

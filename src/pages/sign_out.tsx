@@ -11,8 +11,8 @@ const SignOut: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    signOut().then(() => {
-      router.replace(Routes.SignIn);
+    signOut({ redirect: false, callbackUrl: Routes.SignIn }).then((data) => {
+      router.replace(data.url);
     });
   }, []);
 

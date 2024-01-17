@@ -32,17 +32,19 @@ export async function getServerSideProps(context: CtxOrReq | undefined) {
   const csrfToken = await getCsrfToken(context);
 
   return {
-    props: { providers, csrfToken, host: context?.req?.headers.host },
+    props: { providers, csrfToken, host: context?.req?.headers?.host },
   };
 }
 
 const SignIn: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ providers, csrfToken, host }) => {
+  const title = `${AppConstants.appTitle} | Sign In`;
+
   return (
     <UnauthAppShell>
       <Head>
-        <title>{AppConstants.appTitle} | Sign In</title>
+        <title>{title}</title>
       </Head>
       <div className="app-container flex h-full w-full flex-col items-center justify-center">
         <div className="relative grid h-full flex-col items-start justify-center md:items-center lg:container lg:max-w-none lg:grid-cols-2 lg:px-0">

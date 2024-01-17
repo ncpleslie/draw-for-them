@@ -24,7 +24,6 @@ export const authOptions: NextAuthOptions = {
     EmailProvider({
       from: env.EMAIL_FROM,
       maxAge: 5 * 60,
-      name: "email",
       async generateVerificationToken() {
         // TODO: This isn't crypto safe. Needs updating
         return [...Array(6)].map(() => (Math.random() * 10) | 0).join(``);

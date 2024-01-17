@@ -1,4 +1,7 @@
-import type { ImageEvent, ImageEventWithSender } from "../server/domain/db/client";
+import type {
+  ImageEvent,
+  ImageEventWithSender,
+} from "../server/domain/db/client";
 
 export default class BaseDrawEvent {
   constructor(data: ImageEvent) {
@@ -18,7 +21,7 @@ export default class BaseDrawEvent {
 }
 
 export class NotificationDrawEvent extends BaseDrawEvent {
-  constructor(data: any);
+  constructor(data: unknown);
   constructor(data: ImageEventWithSender) {
     super(data);
 

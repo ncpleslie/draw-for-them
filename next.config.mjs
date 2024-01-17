@@ -1,4 +1,4 @@
-// @ts-check
+// @ts-nocheck
 /**
  * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
  * This is especially useful for Docker builds.
@@ -23,8 +23,9 @@ const config = {
   },
 };
 
-export default withSuperjson()(
-  withPWA({ disable: process.env.NODE_ENV === "development", dest: "public" })(
-    config
-  )
-);
+const pwa = withPWA({
+  disable: process.env.NODE_ENV === "development",
+  dest: "public",
+})(config);
+
+export default withSuperjson()(pwa);
