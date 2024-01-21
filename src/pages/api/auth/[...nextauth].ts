@@ -1,18 +1,63 @@
-import type { Theme } from "next-auth";
+import type { Account, Profile, Session, Theme, User } from "next-auth";
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import EmailProvider from "next-auth/providers/email";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { Routes } from "../../../enums/routes.enum";
 import { prisma } from "../../../server/domain/db/client";
 import { env } from "../../../env/server";
 import { Resend } from "resend";
 import AppConstants from "../../../constants/app.constants";
+import { AdapterUser } from "next-auth/adapters";
+import { JWT } from "next-auth/jwt";
+import { connect } from "http2";
 
 export const authOptions: NextAuthOptions = {
   callbacks: {
-    session({ session, user }) {
+    async jwt({
+      token,
+      account,
+      profile,
+    }: {
+      token: JWT;
+      account: Account | null;
+      profile?: Profile;
+    }): Promise<JWT> {
+      if (!token.provider) {
+        token.provider = "anonymous";
+      }
+      return token;
+    },
+    async session({
+      session,
+      token,
+      user,
+    }: {
+      session: Session & { token_provider?: {} };
+      token: JWT;
+      user?: AdapterUser;
+    }): Promise<Session> {
+      console.log("session", session);
+      console.log("user", user);
+      console.log("token", token);
+      let sessionUser = user;
+
+      if (!sessionUser && session.user?.email) {
+        sessionUser = (await prisma.user.findUnique({
+          where: {
+            email: session.user.email,
+          },
+        })) as AdapterUser;
+      }
+
       if (session.user) {
-        session.user["id"] = user.id;
+        // TODO: Fix this
+        session.user["id"] = user?.id || sessionUser?.id || "";
+      }
+
+      // don't make the token (JWT) contents available to the client session (JWT), but flag that they're server-side
+      if (token.provider) {
+        session.token_provider = token.provider;
       }
       return session;
     },
@@ -40,7 +85,17 @@ export const authOptions: NextAuthOptions = {
         });
       },
     }),
+    CredentialsProvider({
+      name: "anonymous",
+      credentials: {},
+      async authorize(credentials, req) {
+        return createAnonymousUser();
+      },
+    }),
   ],
+  session: {
+    strategy: "jwt",
+  },
   pages: {
     signIn: Routes.SignIn,
     newUser: Routes.NewUser,
@@ -110,3 +165,19 @@ function html(params: {
 </body>
 `;
 }
+
+const createAnonymousUser = async () => {
+  // generate a random name and email for this anonymous user
+  const id = [...Array(6)].map(() => (Math.random() * 10) | 0).join(``);
+  const user = await prisma.user.create({
+    data: {
+      id: id,
+      email: `guest-${id}@guest.com`,
+      emailVerified: new Date(),
+    },
+  });
+
+  console.log("user", user);
+
+  return user;
+};

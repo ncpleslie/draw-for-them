@@ -5,9 +5,10 @@ import {
   signIn,
   getCsrfToken,
   getSession,
+  useSession,
 } from "next-auth/react";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import EmailLogin from "../components/signin/EmailLogin";
 import { VerificationStep } from "../components/signin/VerificationStep";
 import { Routes } from "../enums/routes.enum";
@@ -15,6 +16,9 @@ import UnauthAppShell from "../layout/UnauthAppShell";
 import type EmailSignUpFormData from "../models/email-signup-form-data.model";
 import Icon from "../components/ui/Icon";
 import AppConstants from "../constants/app.constants";
+import Btn from "../components/ui/Btn";
+import { router } from "../server/trpc/trpc";
+import { useRouter } from "next/router";
 
 export async function getServerSideProps(context: CtxOrReq | undefined) {
   const session = await getSession(context);
@@ -40,6 +44,25 @@ const SignIn: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ providers, csrfToken, host }) => {
   const title = `${AppConstants.appTitle} | Sign In`;
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  const signInAnon = (e: FormEvent) => {
+    e.preventDefault();
+    signIn("credentials", {
+      redirect: false,
+      message: "Signing in as guest",
+      callbackUrl: `https://${host}`,
+    }).then((data) => {
+      // async sign-in returned
+      console.log(data);
+      router.replace(data?.url || Routes.Root);
+    });
+  };
+
+  useEffect(() => {
+    console.log(session);
+  }, [session]);
 
   return (
     <UnauthAppShell>
@@ -87,6 +110,25 @@ const SignIn: NextPage<
               <div className="mx-4 grid gap-6 md:mx-0">
                 {providers?.email && csrfToken && host && (
                   <EmailLoginSection csrfToken={csrfToken} host={host} />
+                )}
+                {providers?.credentials && (
+                  <form
+                    onSubmit={signInAnon}
+                    className="mx-4 mt-4 flex w-full flex-col items-center justify-between gap-4"
+                  >
+                    <div className="flex h-full w-full flex-col justify-center gap-4">
+                      {/* <input
+                        name="csrfToken"
+                        type="hidden"
+                        defaultValue={csrfToken}
+                      /> */}
+                    </div>
+                    <div className="flex flex-row gap-8">
+                      <Btn type="submit" loading={false}>
+                        <p className="text-lg">Continue as Guest</p>
+                      </Btn>
+                    </div>
+                  </form>
                 )}
               </div>
               <p className="text-muted-foreground px-8 text-center text-sm">
