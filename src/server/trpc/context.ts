@@ -33,7 +33,7 @@ export const createContext = async (
     | CreateNextContextOptions
     | NodeHTTPCreateContextFnOptions<IncomingMessage, ws>
 ) => {
-  const session = await getSession(opts);
+  const session = await getSession({ req: opts.req });
 
   return await createContextInner({
     session,

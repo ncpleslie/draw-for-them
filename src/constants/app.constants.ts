@@ -17,4 +17,10 @@ export default class AppConstants {
    */
   public static readonly appDescription =
     "An ephemeral image sharing social network";
+
+  /**
+   * The max session age in seconds
+   * 30 days.
+   */
+  public static readonly maxSessionAgeInSecs = 60 * 60 * 24 * 30;
 }

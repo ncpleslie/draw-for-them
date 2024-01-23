@@ -16,6 +16,7 @@ export default class GlobalRef<T> {
    * Gets the value.
    */
   get value() {
+    // eslint-disable-next-line
     return (global as any)[this.sym] as T;
   }
 
@@ -23,6 +24,7 @@ export default class GlobalRef<T> {
    * Sets the value.
    */
   set value(value: T) {
+    // eslint-disable-next-line
     (global as any)[this.sym] = value;
   }
 }

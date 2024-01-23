@@ -1,6 +1,5 @@
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import ws from "ws";
-import fetch from "node-fetch";
 import { appRouter } from "./trpc/router/_app";
 import { createContext } from "./trpc/context";
 import { env } from "../env/server";
@@ -8,10 +7,6 @@ import { env } from "../env/server";
 /**
  * This file is used to run a WebSocket server for development purposes only.
  */
-
-if (!global.fetch) {
-  (global as any).fetch = fetch;
-}
 
 const wssDevLog = (msg: string) => {
   console.log(`[Dev WSS] ${msg}`);

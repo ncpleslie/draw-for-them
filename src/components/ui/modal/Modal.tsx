@@ -1,11 +1,5 @@
-import type {
-  PropsWithChildren} from "react";
-import {
-  cloneElement,
-  Fragment,
-  useEffect,
-  useState,
-} from "react";
+import type { PropsWithChildren } from "react";
+import { cloneElement, Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { create } from "zustand";
 import Btn from "../Btn";
@@ -23,6 +17,7 @@ export const useModalStore = create<ModalState>((set) => ({
 }));
 
 export interface BaseModalProps {
+  // eslint-disable-next-line
   close?: (value: any) => void;
   state?: ModalState;
 }

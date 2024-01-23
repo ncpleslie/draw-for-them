@@ -74,15 +74,11 @@ const DrawingArea: React.FC<DrawingAreaProps> = ({ onSave }) => {
 
   const observer = useRef(
     new ResizeObserver((entries) => {
-      if (!entries) {
+      if (!entries || !entries.length || !entries[0]?.contentRect) {
         return;
       }
 
-      if (entries.length === 0) {
-        return;
-      }
-
-      setDrawAreaHeight(entries[0]!.contentRect.height - margin);
+      setDrawAreaHeight(entries[0].contentRect.height - margin);
     })
   );
 

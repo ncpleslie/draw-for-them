@@ -2,7 +2,6 @@ import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 import DomainNotFoundError from "../services/errors/not-found.error";
-
 import { type Context } from "./context";
 
 const t = initTRPC.context<Context>().create({
@@ -39,6 +38,7 @@ const isAuthed = t.middleware(({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
     throw new TRPCError({ code: "UNAUTHORIZED" });
   }
+
   return next({
     ctx: {
       // infers the `session` as non-nullable

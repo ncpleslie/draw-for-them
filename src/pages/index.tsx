@@ -11,13 +11,11 @@ import AuthAppShell from "../layout/AuthAppShell";
 
 export async function getServerSideProps(context: CreateNextContextOptions) {
   const ctx = await createContext(context);
-
   const allImages = [];
 
   try {
-    const userId = ctx.session?.user?.id;
-    if (!userId) {
-      // Redirect user
+    const user = ctx.session?.user;
+    if (!user?.id) {
       return {
         redirect: {
           destination: Routes.SignIn,
@@ -25,8 +23,9 @@ export async function getServerSideProps(context: CreateNextContextOptions) {
         },
       };
     }
+
     const imageEvents =
-      (await ctx.userService.getAllImageEventsForUserAsync(userId)) || [];
+      (await ctx.userService.getAllImageEventsForUserAsync(user?.id)) || [];
 
     const images = imageEvents?.map(
       (image) => new NotificationDrawEvent(image)

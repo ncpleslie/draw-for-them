@@ -4,25 +4,31 @@ import ImageEventService from "../services/image-event.service";
 import UserService from "../services/user.service";
 import { env } from "../../env/server.js";
 import GlobalRef from "./global-ref";
+import EmailClient from "../client/email/email-client";
 
 /**
  * Global provider for services and other singletons that should be shared across the application.
  */
 class GlobalProvider {
-  private static userServiceRef = new GlobalRef<UserService>(UserService.name);
+  private static emailClientRef = new GlobalRef<EmailClient>(EmailClient.name);
   private static imageEventServiceRef = new GlobalRef<ImageEventService>(
     ImageEventService.name
   );
+  private static userServiceRef = new GlobalRef<UserService>(UserService.name);
 
   /**
-   * Gets the user service.
-   * @returns - The user service.
+   * Gets the email client.
+   * @returns - The email client.
    */
-  static getUserService(): UserService {
-    if (!GlobalProvider.userServiceRef.value) {
-      GlobalProvider.userServiceRef.value = new UserService(UserDB);
+  static getEmailClient() {
+    if (!GlobalProvider.emailClientRef.value) {
+      GlobalProvider.emailClientRef.value = new EmailClient(
+        env.RESEND_API_KEY,
+        env.EMAIL_FROM
+      );
     }
-    return GlobalProvider.userServiceRef.value;
+
+    return GlobalProvider.emailClientRef.value;
   }
 
   /**
@@ -45,18 +51,37 @@ class GlobalProvider {
         storageClient
       );
     }
+
     return GlobalProvider.imageEventServiceRef.value;
+  }
+
+  /**
+   * Gets the user service.
+   * @returns - The user service.
+   */
+  static getUserService(): UserService {
+    if (!GlobalProvider.userServiceRef.value) {
+      GlobalProvider.userServiceRef.value = new UserService(UserDB);
+    }
+
+    return GlobalProvider.userServiceRef.value;
   }
 }
 
 /**
- * The user service.
- * @see UserService
+ * The email client.
+ * @see EmailClient
  */
-export const userService = GlobalProvider.getUserService();
+export const emailClient = GlobalProvider.getEmailClient();
 
 /**
  * The image event service.
  * @see ImageEventService
  */
 export const imageEventService = GlobalProvider.getImageEventService();
+
+/**
+ * The user service.
+ * @see UserService
+ */
+export const userService = GlobalProvider.getUserService();
