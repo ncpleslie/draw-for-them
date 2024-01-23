@@ -1,7 +1,6 @@
 import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import type { InferGetServerSidePropsType, NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FadeIn from "../components/transitions/FadeIn";
 import Btn from "../components/ui/Btn";
 import FocusableInput from "../components/ui/FocusableInput";
@@ -39,8 +38,9 @@ export async function getServerSideProps(context: CreateNextContextOptions) {
 const AddAFriend: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
 > = ({ friends }) => {
-  const router = useRouter();
   const [searchInput, setSearchInput] = useState("");
+  const [friendId, setFriendId] = useState("");
+
   const {
     data: foundUsers,
     error: searchFriendError,
@@ -70,14 +70,9 @@ const AddAFriend: NextPage<
       return;
     }
 
+    setFriendId(user.id);
     mutateAddFriend({ id: user.id });
   };
-
-  useEffect(() => {
-    if (addFriendSuccess) {
-      router.replace(Routes.Root);
-    }
-  }, [addFriendSuccess]);
 
   return (
     <AuthAppShell>
@@ -116,9 +111,21 @@ const AddAFriend: NextPage<
                 )}
               </div>
             )}
-            <Btn type="submit" className="mt-4 pt-0">
-              Search
-            </Btn>
+            <div className="flex w-full flex-row justify-center gap-4">
+              <Btn type="submit" className="mt-4 grow pt-0">
+                Search
+              </Btn>
+              {addFriendSuccess && (
+                <Btn
+                  type="link"
+                  title={`Continue to home`}
+                  href={Routes.Root}
+                  className="mt-4 pt-0"
+                >
+                  Done
+                </Btn>
+              )}
+            </div>
           </form>
         </div>
 
@@ -169,8 +176,8 @@ const AddAFriend: NextPage<
                   <FoundFriendPanel
                     key={user.id}
                     user={user}
-                    loading={addFriendLoading}
-                    successfullyAdded={addFriendSuccess}
+                    loading={addFriendLoading && friendId === user.id}
+                    successfullyAdded={addFriendSuccess && friendId === user.id}
                     addFriend={handleAddAFriend}
                   />
                 ))}

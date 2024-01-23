@@ -2,6 +2,7 @@ import { type Friend, type User, type IUserDomain } from "../domain/db/client";
 import NotFoundError from "./errors/not-found.error";
 import ValidationError from "./errors/validation.error";
 import { exclude } from "../../utils/helper.utils";
+import { v4 as uuid } from "uuid";
 
 /**
  * The user service for interacting with users in the database.
@@ -14,6 +15,19 @@ export default class UserService {
    * @param db - The database.
    */
   constructor(private db: IUserDomain) {}
+
+  /**
+   * Creates an anonymous user.
+   * @returns - A new anonymous user.
+   */
+  public async createAnonymousUserAsync() {
+    const id = uuid();
+    return await this.db.create({
+      data: {
+        email: `guest-${id}@guest.com`,
+      },
+    });
+  }
 
   /**
    * Deletes a friend from a user by id.

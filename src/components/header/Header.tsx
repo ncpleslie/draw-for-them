@@ -3,10 +3,10 @@ import Btn from "../ui/Btn";
 import Icon from "../ui/Icon";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Notification from "./notification/Notification";
+import Notification from "./Notification";
 import { trpc } from "../../utils/trpc";
 import { useEffect, useState } from "react";
-import Menu from "./menu/Menu";
+import Menu from "./Menu";
 import type { NotificationDrawEvent } from "../../models/draw_event.model";
 import { Routes } from "../../enums/routes.enum";
 
