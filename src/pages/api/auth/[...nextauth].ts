@@ -64,6 +64,7 @@ export function requestWrapper(
 
             cookies.set("next-auth.session-token", sessionToken, {
               expires: sessionExpiry,
+              sameSite: true,
             });
           }
         }
