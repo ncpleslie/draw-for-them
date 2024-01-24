@@ -1,5 +1,5 @@
 import type { ServiceAccount } from "firebase-admin/app";
-import { cert, initializeApp } from "firebase-admin/app";
+import { cert, getApps, initializeApp } from "firebase-admin/app";
 import type { Storage } from "firebase-admin/storage";
 import { getStorage } from "firebase-admin/storage";
 
@@ -15,6 +15,15 @@ export default abstract class BaseStorageClient {
    * @param bucket - The bucket.
    */
   constructor(config: ServiceAccount, bucket: string) {
+    const apps = getApps();
+    if (apps.length > 0) {
+      const existingApp = apps.find((app) => app.name === config.projectId);
+      if (existingApp) {
+        this.storage = getStorage(existingApp);
+        return;
+      }
+    }
+
     const app = initializeApp(
       {
         projectId: config.projectId,

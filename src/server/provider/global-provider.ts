@@ -16,6 +16,8 @@ class GlobalProvider {
   );
   private static userServiceRef = new GlobalRef<UserService>(UserService.name);
 
+  private constructor() {}
+
   /**
    * Gets the email client.
    * @returns - The email client.
