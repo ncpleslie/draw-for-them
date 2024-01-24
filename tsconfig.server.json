@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "module": "node16",
+    "module": "commonjs",
     "outDir": "dist",
     "target": "ES2019",
     "lib": ["ES2019", "DOM"],

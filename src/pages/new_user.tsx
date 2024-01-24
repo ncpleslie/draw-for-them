@@ -44,7 +44,7 @@ const NewUser: NextPage<
 
   const {
     mutate: mutateUpdateProfile,
-    isLoading,
+    isPending,
     isSuccess,
     error,
   } = trpc.user.updateUserProfile.useMutation({});
@@ -84,7 +84,7 @@ const NewUser: NextPage<
               <p>{error?.shape?.data.zodError?.formErrors}</p>
             </div>
           )}
-          <Btn type="submit" className="mt-4 pt-0" loading={isLoading}>
+          <Btn type="submit" className="mt-4 pt-0" loading={isPending}>
             Let&apos;s move on
           </Btn>
         </form>

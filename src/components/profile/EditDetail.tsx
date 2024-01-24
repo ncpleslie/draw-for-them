@@ -15,7 +15,7 @@ const EditDetail: React.FC<EditDetailProps> = ({ onNameEdited }) => {
   const {
     data: editProfileData,
     mutate: editProfileMutate,
-    isLoading: editProfileLoading,
+    isPending: editProfileLoading,
     error: editProfileError,
   } = trpc.user.updateUserProfile.useMutation({});
 

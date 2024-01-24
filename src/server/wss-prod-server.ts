@@ -2,7 +2,7 @@ import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import http from "http";
 import next from "next";
 import { parse } from "url";
-import { WebSocketServer } from "ws";
+import ws from "ws";
 import type { Socket } from "net";
 import { env } from "../env/server";
 import { createContext } from "./trpc/context";
@@ -31,7 +31,7 @@ app.prepare().then(() => {
     handle(req, res, parsedUrl);
   });
 
-  const wss = new WebSocketServer({ server });
+  const wss = new ws.Server({ server });
   const handler = applyWSSHandler({ wss, router: appRouter, createContext });
 
   process.on("SIGTERM", () => {
@@ -45,11 +45,10 @@ app.prepare().then(() => {
     });
   });
 
-  server.listen(env.PORT, "0.0.0.0", () => {
-    const address = server.address();
-    console.log(`Next address: ${JSON.stringify(address)}`);
-    console.log(
-      `> Server listening at http://localhost:${env.PORT} as ${env.NODE_ENV}`
-    );
-  });
+  server.listen(env.PORT, "0.0.0.0");
+  const address = server.address();
+  console.log(`Next address: ${JSON.stringify(address)}`);
+  console.log(
+    `Server listening at http://localhost:${env.PORT} as ${env.NODE_ENV}`
+  );
 });

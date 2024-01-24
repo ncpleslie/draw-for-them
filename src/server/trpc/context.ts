@@ -1,12 +1,8 @@
-import { type inferAsyncReturnType } from "@trpc/server";
 import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
-import { type NodeHTTPCreateContextFnOptions } from "@trpc/server/dist/adapters/node-http";
-import { type IncomingMessage } from "http";
 import { type Session } from "next-auth";
-import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerAuthSession } from "../common/get-server-auth-session";
-import type ws from "ws";
 import { imageEventService, userService } from "../provider/global-provider";
+import { type CreateWSSContextFnOptions } from "@trpc/server/adapters/ws";
+import { getSession } from "next-auth/react";
 
 type CreateContextOptions = {
   session: Session | null;
@@ -30,17 +26,13 @@ export const createContextInner = async (opts: CreateContextOptions) => {
  * @link https://trpc.io/docs/context
  **/
 export const createContext = async (
-  opts:
-    | CreateNextContextOptions
-    | NodeHTTPCreateContextFnOptions<IncomingMessage, ws>
+  opts: CreateNextContextOptions | CreateWSSContextFnOptions
 ) => {
-  const { req, res }: { req: NextApiRequest; res: NextApiResponse } =
-    opts as CreateNextContextOptions;
-  const session = await getServerAuthSession({ req, res });
+  const session = await getSession(opts);
 
   return await createContextInner({
     session,
   });
 };
 
-export type Context = inferAsyncReturnType<typeof createContext>;
+export type Context = Awaited<ReturnType<typeof createContext>>;

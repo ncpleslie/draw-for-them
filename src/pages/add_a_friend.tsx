@@ -56,7 +56,7 @@ const AddAFriend: NextPage<
 
   const {
     mutate: mutateAddFriend,
-    isLoading: addFriendLoading,
+    isPending: addFriendLoading,
     isSuccess: addFriendSuccess,
   } = trpc.user.addUserAsFriendById.useMutation({});
 

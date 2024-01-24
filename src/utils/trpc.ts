@@ -35,7 +35,7 @@ function getEndingLink(ctx: NextPageContext | undefined) {
     return httpBatchLink({
       url: `${getBaseUrl()}/api/trpc`,
       headers() {
-        if (ctx?.req) {
+        if (ctx?.req?.headers) {
           // on ssr, forward client's headers to the server
           return {
             ...ctx.req.headers,

@@ -1,5 +1,5 @@
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
-import { WebSocketServer } from "ws";
+import ws from "ws";
 import { appRouter } from "./trpc/router/_app";
 import { createContext } from "./trpc/context";
 import { env } from "../env/server";
@@ -12,7 +12,7 @@ const wssDevLog = (msg: string) => {
   console.log(`[Dev WSS] ${msg}`);
 };
 
-const wss = new WebSocketServer({
+const wss = new ws.Server({
   port: env.WS_PORT,
 });
 
