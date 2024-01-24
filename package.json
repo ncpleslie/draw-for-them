@@ -24,7 +24,8 @@
     "lint": "next lint",
     "postinstall": "prisma generate",
     "studio": "prisma studio",
-    "start": "cross-env-shell NODE_ENV=production NEXT_PUBLIC_WS_URL=localhost:3001 NEXT_PUBLIC_APP_URL=localhost:3000 node dist/src/server/wss-prod-server.js",
+    "start": "cross-env-shell NODE_ENV=production node dist/src/server/wss-prod-server.js",
+    "start:testing": "cross-env-shell NODE_ENV=production NEXT_PUBLIC_WS_URL=localhost:3001 NEXT_PUBLIC_APP_URL=localhost:3000 node dist/src/server/wss-prod-server.js",
     "test": "jest --silent=false --json --outputFile=jest-results.json",
     "test:ci": "run-s db-migrate-dev db-seed test"
   },
