@@ -5,9 +5,10 @@ import {
   signIn,
   getCsrfToken,
   getSession,
+  useSession,
 } from "next-auth/react";
 import Head from "next/head";
-import React, { type FormEvent, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes } from "../enums/routes.enum";
 import UnauthAppShell from "../layout/UnauthAppShell";
 import Icon from "../components/ui/Icon";
@@ -30,25 +31,42 @@ export async function getServerSideProps(context: CtxOrReq | undefined) {
   }
 
   const providers = await getProviders();
-  const csrfToken = await getCsrfToken(context);
 
   return {
-    props: { providers, csrfToken, host: context?.req?.headers?.host },
+    props: {
+      providers,
+      host: context?.req?.headers?.host,
+    },
   };
 }
 
 const SignIn: NextPage<
   InferGetServerSidePropsType<typeof getServerSideProps>
-> = ({ providers, csrfToken, host }) => {
+> = ({ providers, host }) => {
   const title = `${AppConstants.appTitle} | Sign In`;
   const router = useRouter();
+  const session = useSession();
+  const [csrfToken, setCsrfToken] = useState("");
 
-  const signInAnon = async () => {
-    await signIn("credentials", {
-      redirect: true,
-      callbackUrl: Routes.NewUser,
-    });
-  };
+  useEffect(() => {
+    async function fetchCsrfToken() {
+      const result = await getCsrfToken();
+      if (!result) {
+        throw new Error("Can not sign in without a CSRF token");
+      }
+      setCsrfToken(result);
+    }
+
+    /*
+      Wait until session is fetched before obtaining csrfToken 
+      to prevent synchronization issues caused by both 
+      /api/auth/session and /api/auth/csrf setting the cookie. 
+      Only happens in dev environment.
+    */
+    if (session.status !== "loading") {
+      fetchCsrfToken();
+    }
+  }, [session.status]);
 
   const signInEmail = async (email: string) => {
     await signIn("email", { email: email, redirect: false });
@@ -85,7 +103,7 @@ const SignIn: NextPage<
                 </p>
               </div>
               <div className="mx-4 grid gap-4 md:mx-0">
-                {providers?.email && csrfToken && (
+                {providers?.email && (
                   <EmailLoginSection
                     csrfToken={csrfToken}
                     onEmailLogin={signInEmail}
@@ -102,11 +120,8 @@ const SignIn: NextPage<
                     </span>
                   </div>
                 </div>
-                {providers?.credentials && csrfToken && (
-                  <GuestLoginSection
-                    csrfToken={csrfToken}
-                    onGuestLogin={signInAnon}
-                  />
+                {providers?.credentials && (
+                  <GuestLoginSection csrfToken={csrfToken} />
                 )}
                 <DisclaimerSection />
               </div>
@@ -120,29 +135,17 @@ const SignIn: NextPage<
 
 interface GuestLoginSectionProps {
   csrfToken?: string;
-  onGuestLogin: () => Promise<void>;
 }
 
-const GuestLoginSection: React.FC<GuestLoginSectionProps> = ({
-  csrfToken,
-  onGuestLogin,
-}) => {
-  const [loading, setLoading] = useState(false);
-
-  const onSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    await onGuestLogin();
-    setLoading(false);
-  };
-
+const GuestLoginSection: React.FC<GuestLoginSectionProps> = ({ csrfToken }) => {
   return (
     <form
-      onSubmit={onSubmit}
+      method="post"
+      action="/api/auth/callback/credentials"
       className="flex w-full flex-col items-center justify-between gap-4"
     >
       <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-      <Btn type="submit" loading={loading} className="w-full">
+      <Btn type="submit" loading={!csrfToken} className="w-full">
         <p className="w-full text-lg">Guest</p>
       </Btn>
     </form>
@@ -218,7 +221,7 @@ const EmailLogin: React.FC<EmailLoginProps> = ({ csrfToken, onSubmit }) => {
         />
       </div>
       <div className="flex flex-row gap-8">
-        <Btn type="submit" loading={loading}>
+        <Btn type="submit" loading={loading || !csrfToken}>
           <p className="text-lg">Continue</p>
         </Btn>
       </div>
