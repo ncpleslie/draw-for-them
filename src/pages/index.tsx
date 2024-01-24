@@ -24,6 +24,15 @@ export async function getServerSideProps(context: CreateNextContextOptions) {
       };
     }
 
+    if (!user?.name) {
+      return {
+        redirect: {
+          destination: Routes.NewUser,
+          permanent: false,
+        },
+      };
+    }
+
     const imageEvents =
       (await ctx.userService.getAllImageEventsForUserAsync(user?.id)) || [];
 
