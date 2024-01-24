@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { getServerSession } from "next-auth";
+import { unstable_getServerSession } from "next-auth";
 import { requestWrapper } from "../../pages/api/auth/[...nextauth]";
 
 /**
@@ -10,5 +10,5 @@ export const getServerAuthSession = async (ctx: {
   req: NextApiRequest;
   res: NextApiResponse;
 }) => {
-  return await getServerSession(...requestWrapper(ctx.req, ctx.res));
+  return await unstable_getServerSession(...requestWrapper(ctx.req, ctx.res));
 };
