@@ -9,15 +9,8 @@ import { useEffect, useState } from "react";
 import Menu from "./Menu";
 import type { NotificationDrawEvent } from "../../models/draw_event.model";
 import { Routes } from "../../enums/routes.enum";
-import { useSession } from "next-auth/react";
 
 const Header = ({}) => {
-  const session = useSession();
-
-  if (!session.data?.user?.id) {
-    return <></>;
-  }
-
   const router = useRouter();
   const [drawEvents, setDrawEvents] = useState<NotificationDrawEvent[]>();
 
